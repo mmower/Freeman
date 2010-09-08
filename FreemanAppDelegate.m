@@ -34,6 +34,7 @@ FreemanAppDelegate *gDelegate = nil;
 @implementation FreemanAppDelegate
 
 @synthesize window = _window;
+@synthesize statusMenu = _statusMenu;
 
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
@@ -44,6 +45,14 @@ FreemanAppDelegate *gDelegate = nil;
 		_overlayManager = [[FreemanOverlayManager alloc] init];
 		[self registerHotKeys];
 	}
+}
+
+
+- (void)awakeFromNib {
+	_statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
+	[_statusItem setMenu:_statusMenu];
+	[_statusItem setTitle:@"Freeman"];
+	[_statusItem setHighlightMode:YES];
 }
 
 

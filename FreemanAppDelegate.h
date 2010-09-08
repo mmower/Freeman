@@ -12,10 +12,12 @@
 
 @interface FreemanAppDelegate : NSObject <NSApplicationDelegate> {
     NSWindow					*_window;
-	
+	NSMenu						*_statusMenu;
+	NSStatusItem				*_statusItem;	
 	FreemanOverlayManager		*_overlayManager;
 }
 
 @property (assign) IBOutlet NSWindow *window;
+@property (assign) IBOutlet NSMenu *statusMenu;
 
 @end
