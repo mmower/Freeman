@@ -8,8 +8,12 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class FreemanOverlayManager;
+
 @interface FreemanAppDelegate : NSObject <NSApplicationDelegate> {
-    NSWindow *window;
+    NSWindow					*_window;
+	
+	FreemanOverlayManager		*_overlayManager;
 }
 
 @property (assign) IBOutlet NSWindow *window;
