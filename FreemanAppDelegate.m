@@ -10,6 +10,7 @@
 
 #import <Carbon/Carbon.h>
 #import <AppKit/NSAccessibility.h>
+#import <ApplicationServices/ApplicationServices.h>
 
 #import "FreemanOverlayManager.h"
 
@@ -17,7 +18,8 @@
 #define TRIGGER_ACTION (0x01)
 
 
-OSStatus MyHotKeyHandler( EventHandlerCallRef nextHandler, EventRef theEvent, void *userData );
+OSStatus HotKeyHandler( EventHandlerCallRef nextHandler, EventRef theEvent, void *userData );
+OSStatus AppSwitchHandler( EventHandlerCallRef nextHandler, EventRef theEvent, void *userData );
 
 
 FreemanAppDelegate *gDelegate = nil;
@@ -25,6 +27,7 @@ FreemanAppDelegate *gDelegate = nil;
 @interface FreemanAppDelegate (PrivateMethods)
 
 - (void)registerHotKeys;
+- (void)registerAppSwitch;
 - (void)respondToHotKey;
 - (void)trigger;
 
@@ -36,6 +39,7 @@ FreemanAppDelegate *gDelegate = nil;
 @synthesize window = _window;
 @synthesize statusMenu = _statusMenu;
 
+@synthesize overlayManager = _overlayManager;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	if( !AXAPIEnabled() ) {
@@ -44,6 +48,7 @@ FreemanAppDelegate *gDelegate = nil;
 		gDelegate = self;
 		_overlayManager = [[FreemanOverlayManager alloc] init];
 		[self registerHotKeys];
+		[self registerAppSwitch];
 	}
 }
 
@@ -70,7 +75,7 @@ FreemanAppDelegate *gDelegate = nil;
     eventType.eventClass=kEventClassKeyboard;
     eventType.eventKind=kEventHotKeyPressed;
     
-    InstallApplicationEventHandler( &MyHotKeyHandler, 1, &eventType, NULL, NULL );
+    InstallApplicationEventHandler( &HotKeyHandler, 1, &eventType, NULL, NULL );
     
     hotKeyID.signature = 'grp1';
     hotKeyID.id = TRIGGER_ACTION;
@@ -78,7 +83,7 @@ FreemanAppDelegate *gDelegate = nil;
 }
 
 
-OSStatus MyHotKeyHandler( EventHandlerCallRef nextHandler, EventRef theEvent, void *userData ) {
+OSStatus HotKeyHandler( EventHandlerCallRef nextHandler, EventRef theEvent, void *userData ) {
 #pragma unused(nextHandler)
 #pragma unused(theEvent)
 #pragma unused(userData)
@@ -103,15 +108,41 @@ OSStatus MyHotKeyHandler( EventHandlerCallRef nextHandler, EventRef theEvent, vo
     return noErr;
 }
 
+
 - (void)respondToHotKey {
 	if( [_overlayManager enabled] ) {
-		NSLog( @"Disable overlay manager." );
-		[_overlayManager setEnabled:NO];
+		NSLog( @"Overlay!" );
 	} else {
-		NSLog( @"Enable overlay manager." );
-		[_overlayManager setEnabled:YES];
+		NSLog( @"No overlay!" );
 	}
 }
+
+
+#pragma mark app switch handling
+
+
+- (void)registerAppSwitch {
+	EventTypeSpec spec = { kEventClassApplication, kEventAppFrontSwitched };
+    
+    OSStatus err = InstallApplicationEventHandler(NewEventHandlerUPP(AppSwitchHandler), 1, &spec, (void*)self, NULL);
+    if( err ) {
+        NSLog( @"Uh oh..." );
+    }
+}
+
+OSStatus AppSwitchHandler( EventHandlerCallRef nextHandler, EventRef theEvent, void *userData ) {
+	ProcessSerialNumber psn;
+	NSString *processName;
+	
+	GetFrontProcess( &psn );
+	CopyProcessName( &psn, (CFStringRef*)&processName );
+	
+	NSLog( @"Front process is now: %@", processName );
+	[[gDelegate overlayManager] setEnabled:[processName isEqualToString:@"Reaktor 5"]];
+	
+	return noErr;
+}
+
 
 
 @end

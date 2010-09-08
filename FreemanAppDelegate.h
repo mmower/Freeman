@@ -19,5 +19,6 @@
 
 @property (assign) IBOutlet NSWindow *window;
 @property (assign) IBOutlet NSMenu *statusMenu;
+@property (assign) FreemanOverlayManager *overlayManager;
 
 @end
