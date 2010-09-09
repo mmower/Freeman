@@ -41,6 +41,7 @@ FreemanAppDelegate *gDelegate = nil;
 
 @synthesize window = _window;
 @synthesize statusMenu = _statusMenu;
+@synthesize statusItem = _statusItem;
 
 @synthesize overlayManager = _overlayManager;
 @synthesize reaktorProcess = _reaktorProcess;
@@ -66,7 +67,7 @@ FreemanAppDelegate *gDelegate = nil;
 - (void)awakeFromNib {
 	_statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
 	[_statusItem setMenu:_statusMenu];
-	[_statusItem setTitle:@"Freeman"];
+	[_statusItem setTitle:@"R"];
 	[_statusItem setHighlightMode:YES];
 }
 
@@ -124,7 +125,8 @@ OSStatus HotKeyHandler( EventHandlerCallRef nextHandler, EventRef theEvent, void
 		NSLog( @"Overlay!" );
 		CGFloat ydepth = [[NSScreen mainScreen] frame].size.height;
 		CGPoint clickPoint = CGPointMake([_event locationInWindow].x, ydepth-[_event locationInWindow].y);
-		[_reaktorProcess rightMouseClick:clickPoint];
+		[_reaktorProcess sendRightMouseClick:clickPoint];
+		[_reaktorProcess sendKeySequence:@"RRRE"];
 	} else {
 		NSLog( @"No overlay!" );
 	}
@@ -162,8 +164,10 @@ OSStatus AppSwitchHandler( EventHandlerCallRef nextHandler, EventRef theEvent, v
 	
 	if( [processName isEqualToString:@"Reaktor 5"] ) {
 		[gDelegate setReaktorProcess:[FreemanRemoteProcess remoteProcessWithSerialNumber:psn]];
+		[[gDelegate statusItem] setTitle:@"R!"];
 		[[gDelegate overlayManager] setEnabled:YES];
 	} else {
+		[[gDelegate statusItem] setTitle:@"R"];
 		[[gDelegate overlayManager] setEnabled:NO];
 	}
 	

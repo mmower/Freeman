@@ -9,9 +9,27 @@
 #import "FreemanRemoteProcess.h"
 
 
+#define CGKEYCODE_RIGHT (124)
+#define CGKEYCODE_DOWN (125) //125
+#define CGKEYCODE_UP (126)
+#define CGKEYCODE_RETURN (36)
+
+
+typedef CGEventRef (^EventRefGeneratingBlock)();
+
+
+@interface FreemanRemoteProcess (PrivateMethods)
+
+- (void)postEvent:(EventRefGeneratingBlock)block;
+- (CGKeyCode)mapSpecifierToKeyCode:(NSString *)specifier;
+
+@end
+
+
 @implementation FreemanRemoteProcess
 
 @synthesize psn = _psn;
+
 
 + (id)remoteProcessWithSerialNumber:(ProcessSerialNumber)psn {
 	return [[FreemanRemoteProcess alloc] initWithProcessSerialNumber:psn];
@@ -27,18 +45,69 @@
 }
 
 
-- (void)rightMouseClick:(CGPoint)clickPoint {
-	CGEventRef eventRef;
-	
-	eventRef = CGEventCreateMouseEvent( NULL, kCGEventRightMouseDown, clickPoint, kCGMouseButtonRight );
-	NSAssert( eventRef != NULL, @"Failed to create kCGEventRightMouseDown" );
+- (void)postEvent:(EventRefGeneratingBlock)block {
+	CGEventRef eventRef = block();
+	NSAssert( eventRef, @"Failed to create event" );
 	CGEventPostToPSN( &_psn, eventRef );
 	CFRelease( eventRef );
+}
+
+
+- (void)sendRightMouseClick:(CGPoint)clickPoint {
+	[self postEvent:^() { return CGEventCreateMouseEvent( NULL, kCGEventRightMouseDown, clickPoint, kCGMouseButtonRight ); }];
+	[self postEvent:^() { return CGEventCreateMouseEvent( NULL, kCGEventRightMouseUp, clickPoint, kCGMouseButtonRight ); }];
+}
+
+
+- (void)sendKeyStroke:(CGKeyCode)keyCode {
+	[self postEvent:^() { return CGEventCreateKeyboardEvent( NULL, keyCode, YES ); }];
+	[self postEvent:^() { return CGEventCreateKeyboardEvent( NULL, keyCode, NO ); }];
+}
+
+
+- (void)sendKeySequence:(NSString *)keys {
+	for( int i = 0; i < [keys length]; i++ ) {
+		[self sendKeyStroke:[self mapSpecifierToKeyCode:[keys substringWithRange:NSMakeRange(i, 1)]]];
+	}
+}
+
+
+- (void)sendRightKey {
+	NSLog( @"Send right key" );
+	[self sendKeyStroke:CGKEYCODE_RIGHT];
+}
+
+
+- (void)sendDownKey {
+	NSLog( @"Send down key" );
+	[self sendKeyStroke:CGKEYCODE_DOWN];
+}
+
+
+- (void)sendUpKey {
+	NSLog( @"Send up key" );
+	[self sendKeyStroke:CGKEYCODE_UP];
+}
+
+
+- (void)sendReturnKey {
+	NSLog( @"Send return key" );
+	[self sendKeyStroke:CGKEYCODE_RETURN];
+}
+
+
+- (CGKeyCode)mapSpecifierToKeyCode:(NSString *)specifier {
+	if( [specifier isEqualToString:@"D"] ) {
+		return CGKEYCODE_DOWN;
+	} else if( [specifier isEqualToString:@"R" ] ) {
+		return CGKEYCODE_RIGHT;
+	} else if( [specifier isEqualToString:@"E" ] ) {
+		return CGKEYCODE_RETURN;
+	} else {
+		NSAssert1( NO, @"Unknown specified %@ encountered", specifier );
+	}
 	
-	eventRef = CGEventCreateMouseEvent( NULL, kCGEventRightMouseUp, clickPoint, kCGMouseButtonRight );
-	NSAssert( eventRef != NULL, @"Failed to create kCGEventRightMouseUp" );
-	CGEventPostToPSN( &_psn, eventRef );
-	CFRelease( eventRef );	
+	return 0;
 }
 
 

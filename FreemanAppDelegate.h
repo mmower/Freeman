@@ -22,6 +22,7 @@
 
 @property (assign) IBOutlet NSWindow *window;
 @property (assign) IBOutlet NSMenu *statusMenu;
+@property (assign) NSStatusItem *statusItem;
 @property (assign) FreemanOverlayManager *overlayManager;
 @property (assign) FreemanRemoteProcess *reaktorProcess;
 

@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-
 @interface FreemanRemoteProcess : NSObject {
 	ProcessSerialNumber		_psn;
 
@@ -20,6 +19,13 @@
 
 - (id)initWithProcessSerialNumber:(ProcessSerialNumber)psn;
 
-- (void)rightMouseClick:(CGPoint)clickPoint;
+
+- (void)sendRightMouseClick:(CGPoint)clickPoint;
+- (void)sendKeyStroke:(CGKeyCode)keyCode;
+- (void)sendKeySequence:(NSString *)keys;
+- (void)sendRightKey;
+- (void)sendDownKey;
+- (void)sendUpKey;
+- (void)sendReturnKey;
 
 @end
