@@ -17,10 +17,15 @@
 
 typedef CGEventRef (^EventRefGeneratingBlock)();
 
+//CGEventTimestamp delayEventByMillis( CGEventTimestamp timeStamp, int millis ) {
+//	return timeStamp + (millis * 1000000);
+//}
+
 
 @interface FreemanRemoteProcess (PrivateMethods)
 
 - (void)postEvent:(EventRefGeneratingBlock)block;
+- (CGEventRef)createKeyboardEvent:(CGKeyCode)keyCode keyDown:(BOOL)keyDown;
 - (CGKeyCode)mapSpecifierToKeyCode:(NSString *)specifier;
 
 @end
@@ -60,16 +65,30 @@ typedef CGEventRef (^EventRefGeneratingBlock)();
 }
 
 
+- (CGEventRef)createKeyboardEvent:(CGKeyCode)keyCode keyDown:(BOOL)keyDown {
+	CGEventRef ref = CGEventCreateKeyboardEvent( _eventSourceRef, keyCode, keyDown );
+	if( keyCode == CGKEYCODE_RIGHT || keyCode == CGKEYCODE_DOWN ) {
+		CGEventFlags flags = CGEventGetFlags( ref );
+		flags = flags | kCGEventFlagMaskSecondaryFn | kCGEventFlagMaskNumericPad;
+		CGEventSetFlags(ref, flags);
+	}
+	return ref;
+}
+
+
 - (void)sendKeyStroke:(CGKeyCode)keyCode {
-	[self postEvent:^() { return CGEventCreateKeyboardEvent( _eventSourceRef, keyCode, YES ); }];
-	[self postEvent:^() { return CGEventCreateKeyboardEvent( _eventSourceRef, keyCode, NO ); }];
+	[self postEvent:^() { return [self createKeyboardEvent:keyCode keyDown:YES]; }];
+	[self postEvent:^() { return [self createKeyboardEvent:keyCode keyDown:NO]; }];
 }
 
 
 - (void)sendKeySequence:(NSString *)keys {
 	for( int i = 0; i < [keys length]; i++ ) {
-		[self sendKeyStroke:[self mapSpecifierToKeyCode:[keys substringWithRange:NSMakeRange(i, 1)]]];
-		usleep(125000);
+		NSString *specifier = [keys substringWithRange:NSMakeRange(i, 1)];
+		[self sendKeyStroke:[self mapSpecifierToKeyCode:specifier]];
+		if( [specifier isEqualToString:@"R"] ) {
+			usleep(125000);
+		}
 	}
 }
 
