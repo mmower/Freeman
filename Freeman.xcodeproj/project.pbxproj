@@ -15,6 +15,7 @@
 		C9266BF912383783002619C7 /* FreemanOverlayManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C9266BF812383783002619C7 /* FreemanOverlayManager.m */; };
 		C9266C1C12383B79002619C7 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9266C1B12383B79002619C7 /* Carbon.framework */; };
 		C9266C7212384B46002619C7 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9266C7112384B46002619C7 /* Quartz.framework */; };
+		C993DDFB1238D6C000FCB461 /* FreemanRemoteProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = C993DDFA1238D6C000FCB461 /* FreemanRemoteProcess.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,8 @@
 		C9266BF812383783002619C7 /* FreemanOverlayManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreemanOverlayManager.m; sourceTree = "<group>"; };
 		C9266C1B12383B79002619C7 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		C9266C7112384B46002619C7 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
+		C993DDF91238D6C000FCB461 /* FreemanRemoteProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreemanRemoteProcess.h; sourceTree = "<group>"; };
+		C993DDFA1238D6C000FCB461 /* FreemanRemoteProcess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreemanRemoteProcess.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +60,8 @@
 				256AC3D90F4B6AC300CF3369 /* FreemanAppDelegate.m */,
 				C9266BF712383783002619C7 /* FreemanOverlayManager.h */,
 				C9266BF812383783002619C7 /* FreemanOverlayManager.m */,
+				C993DDF91238D6C000FCB461 /* FreemanRemoteProcess.h */,
+				C993DDFA1238D6C000FCB461 /* FreemanRemoteProcess.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -190,6 +195,7 @@
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
 				256AC3DA0F4B6AC300CF3369 /* FreemanAppDelegate.m in Sources */,
 				C9266BF912383783002619C7 /* FreemanOverlayManager.m in Sources */,
+				C993DDFB1238D6C000FCB461 /* FreemanRemoteProcess.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

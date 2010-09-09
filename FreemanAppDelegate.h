@@ -9,19 +9,20 @@
 #import <Cocoa/Cocoa.h>
 
 @class FreemanOverlayManager;
+@class FreemanRemoteProcess;
 
 @interface FreemanAppDelegate : NSObject <NSApplicationDelegate> {
     NSWindow					*_window;
 	NSMenu						*_statusMenu;
 	NSStatusItem				*_statusItem;	
 	FreemanOverlayManager		*_overlayManager;
-	ProcessSerialNumber			_reaktorPSN;
+	FreemanRemoteProcess		*_reaktorProcess;
 	NSEvent						*_event;
 }
 
 @property (assign) IBOutlet NSWindow *window;
 @property (assign) IBOutlet NSMenu *statusMenu;
 @property (assign) FreemanOverlayManager *overlayManager;
-@property (assign) ProcessSerialNumber reaktorPSN;
+@property (assign) FreemanRemoteProcess *reaktorProcess;
 
 @end

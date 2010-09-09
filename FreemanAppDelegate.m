@@ -13,6 +13,7 @@
 #import <ApplicationServices/ApplicationServices.h>
 
 #import "FreemanOverlayManager.h"
+#import "FreemanRemoteProcess.h"
 
 
 #define TRIGGER_ACTION (0x01)
@@ -37,11 +38,13 @@ FreemanAppDelegate *gDelegate = nil;
 
 @implementation FreemanAppDelegate
 
+
 @synthesize window = _window;
 @synthesize statusMenu = _statusMenu;
 
 @synthesize overlayManager = _overlayManager;
-@synthesize reaktorPSN = _reaktorPSN;
+@synthesize reaktorProcess = _reaktorProcess;
+
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	if( !AXAPIEnabled() ) {
@@ -119,44 +122,9 @@ OSStatus HotKeyHandler( EventHandlerCallRef nextHandler, EventRef theEvent, void
 - (void)respondToHotKey {
 	if( [_overlayManager enabled] ) {
 		NSLog( @"Overlay!" );
-		
 		CGFloat ydepth = [[NSScreen mainScreen] frame].size.height;
 		CGPoint clickPoint = CGPointMake([_event locationInWindow].x, ydepth-[_event locationInWindow].y);
-		
-		CGEventRef eventRef;
-		
-		eventRef = CGEventCreateMouseEvent( NULL, kCGEventRightMouseDown, clickPoint, kCGMouseButtonRight );
-		if( eventRef == NULL ) {
-			NSLog( @"Failed to create mouse down event" );
-			return;
-		}
-		
-		CGEventPostToPSN( &_reaktorPSN, eventRef );
-		CFRelease( eventRef );
-		
-		eventRef = CGEventCreateMouseEvent( NULL, kCGEventRightMouseUp, clickPoint, kCGMouseButtonRight );
-		if( eventRef == NULL ) {
-			NSLog( @"Failed to create mouse up event" );
-			return;
-		}
-		
-		CGEventPostToPSN( &_reaktorPSN, eventRef );
-		CFRelease( eventRef );
-		
-//		
-//		NSEvent *customEvent;
-//		
-//		customEvent = [NSEvent mouseEventWithType:NSRightMouseDown
-//										 location:[_event locationInWindow]
-//									modifierFlags:0
-//										timestamp:[_event timestamp]
-//									 windowNumber:[_event windowNumber]
-//										  context:nil
-//									  eventNumber:0
-//									   clickCount:1
-//										 pressure:0];
-//		
-//		CGEvent = [customEvent CGEvent];
+		[_reaktorProcess rightMouseClick:clickPoint];
 	} else {
 		NSLog( @"No overlay!" );
 	}
@@ -193,7 +161,7 @@ OSStatus AppSwitchHandler( EventHandlerCallRef nextHandler, EventRef theEvent, v
 	NSLog( @"Front process is now: %@", processName );
 	
 	if( [processName isEqualToString:@"Reaktor 5"] ) {
-		[gDelegate setReaktorPSN:psn];
+		[gDelegate setReaktorProcess:[FreemanRemoteProcess remoteProcessWithSerialNumber:psn]];
 		[[gDelegate overlayManager] setEnabled:YES];
 	} else {
 		[[gDelegate overlayManager] setEnabled:NO];
