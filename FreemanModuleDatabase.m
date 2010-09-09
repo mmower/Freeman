@@ -8,6 +8,8 @@
 
 #import "FreemanModuleDatabase.h"
 
+#import "FreemanModule.h"
+
 
 @interface FreemanModuleDatabase (PrivateMethods)
 
@@ -87,6 +89,11 @@
 - (void)closeMenu {
 	[_menuStack removeLastObject];
 //	NSLog( @"Close menu: [%@]", _menuStack );
+}
+
+
+- (NSArray *)searchFor:(NSString *)query {
+	return [NSArray arrayWithObjects:[[FreemanModule alloc] initWithName:@"Bar"],nil];
 }
 
 

@@ -26,6 +26,7 @@
 @property (assign) IBOutlet NSMenu *statusMenu;
 @property (assign) NSStatusItem *statusItem;
 @property (assign) FreemanOverlayManager *overlayManager;
+@property (assign) FreemanModuleDatabase *moduleDatabase;
 @property (assign) FreemanRemoteProcess *reaktorProcess;
 
 - (void)insertModule:(NSString *)module;

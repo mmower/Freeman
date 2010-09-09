@@ -18,4 +18,6 @@
 
 - (id)initWithDatabasePath:(NSString *)databasePath;
 
+- (NSArray *)searchFor:(NSString *)query;
+
 @end

@@ -45,6 +45,7 @@ FreemanAppDelegate *gDelegate = nil;
 @synthesize statusItem = _statusItem;
 
 @synthesize overlayManager = _overlayManager;
+@synthesize moduleDatabase = _moduleDatabase;
 @synthesize reaktorProcess = _reaktorProcess;
 
 

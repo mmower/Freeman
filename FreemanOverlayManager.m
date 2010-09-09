@@ -8,6 +8,8 @@
 
 #import "FreemanOverlayManager.h"
 
+#import "FreemanAppDelegate.h"
+#import "FreemanModuleDatabase.h"
 #import "FreemanModule.h"
 
 
@@ -60,7 +62,7 @@
 
 - (void)search:(id)object {
 	NSLog( @"Search for %@", [self searchString] );
-	[self setSearchResults:[NSArray arrayWithObjects:[[FreemanModule alloc] initWithName:@"Bar"],nil]];
+	[self setSearchResults:[[[self delegate] moduleDatabase] searchFor:[self searchString]]];
 	NSLog( @"Updated search results: %@", [self searchResults] );
 }
 
