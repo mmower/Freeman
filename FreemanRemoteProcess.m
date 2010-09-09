@@ -73,25 +73,21 @@ typedef CGEventRef (^EventRefGeneratingBlock)();
 
 
 - (void)sendRightKey {
-	NSLog( @"Send right key" );
 	[self sendKeyStroke:CGKEYCODE_RIGHT];
 }
 
 
 - (void)sendDownKey {
-	NSLog( @"Send down key" );
 	[self sendKeyStroke:CGKEYCODE_DOWN];
 }
 
 
 - (void)sendUpKey {
-	NSLog( @"Send up key" );
 	[self sendKeyStroke:CGKEYCODE_UP];
 }
 
 
 - (void)sendReturnKey {
-	NSLog( @"Send return key" );
 	[self sendKeyStroke:CGKEYCODE_RETURN];
 }
 
@@ -101,7 +97,7 @@ typedef CGEventRef (^EventRefGeneratingBlock)();
 		return CGKEYCODE_DOWN;
 	} else if( [specifier isEqualToString:@"R" ] ) {
 		return CGKEYCODE_RIGHT;
-	} else if( [specifier isEqualToString:@"E" ] ) {
+	} else if( [specifier isEqualToString:@"!" ] ) {
 		return CGKEYCODE_RETURN;
 	} else {
 		NSAssert1( NO, @"Unknown specified %@ encountered", specifier );

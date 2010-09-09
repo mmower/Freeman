@@ -126,7 +126,7 @@ OSStatus HotKeyHandler( EventHandlerCallRef nextHandler, EventRef theEvent, void
 		CGFloat ydepth = [[NSScreen mainScreen] frame].size.height;
 		CGPoint clickPoint = CGPointMake([_event locationInWindow].x, ydepth-[_event locationInWindow].y);
 		[_reaktorProcess sendRightMouseClick:clickPoint];
-		[_reaktorProcess sendKeySequence:@"RRRE"];
+		[_reaktorProcess sendKeySequence:@"RRDR!"];
 	} else {
 		NSLog( @"No overlay!" );
 	}
