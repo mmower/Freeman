@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface FreemanRemoteProcess : NSObject {
+	CGEventSourceRef			_eventSourceRef;
 	ProcessSerialNumber		_psn;
 
 }

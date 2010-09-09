@@ -38,6 +38,7 @@ typedef CGEventRef (^EventRefGeneratingBlock)();
 
 - (id)initWithProcessSerialNumber:(ProcessSerialNumber)psn {
 	if( ( self = [super init] ) ) {
+		_eventSourceRef = CGEventSourceCreate( kCGEventSourceStateCombinedSessionState );
 		_psn = psn;
 	}
 	
@@ -54,20 +55,21 @@ typedef CGEventRef (^EventRefGeneratingBlock)();
 
 
 - (void)sendRightMouseClick:(CGPoint)clickPoint {
-	[self postEvent:^() { return CGEventCreateMouseEvent( NULL, kCGEventRightMouseDown, clickPoint, kCGMouseButtonRight ); }];
-	[self postEvent:^() { return CGEventCreateMouseEvent( NULL, kCGEventRightMouseUp, clickPoint, kCGMouseButtonRight ); }];
+	[self postEvent:^() { return CGEventCreateMouseEvent( _eventSourceRef, kCGEventRightMouseDown, clickPoint, kCGMouseButtonRight ); }];
+	[self postEvent:^() { return CGEventCreateMouseEvent( _eventSourceRef, kCGEventRightMouseUp, clickPoint, kCGMouseButtonRight ); }];
 }
 
 
 - (void)sendKeyStroke:(CGKeyCode)keyCode {
-	[self postEvent:^() { return CGEventCreateKeyboardEvent( NULL, keyCode, YES ); }];
-	[self postEvent:^() { return CGEventCreateKeyboardEvent( NULL, keyCode, NO ); }];
+	[self postEvent:^() { return CGEventCreateKeyboardEvent( _eventSourceRef, keyCode, YES ); }];
+	[self postEvent:^() { return CGEventCreateKeyboardEvent( _eventSourceRef, keyCode, NO ); }];
 }
 
 
 - (void)sendKeySequence:(NSString *)keys {
 	for( int i = 0; i < [keys length]; i++ ) {
 		[self sendKeyStroke:[self mapSpecifierToKeyCode:[keys substringWithRange:NSMakeRange(i, 1)]]];
+		usleep(125000);
 	}
 }
 

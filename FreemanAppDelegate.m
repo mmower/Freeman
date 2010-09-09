@@ -57,7 +57,6 @@ FreemanAppDelegate *gDelegate = nil;
 		[self registerAppSwitch];
 		
 		[NSEvent addGlobalMonitorForEventsMatchingMask:NSEventMaskFromType(NSLeftMouseDown) handler:^(NSEvent *event) {
-			NSLog( @"Register event!" );
 			[self registerEvent:event];
 		}];
 	}
