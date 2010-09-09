@@ -16,6 +16,11 @@
 		C9266C1C12383B79002619C7 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9266C1B12383B79002619C7 /* Carbon.framework */; };
 		C9266C7212384B46002619C7 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9266C7112384B46002619C7 /* Quartz.framework */; };
 		C993DDFB1238D6C000FCB461 /* FreemanRemoteProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = C993DDFA1238D6C000FCB461 /* FreemanRemoteProcess.m */; };
+		C993DF8212391D3A00FCB461 /* FreemanModuleDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = C993DF8112391D3A00FCB461 /* FreemanModuleDatabase.m */; };
+		C993DF8512391D5A00FCB461 /* FreemanModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C993DF8412391D5A00FCB461 /* FreemanModule.m */; };
+		C993DFAD12392D6600FCB461 /* modules.xml in Resources */ = {isa = PBXBuildFile; fileRef = C993DF7F123912C200FCB461 /* modules.xml */; };
+		C993E0001239324000FCB461 /* Overlay.xib in Resources */ = {isa = PBXBuildFile; fileRef = C993DFFF1239324000FCB461 /* Overlay.xib */; };
+		C993E13E123952E900FCB461 /* NSString+FreemanRanking.m in Sources */ = {isa = PBXBuildFile; fileRef = C993E13D123952E900FCB461 /* NSString+FreemanRanking.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +42,14 @@
 		C9266C7112384B46002619C7 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		C993DDF91238D6C000FCB461 /* FreemanRemoteProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreemanRemoteProcess.h; sourceTree = "<group>"; };
 		C993DDFA1238D6C000FCB461 /* FreemanRemoteProcess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreemanRemoteProcess.m; sourceTree = "<group>"; };
+		C993DF7F123912C200FCB461 /* modules.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = modules.xml; sourceTree = "<group>"; };
+		C993DF8012391D3A00FCB461 /* FreemanModuleDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreemanModuleDatabase.h; sourceTree = "<group>"; };
+		C993DF8112391D3A00FCB461 /* FreemanModuleDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreemanModuleDatabase.m; sourceTree = "<group>"; };
+		C993DF8312391D5A00FCB461 /* FreemanModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreemanModule.h; sourceTree = "<group>"; };
+		C993DF8412391D5A00FCB461 /* FreemanModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreemanModule.m; sourceTree = "<group>"; };
+		C993DFFF1239324000FCB461 /* Overlay.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Overlay.xib; sourceTree = "<group>"; };
+		C993E13C123952E900FCB461 /* NSString+FreemanRanking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+FreemanRanking.h"; sourceTree = "<group>"; };
+		C993E13D123952E900FCB461 /* NSString+FreemanRanking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+FreemanRanking.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +75,12 @@
 				C9266BF812383783002619C7 /* FreemanOverlayManager.m */,
 				C993DDF91238D6C000FCB461 /* FreemanRemoteProcess.h */,
 				C993DDFA1238D6C000FCB461 /* FreemanRemoteProcess.m */,
+				C993DF8012391D3A00FCB461 /* FreemanModuleDatabase.h */,
+				C993DF8112391D3A00FCB461 /* FreemanModuleDatabase.m */,
+				C993DF8312391D5A00FCB461 /* FreemanModule.h */,
+				C993DF8412391D5A00FCB461 /* FreemanModule.m */,
+				C993E13C123952E900FCB461 /* NSString+FreemanRanking.h */,
+				C993E13D123952E900FCB461 /* NSString+FreemanRanking.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -121,6 +140,8 @@
 				8D1107310486CEB800E47090 /* Freeman-Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
+				C993DF7F123912C200FCB461 /* modules.xml */,
+				C993DFFF1239324000FCB461 /* Overlay.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -182,6 +203,8 @@
 			files = (
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */,
+				C993DFAD12392D6600FCB461 /* modules.xml in Resources */,
+				C993E0001239324000FCB461 /* Overlay.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -196,6 +219,9 @@
 				256AC3DA0F4B6AC300CF3369 /* FreemanAppDelegate.m in Sources */,
 				C9266BF912383783002619C7 /* FreemanOverlayManager.m in Sources */,
 				C993DDFB1238D6C000FCB461 /* FreemanRemoteProcess.m in Sources */,
+				C993DF8212391D3A00FCB461 /* FreemanModuleDatabase.m in Sources */,
+				C993DF8512391D5A00FCB461 /* FreemanModule.m in Sources */,
+				C993E13E123952E900FCB461 /* NSString+FreemanRanking.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

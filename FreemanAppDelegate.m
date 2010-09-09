@@ -14,7 +14,7 @@
 
 #import "FreemanOverlayManager.h"
 #import "FreemanRemoteProcess.h"
-
+#import "FreemanModuleDatabase.h"
 
 #define TRIGGER_ACTION (0x01)
 
@@ -24,6 +24,7 @@ OSStatus AppSwitchHandler( EventHandlerCallRef nextHandler, EventRef theEvent, v
 
 
 FreemanAppDelegate *gDelegate = nil;
+
 
 @interface FreemanAppDelegate (PrivateMethods)
 
@@ -47,12 +48,21 @@ FreemanAppDelegate *gDelegate = nil;
 @synthesize reaktorProcess = _reaktorProcess;
 
 
+- (id)init {
+	if( ( self = [super init] ) ) {
+		_moduleDatabase = [[FreemanModuleDatabase alloc] initWithDatabasePath:[[NSBundle mainBundle] pathForResource:@"modules" ofType:@"xml"]];
+	}
+	
+	return self;
+}
+
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	if( !AXAPIEnabled() ) {
 		NSLog( @"Universal access must be enabled or GrapplingIron can't work!" );
 	} else {
 		gDelegate = self;
-		_overlayManager = [[FreemanOverlayManager alloc] init];
+		_overlayManager = [[FreemanOverlayManager alloc] initWithDelegate:self];
 		[self registerHotKeys];
 		[self registerAppSwitch];
 		
@@ -120,15 +130,17 @@ OSStatus HotKeyHandler( EventHandlerCallRef nextHandler, EventRef theEvent, void
 
 
 - (void)respondToHotKey {
-	if( [_overlayManager enabled] ) {
-		NSLog( @"Overlay!" );
-		CGFloat ydepth = [[NSScreen mainScreen] frame].size.height;
-		CGPoint clickPoint = CGPointMake([_event locationInWindow].x, ydepth-[_event locationInWindow].y);
-		[_reaktorProcess sendRightMouseClick:clickPoint];
-		[_reaktorProcess sendKeySequence:@"RRDR!"];
-	} else {
-		NSLog( @"No overlay!" );
-	}
+	[_overlayManager prompt];
+}
+
+
+- (void)insertModule:(NSString *)module {
+	NSLog( @"Insert: %@", module );
+	
+//	CGFloat ydepth = [[NSScreen mainScreen] frame].size.height;
+//	CGPoint clickPoint = CGPointMake([_event locationInWindow].x, ydepth-[_event locationInWindow].y);
+//	[_reaktorProcess sendRightMouseClick:clickPoint];
+//	[_reaktorProcess sendKeySequence:@"RRDR!"];
 }
 
 
@@ -172,7 +184,6 @@ OSStatus AppSwitchHandler( EventHandlerCallRef nextHandler, EventRef theEvent, v
 	
 	return noErr;
 }
-
 
 
 @end

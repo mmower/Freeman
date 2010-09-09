@@ -10,13 +10,15 @@
 
 @class FreemanOverlayManager;
 @class FreemanRemoteProcess;
+@class FreemanModuleDatabase;
 
 @interface FreemanAppDelegate : NSObject <NSApplicationDelegate> {
-    NSWindow					*_window;
-	NSMenu						*_statusMenu;
-	NSStatusItem				*_statusItem;	
+    NSWindow						*_window;
+	NSMenu							*_statusMenu;
+	NSStatusItem					*_statusItem;	
 	FreemanOverlayManager		*_overlayManager;
-	FreemanRemoteProcess		*_reaktorProcess;
+	FreemanRemoteProcess			*_reaktorProcess;
+	FreemanModuleDatabase		*_moduleDatabase;
 	NSEvent						*_event;
 }
 
@@ -25,5 +27,7 @@
 @property (assign) NSStatusItem *statusItem;
 @property (assign) FreemanOverlayManager *overlayManager;
 @property (assign) FreemanRemoteProcess *reaktorProcess;
+
+- (void)insertModule:(NSString *)module;
 
 @end

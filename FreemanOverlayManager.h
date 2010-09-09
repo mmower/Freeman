@@ -9,11 +9,34 @@
 #import <Foundation/Foundation.h>
 
 
-@interface FreemanOverlayManager : NSObject {
-	BOOL	_enabled;
-
+@interface FreemanOverlayManager : NSWindowController {
+	id				_delegate;
+	BOOL			_enabled;
+	
+	NSString		*_searchString;
+	NSArray			*_searchResults;
+	
+	NSTextField		*_searchField;
+	NSButton		*_insertButton;
+	NSTableView		*_resultsTable;
+	
+	NSThread		*_searchThread;
 }
 
+@property (assign) id delegate;
 @property (assign) BOOL enabled;
+
+@property (assign) NSString *searchString;
+@property (assign) NSArray *searchResults;
+
+@property (assign) IBOutlet NSTextField *searchField;
+@property (assign) IBOutlet NSButton *insertButton;
+@property (assign) IBOutlet NSTableView *resultsTable;
+
+- (id)initWithDelegate:(id)delegate;
+
+- (void)prompt;
+
+- (IBAction)insertModule:(id)sender;
 
 @end

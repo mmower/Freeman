@@ -69,7 +69,7 @@ typedef CGEventRef (^EventRefGeneratingBlock)();
 - (void)sendKeySequence:(NSString *)keys {
 	for( int i = 0; i < [keys length]; i++ ) {
 		[self sendKeyStroke:[self mapSpecifierToKeyCode:[keys substringWithRange:NSMakeRange(i, 1)]]];
-		usleep(125000);
+		usleep(250000);
 	}
 }
 
