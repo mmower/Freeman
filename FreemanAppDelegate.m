@@ -28,6 +28,7 @@ FreemanAppDelegate *gDelegate = nil;
 
 - (void)registerHotKeys;
 - (void)registerAppSwitch;
+- (void)registerEvent:(NSEvent *)event;
 - (void)respondToHotKey;
 - (void)trigger;
 
@@ -40,6 +41,7 @@ FreemanAppDelegate *gDelegate = nil;
 @synthesize statusMenu = _statusMenu;
 
 @synthesize overlayManager = _overlayManager;
+@synthesize reaktorPSN = _reaktorPSN;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	if( !AXAPIEnabled() ) {
@@ -49,6 +51,11 @@ FreemanAppDelegate *gDelegate = nil;
 		_overlayManager = [[FreemanOverlayManager alloc] init];
 		[self registerHotKeys];
 		[self registerAppSwitch];
+		
+		[NSEvent addGlobalMonitorForEventsMatchingMask:NSEventMaskFromType(NSLeftMouseDown) handler:^(NSEvent *event) {
+			NSLog( @"Register event!" );
+			[self registerEvent:event];
+		}];
 	}
 }
 
@@ -112,8 +119,55 @@ OSStatus HotKeyHandler( EventHandlerCallRef nextHandler, EventRef theEvent, void
 - (void)respondToHotKey {
 	if( [_overlayManager enabled] ) {
 		NSLog( @"Overlay!" );
+		
+		CGFloat ydepth = [[NSScreen mainScreen] frame].size.height;
+		CGPoint clickPoint = CGPointMake([_event locationInWindow].x, ydepth-[_event locationInWindow].y);
+		
+		CGEventRef eventRef;
+		
+		eventRef = CGEventCreateMouseEvent( NULL, kCGEventRightMouseDown, clickPoint, kCGMouseButtonRight );
+		if( eventRef == NULL ) {
+			NSLog( @"Failed to create mouse down event" );
+			return;
+		}
+		
+		CGEventPostToPSN( &_reaktorPSN, eventRef );
+		CFRelease( eventRef );
+		
+		eventRef = CGEventCreateMouseEvent( NULL, kCGEventRightMouseUp, clickPoint, kCGMouseButtonRight );
+		if( eventRef == NULL ) {
+			NSLog( @"Failed to create mouse up event" );
+			return;
+		}
+		
+		CGEventPostToPSN( &_reaktorPSN, eventRef );
+		CFRelease( eventRef );
+		
+//		
+//		NSEvent *customEvent;
+//		
+//		customEvent = [NSEvent mouseEventWithType:NSRightMouseDown
+//										 location:[_event locationInWindow]
+//									modifierFlags:0
+//										timestamp:[_event timestamp]
+//									 windowNumber:[_event windowNumber]
+//										  context:nil
+//									  eventNumber:0
+//									   clickCount:1
+//										 pressure:0];
+//		
+//		CGEvent = [customEvent CGEvent];
 	} else {
 		NSLog( @"No overlay!" );
+	}
+}
+
+
+#pragma mark mouse detection
+
+- (void)registerEvent:(NSEvent *)event {
+	if( [[self overlayManager] enabled] ) {
+		_event = event;
 	}
 }
 
@@ -131,14 +185,19 @@ OSStatus HotKeyHandler( EventHandlerCallRef nextHandler, EventRef theEvent, void
 }
 
 OSStatus AppSwitchHandler( EventHandlerCallRef nextHandler, EventRef theEvent, void *userData ) {
-	ProcessSerialNumber psn;
 	NSString *processName;
+	ProcessSerialNumber psn;
 	
 	GetFrontProcess( &psn );
 	CopyProcessName( &psn, (CFStringRef*)&processName );
-	
 	NSLog( @"Front process is now: %@", processName );
-	[[gDelegate overlayManager] setEnabled:[processName isEqualToString:@"Reaktor 5"]];
+	
+	if( [processName isEqualToString:@"Reaktor 5"] ) {
+		[gDelegate setReaktorPSN:psn];
+		[[gDelegate overlayManager] setEnabled:YES];
+	} else {
+		[[gDelegate overlayManager] setEnabled:NO];
+	}
 	
 	return noErr;
 }

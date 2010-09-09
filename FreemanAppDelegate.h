@@ -15,10 +15,13 @@
 	NSMenu						*_statusMenu;
 	NSStatusItem				*_statusItem;	
 	FreemanOverlayManager		*_overlayManager;
+	ProcessSerialNumber			_reaktorPSN;
+	NSEvent						*_event;
 }
 
 @property (assign) IBOutlet NSWindow *window;
 @property (assign) IBOutlet NSMenu *statusMenu;
 @property (assign) FreemanOverlayManager *overlayManager;
+@property (assign) ProcessSerialNumber reaktorPSN;
 
 @end
