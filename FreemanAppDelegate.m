@@ -15,6 +15,7 @@
 #import "FreemanOverlayManager.h"
 #import "FreemanRemoteProcess.h"
 #import "FreemanModuleDatabase.h"
+#import "FreemanModule.h"
 
 #define TRIGGER_ACTION (0x01)
 
@@ -135,13 +136,11 @@ OSStatus HotKeyHandler( EventHandlerCallRef nextHandler, EventRef theEvent, void
 }
 
 
-- (void)insertModule:(NSString *)module {
-	NSLog( @"Insert: %@", module );
-	
-//	CGFloat ydepth = [[NSScreen mainScreen] frame].size.height;
-//	CGPoint clickPoint = CGPointMake([_event locationInWindow].x, ydepth-[_event locationInWindow].y);
-//	[_reaktorProcess sendRightMouseClick:clickPoint];
-//	[_reaktorProcess sendKeySequence:@"RRDR!"];
+- (void)insertModule:(FreemanModule *)module {
+	CGFloat ydepth = [[NSScreen mainScreen] frame].size.height;
+	CGPoint clickPoint = CGPointMake([_event locationInWindow].x, ydepth-[_event locationInWindow].y);
+	[_reaktorProcess sendRightMouseClick:clickPoint];
+	[_reaktorProcess sendKeySequence:[module navigationSequence]];
 }
 
 
@@ -149,7 +148,10 @@ OSStatus HotKeyHandler( EventHandlerCallRef nextHandler, EventRef theEvent, void
 
 - (void)registerEvent:(NSEvent *)event {
 	if( [[self overlayManager] enabled] ) {
-		_event = event;
+		if( [event modifierFlags] & NSAlternateKeyMask ) {
+			_event = event;
+			[_overlayManager prompt];
+		}
 	}
 }
 

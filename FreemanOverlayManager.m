@@ -36,6 +36,9 @@
 
 - (void)windowDidLoad {
 	[self addObserver:self forKeyPath:@"searchString" options:NSKeyValueObservingOptionNew context:NULL];
+	
+	[[self resultsTable] setTarget:self];
+	[[self resultsTable] setDoubleAction:@selector(insertModule:)];
 }
 
 
@@ -67,29 +70,41 @@
 
 - (void)search:(id)object {
 	if( ![self searchString] || [[self searchString] isEqualToString:@""] ) {
-		[self setSearchResults:[NSArray array]];
+		dispatch_async( dispatch_get_main_queue(), ^{
+			[self setSearchResults:[NSArray array]];
+		});
+		return;
 	} else {
 		NSLog( @"Search for %@", [self searchString] );
-		[self setSearchResults:[[[self delegate] moduleDatabase] searchFor:[self searchString]]];
+		
+		NSArray *results = [[[self delegate] moduleDatabase] searchFor:[self searchString]];
+		if( [results count] > 0 && ![[NSThread currentThread] isCancelled] ) {
+			dispatch_async( dispatch_get_main_queue(), ^{
+				[self setSearchResults:results];
+				[[self resultsTable] selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
+			});
+		}
 	}
-	NSLog( @"Result count = %d", [[self searchResults] count] );
-	if( [[self searchResults] count] > 0 ) {
-		NSLog( @"Ask to select result 0" );
-		dispatch_async( dispatch_get_main_queue(), ^{
-			NSLog( @"Select result 0" );
-			[[self resultsTable] selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
-		} );
-	}
+	
+//	NSLog( @"Result count = %d", [[self searchResults] count] );
+//	if( [[self searchResults] count] > 0 ) {
+//		NSLog( @"Ask to select result 0" );
+//		dispatch_async( dispatch_get_main_queue(), ^{
+//			NSLog( @"Select result 0" );
+//			
+//		} );
+//	}
 }
 
 
 - (IBAction)insertModule:(id)sender {
+	[[self window] orderOut:sender];
+	NSLog( @"Sender = %@", sender );
 	if( [[self resultsTable] selectedRow] != -1 ) {
 		FreemanModule *module = [[self searchResults] objectAtIndex:[[self resultsTable] selectedRow]];
-		NSLog( @"Insert a %@", [module name] );
-//		if( [_delegate respondsToSelector:@selector(insertModule:)] ) {
-//			[_delegate insertModule:[[self searchField] stringValue]];
-//		}
+		if( [_delegate respondsToSelector:@selector(insertModule:)] ) {
+			[_delegate insertModule:module];
+		}
 	}
 	
 }

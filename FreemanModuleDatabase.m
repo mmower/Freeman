@@ -88,7 +88,7 @@
 
 
 - (void)addModule:(NSDictionary *)attributes {
-	[_modules addObject:[[FreemanModule alloc] initWithName:[attributes objectForKey:@"name"] navigationSequence:[_navigationSequence copy] menuHierarchy:[_menuStack copy]]];
+	[_modules addObject:[[FreemanModule alloc] initWithName:[attributes objectForKey:@"name"] navigationSequence:[NSString stringWithFormat:@"%@!",[_navigationSequence copy]] menuHierarchy:[_menuStack copy]]];
 	[_navigationSequence appendString:@"D"];
 }
 

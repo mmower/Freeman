@@ -11,6 +11,7 @@
 @class FreemanOverlayManager;
 @class FreemanRemoteProcess;
 @class FreemanModuleDatabase;
+@class FreemanModule;
 
 @interface FreemanAppDelegate : NSObject <NSApplicationDelegate> {
     NSWindow						*_window;
@@ -29,6 +30,6 @@
 @property (assign) FreemanModuleDatabase *moduleDatabase;
 @property (assign) FreemanRemoteProcess *reaktorProcess;
 
-- (void)insertModule:(NSString *)module;
+- (void)insertModule:(FreemanModule *)module;
 
 @end
