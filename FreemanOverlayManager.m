@@ -56,7 +56,12 @@
 - (void)prompt {
 	[self setSearchString:@""];
 	[self setSearchResults:[NSArray array]];
-	[self showWindow:nil];
+	
+	[[self window] center];
+	[[self window] setLevel:NSFloatingWindowLevel];
+	[[self window] makeKeyAndOrderFront:self];
+	[[self window] makeFirstResponder:[self searchField]];
+	[NSApp activateIgnoringOtherApps:YES];
 }
 
 
