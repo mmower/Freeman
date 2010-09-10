@@ -11,8 +11,12 @@
 
 @interface FreemanModule : NSObject {
 	NSString		*_name;
+	float			_scoreForLastAbbreviation;
 }
 
 @property (assign) NSString *name;
+@property (assign) float scoreForLastAbbreviation;
+
+- (id)initWithName:(NSString *)name;
 
 @end

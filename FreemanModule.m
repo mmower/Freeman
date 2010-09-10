@@ -12,17 +12,19 @@
 @implementation FreemanModule
 
 @synthesize name = _name;
+@synthesize scoreForLastAbbreviation = _scoreForLastAbbreviation;
 
 - (id)initWithName:(NSString *)name {
 	if( ( self = [super init] ) ) {
 		_name = name;
+		_scoreForLastAbbreviation = 0.0;
 	}
 	
 	return self;
 }
 
 - (NSString *)description {
-	return [NSString stringWithFormat:@"Freeman Module<%@>", [self name]];
+	return [NSString stringWithFormat:@"Freeman Module<%@> (%f)", [self name], [self scoreForLastAbbreviation]];
 }
 
 @end

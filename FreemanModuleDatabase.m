@@ -10,6 +10,8 @@
 
 #import "FreemanModule.h"
 
+#import "NSString+FreemanRanking.h"
+
 
 @interface FreemanModuleDatabase (PrivateMethods)
 
@@ -81,6 +83,7 @@
 
 
 - (void)addModule:(NSDictionary *)attributes {
+	[_modules addObject:[[FreemanModule alloc] initWithName:[attributes objectForKey:@"name"]]];
 //	NSString *name = [attributes objectForKey:@"name"];
 //	NSLog( @"Module: %@", name );	
 }
@@ -93,7 +96,25 @@
 
 
 - (NSArray *)searchFor:(NSString *)query {
-	return [NSArray arrayWithObjects:[[FreemanModule alloc] initWithName:@"Bar"],nil];
+	[_modules enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+		[obj setScoreForLastAbbreviation:[[obj name] scoreForAbbreviation:query]];
+		NSLog( @"[%@] : [%@]", query, obj );
+	}];
+	
+	NSArray *possibleMatches = [_modules filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^(id obj, NSDictionary *bindings) {
+		return (BOOL)([obj scoreForLastAbbreviation] > 0.0);
+	}]];
+	
+	
+	return [possibleMatches sortedArrayUsingComparator:^(id a, id b) {
+		if( [a scoreForLastAbbreviation] > [b scoreForLastAbbreviation] ) {
+			return (NSComparisonResult)NSOrderedAscending;
+		} else if( [a scoreForLastAbbreviation] < [b scoreForLastAbbreviation] ) {
+			return (NSComparisonResult)NSOrderedDescending;
+		} else {
+			return (NSComparisonResult)NSOrderedSame;
+		}
+	}];
 }
 
 
