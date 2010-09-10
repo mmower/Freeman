@@ -51,6 +51,11 @@ typedef CGEventRef (^EventRefGeneratingBlock)();
 }
 
 
+- (void)activate {
+	SetFrontProcess( &_psn );
+}
+
+
 - (void)postEvent:(EventRefGeneratingBlock)block {
 	CGEventRef eventRef = block();
 	NSAssert( eventRef, @"Failed to create event" );

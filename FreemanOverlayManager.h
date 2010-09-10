@@ -35,6 +35,7 @@
 - (id)initWithDelegate:(id)delegate;
 
 - (void)prompt;
+- (void)closeAndActivateReaktor;
 
 - (IBAction)insertModule:(id)sender;
 

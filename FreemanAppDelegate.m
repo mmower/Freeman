@@ -145,6 +145,11 @@ OSStatus HotKeyHandler( EventHandlerCallRef nextHandler, EventRef theEvent, void
 }
 
 
+- (void)activateReaktor {
+	[[self reaktorProcess] activate];
+}
+
+
 #pragma mark mouse detection
 
 - (void)registerEvent:(NSEvent *)event {
@@ -177,6 +182,10 @@ OSStatus AppSwitchHandler( EventHandlerCallRef nextHandler, EventRef theEvent, v
 	CopyProcessName( &psn, (CFStringRef*)&processName );
 	// NSLog( @"Front process is now: %@", processName );
 	
+	if( ![processName isEqualToString:@"Freeman"] && [[[gDelegate overlayManager] window] isVisible] ) {
+		[[gDelegate overlayManager] close];
+	}
+	
 	if( [processName isEqualToString:@"Reaktor 5"] ) {
 		[gDelegate setReaktorProcess:[FreemanRemoteProcess remoteProcessWithSerialNumber:psn]];
 		[[gDelegate statusItem] setImage:[NSImage imageNamed:@"MenuActive.png"]];
@@ -187,6 +196,14 @@ OSStatus AppSwitchHandler( EventHandlerCallRef nextHandler, EventRef theEvent, v
 	}
 	
 	return noErr;
+}
+
+
+#pragma mark menubar apps
+
+- (IBAction)showAboutBox:(id)sender {
+	[NSApp activateIgnoringOtherApps:YES];
+	[NSApp orderFrontStandardAboutPanel:sender];
 }
 
 @end

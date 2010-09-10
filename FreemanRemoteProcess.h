@@ -20,7 +20,7 @@
 
 - (id)initWithProcessSerialNumber:(ProcessSerialNumber)psn;
 
-
+- (void)activate;
 - (void)sendRightMouseClick:(CGPoint)clickPoint;
 - (void)sendKeyStroke:(CGKeyCode)keyCode;
 - (void)sendKeySequence:(NSString *)keys;

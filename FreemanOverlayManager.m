@@ -74,6 +74,12 @@
 }
 
 
+- (void)closeAndActivateReaktor {
+	[self close];
+	[[self delegate] activateReaktor];
+}
+
+
 - (void)search:(id)object {
 	if( ![self searchString] || [[self searchString] isEqualToString:@""] ) {
 		dispatch_async( dispatch_get_main_queue(), ^{
@@ -113,15 +119,13 @@
 
 
 - (IBAction)insertModule:(id)sender {
-	NSLog( @"insertModule:" );
-	[[self window] orderOut:sender];
+	[self close];
 	if( [[self resultsTable] selectedRow] != -1 ) {
 		FreemanModule *module = [[self searchResults] objectAtIndex:[[self resultsTable] selectedRow]];
 		if( [_delegate respondsToSelector:@selector(insertModule:)] ) {
 			[_delegate insertModule:module];
 		}
 	}
-	
 }
 
 
@@ -134,6 +138,8 @@
 		[self selectNextResult];
 	} else if( commandSelector == @selector(insertNewline:) ) {
 		[self insertModule:self];
+	} else if( commandSelector == @selector(cancelOperation:) ) {
+		[self closeAndActivateReaktor];
 	} else {
 		NSLog( @"Unregistered selector: %@", NSStringFromSelector(commandSelector));
 		return NO;

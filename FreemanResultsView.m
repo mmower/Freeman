@@ -10,15 +10,22 @@
 
 #import "FreemanOverlayManager.h"
 
+#define KEYCODE_ENTER (36)
+#define KEYCODE_RETURN (76)
+#define KEYCODE_ESCAPE (53)
+
 @implementation FreemanResultsView
 
 @synthesize overlayManager = _overlayManager;
 
 - (void)keyDown:(NSEvent *)event {
 	// Enter or Return select the current result
-	if( [event keyCode] == 36 || [event keyCode] == 76 ) {
+	if( [event keyCode] == KEYCODE_ENTER || [event keyCode] == KEYCODE_RETURN ) {
 		[[self overlayManager] insertModule:self];
+	} else if( [event keyCode] == KEYCODE_ESCAPE ) {
+		[[self overlayManager] closeAndActivateReaktor];
 	} else {
+		// NSLog( @"Key code = %d", [event keyCode] );
 		[super keyDown:event];
 	}
 }
