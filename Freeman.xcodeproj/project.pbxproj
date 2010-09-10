@@ -16,6 +16,9 @@
 		C9219C5C123A8C03009E5829 /* Freeman.icns in Resources */ = {isa = PBXBuildFile; fileRef = C9219C5B123A8C03009E5829 /* Freeman.icns */; };
 		C9219C5F123A8C26009E5829 /* MenuActive.png in Resources */ = {isa = PBXBuildFile; fileRef = C9219C5D123A8C26009E5829 /* MenuActive.png */; };
 		C9219C60123A8C26009E5829 /* MenuNormal.png in Resources */ = {isa = PBXBuildFile; fileRef = C9219C5E123A8C26009E5829 /* MenuNormal.png */; };
+		C9219C76123A8F85009E5829 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9219C75123A8F85009E5829 /* Sparkle.framework */; };
+		C9219C84123A8FC1009E5829 /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = C9219C75123A8F85009E5829 /* Sparkle.framework */; };
+		C9219C9C123A95A4009E5829 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = C9219C9B123A95A4009E5829 /* Credits.rtf */; };
 		C9266BF912383783002619C7 /* FreemanOverlayManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C9266BF812383783002619C7 /* FreemanOverlayManager.m */; };
 		C9266C1C12383B79002619C7 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9266C1B12383B79002619C7 /* Carbon.framework */; };
 		C9266C7212384B46002619C7 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9266C7112384B46002619C7 /* Quartz.framework */; };
@@ -26,6 +29,20 @@
 		C993E0001239324000FCB461 /* Overlay.xib in Resources */ = {isa = PBXBuildFile; fileRef = C993DFFF1239324000FCB461 /* Overlay.xib */; };
 		C993E13E123952E900FCB461 /* NSString+FreemanRanking.m in Sources */ = {isa = PBXBuildFile; fileRef = C993E13D123952E900FCB461 /* NSString+FreemanRanking.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C9219C80123A8FBD009E5829 /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C9219C84123A8FC1009E5829 /* Sparkle.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -45,6 +62,8 @@
 		C9219C5B123A8C03009E5829 /* Freeman.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Freeman.icns; sourceTree = "<group>"; };
 		C9219C5D123A8C26009E5829 /* MenuActive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MenuActive.png; sourceTree = "<group>"; };
 		C9219C5E123A8C26009E5829 /* MenuNormal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MenuNormal.png; sourceTree = "<group>"; };
+		C9219C75123A8F85009E5829 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
+		C9219C9B123A95A4009E5829 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		C9266BF712383783002619C7 /* FreemanOverlayManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreemanOverlayManager.h; sourceTree = "<group>"; };
 		C9266BF812383783002619C7 /* FreemanOverlayManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreemanOverlayManager.m; sourceTree = "<group>"; };
 		C9266C1B12383B79002619C7 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
@@ -69,6 +88,7 @@
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				C9266C1C12383B79002619C7 /* Carbon.framework in Frameworks */,
 				C9266C7212384B46002619C7 /* Quartz.framework in Frameworks */,
+				C9219C76123A8F85009E5829 /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,6 +121,7 @@
 			children = (
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
 				C9266C1B12383B79002619C7 /* Carbon.framework */,
+				C9219C75123A8F85009E5829 /* Sparkle.framework */,
 			);
 			name = "Linked Frameworks";
 			sourceTree = "<group>";
@@ -156,6 +177,7 @@
 				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
 				C993DF7F123912C200FCB461 /* modules.xml */,
 				C993DFFF1239324000FCB461 /* Overlay.xib */,
+				C9219C9B123A95A4009E5829 /* Credits.rtf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -179,6 +201,7 @@
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
+				C9219C80123A8FBD009E5829 /* Copy Frameworks */,
 			);
 			buildRules = (
 			);
@@ -222,6 +245,7 @@
 				C9219C5C123A8C03009E5829 /* Freeman.icns in Resources */,
 				C9219C5F123A8C26009E5829 /* MenuActive.png in Resources */,
 				C9219C60123A8C26009E5829 /* MenuNormal.png in Resources */,
+				C9219C9C123A95A4009E5829 /* Credits.rtf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,6 +294,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
@@ -287,6 +315,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Freeman_Prefix.pch;

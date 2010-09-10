@@ -1,0 +1,20 @@
+Freeman v0.5(1) 10.09.2010
+by Matt Mower <self@mattmower.com>
+
+Freeman is a tool for users of Native Instruments Reaktor on Mac OSX (10.6.4) that offers a new way to insert modules into structure windows. The default Reaktor approach is to use a right-click context menu and navigate to find the module you want. Using Freeman you get a window with smart type-as-you-go search to find & insert the module you want.
+
+To use Freeman copy Freeman.app to your /Applications folder. Then double-click to run it.
+
+Freeman will appear in your menubar to show you it is running but does not display an application window of it's own. You will notice the icon is white on blue.
+
+Now switch to Reaktor (Freeman was tested with v5.5 but should also work with v5.1.5) and you will notice the Freeman icon switches to yellow on blue. This lets you know that Freeman is waiting for your input.
+
+To use Freeman Option-Click on your structure window where you want a new module to appear. The Freeman browser will appear with a search box and a menu of results. Initially it will be empty.
+
+Start typing the name of a module you want, bearing in mind Freeman has a smart 'abbreviation' search. Let's say you want the "Audio Voice Combiner" from Built-In's/Auxilliary. You could type `audio voice combiner` but it would be quicker to type `avc`. In fact, it's enough to type `av` since this is a unique enough combination to identify the module. To insert the module press the `Return` key.
+
+When typing in the search field you will notice that results appear and disappear as you type. At any time the first result will be highlighted with a gray background. You can change the selection using the cursor keys.
+
+Let's say you want the "Snap Value" module. Type `sn` and you will see that "Snapshot" is selected with "Snap Value" one further down. Hit the down arrow (you don't need to focus on the menu, you can type the down arrow while editing the search field) and then return to insert it.
+
+If you find it more convenient you can also browse directly in the menu and hit return to insert a module.
