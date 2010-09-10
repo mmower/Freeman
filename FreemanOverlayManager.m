@@ -66,17 +66,32 @@
 
 
 - (void)search:(id)object {
-	NSLog( @"Search for %@", [self searchString] );
-	[self setSearchResults:[[[self delegate] moduleDatabase] searchFor:[self searchString]]];
-	NSLog( @"Updated search results: %@", [self searchResults] );
+	if( ![self searchString] || [[self searchString] isEqualToString:@""] ) {
+		[self setSearchResults:[NSArray array]];
+	} else {
+		NSLog( @"Search for %@", [self searchString] );
+		[self setSearchResults:[[[self delegate] moduleDatabase] searchFor:[self searchString]]];
+	}
+	NSLog( @"Result count = %d", [[self searchResults] count] );
+	if( [[self searchResults] count] > 0 ) {
+		NSLog( @"Ask to select result 0" );
+		dispatch_async( dispatch_get_main_queue(), ^{
+			NSLog( @"Select result 0" );
+			[[self resultsTable] selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
+		} );
+	}
 }
 
 
 - (IBAction)insertModule:(id)sender {
-	NSLog( @"inertModule:" );
-	if( [_delegate respondsToSelector:@selector(insertModule:)] ) {
-		[_delegate insertModule:[[self searchField] stringValue]];
+	if( [[self resultsTable] selectedRow] != -1 ) {
+		FreemanModule *module = [[self searchResults] objectAtIndex:[[self resultsTable] selectedRow]];
+		NSLog( @"Insert a %@", [module name] );
+//		if( [_delegate respondsToSelector:@selector(insertModule:)] ) {
+//			[_delegate insertModule:[[self searchField] stringValue]];
+//		}
 	}
+	
 }
 
 
