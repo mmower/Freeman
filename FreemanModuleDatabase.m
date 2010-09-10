@@ -46,8 +46,13 @@
 
 
 - (void)parserDidStartDocument:(NSXMLParser *)parser {
-	_menuStack = [NSMutableArray array];
 	_modules = [NSMutableArray array];
+	_menuStack = [NSMutableArray array];
+	_sequenceStack = [NSMutableArray array];
+	_navigationSequence = [NSMutableString stringWithCapacity:20];
+	[_navigationSequence appendString:@"R"];
+	_currentMenuLength = 0;
+	
 }
 
 
@@ -77,28 +82,28 @@
 - (void)openMenu:(NSDictionary *)attributes {
 	NSString *name = [attributes objectForKey:@"name"];
 	[_menuStack addObject:name];
-//	NSLog( @"Open menu: %@ [%@]", name, _menuStack );
-	
+	[_sequenceStack addObject:[_navigationSequence mutableCopy]];
+	[_navigationSequence appendString:@"R"];
 }
 
 
 - (void)addModule:(NSDictionary *)attributes {
-	[_modules addObject:[[FreemanModule alloc] initWithName:[attributes objectForKey:@"name"]]];
-//	NSString *name = [attributes objectForKey:@"name"];
-//	NSLog( @"Module: %@", name );	
+	[_modules addObject:[[FreemanModule alloc] initWithName:[attributes objectForKey:@"name"] navigationSequence:[_navigationSequence copy] menuHierarchy:[_menuStack copy]]];
+	[_navigationSequence appendString:@"D"];
 }
 
 
 - (void)closeMenu {
 	[_menuStack removeLastObject];
-//	NSLog( @"Close menu: [%@]", _menuStack );
+	_navigationSequence = [_sequenceStack objectAtIndex:([_sequenceStack count]-1)];
+	[_navigationSequence appendString:@"D"];
+	[_sequenceStack removeLastObject];
 }
 
 
 - (NSArray *)searchFor:(NSString *)query {
 	[_modules enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
 		[obj setScoreForLastAbbreviation:[[obj name] scoreForAbbreviation:query]];
-		NSLog( @"[%@] : [%@]", query, obj );
 	}];
 	
 	NSArray *possibleMatches = [_modules filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^(id obj, NSDictionary *bindings) {

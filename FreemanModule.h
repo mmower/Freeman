@@ -12,11 +12,15 @@
 @interface FreemanModule : NSObject {
 	NSString		*_name;
 	float			_scoreForLastAbbreviation;
+	NSString		*_navigationSequence;
+	NSArray			*_menuHierarchy;
 }
 
 @property (assign) NSString *name;
 @property (assign) float scoreForLastAbbreviation;
+@property (assign) NSString *navigationSequence;
+@property (assign) NSArray *menuHierarchy;
 
-- (id)initWithName:(NSString *)name;
+- (id)initWithName:(NSString *)name navigationSequence:(NSString *)navigationSequence menuHierarchy:(NSArray *)menuHierarchy;
 
 @end

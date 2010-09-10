@@ -13,18 +13,24 @@
 
 @synthesize name = _name;
 @synthesize scoreForLastAbbreviation = _scoreForLastAbbreviation;
+@synthesize navigationSequence = _navigationSequence;
+@synthesize menuHierarchy = _menuHierarchy;
 
-- (id)initWithName:(NSString *)name {
+- (id)initWithName:(NSString *)name navigationSequence:(NSString *)navigationSequence menuHierarchy:(NSArray *)menuHierarchy {
 	if( ( self = [super init] ) ) {
 		_name = name;
 		_scoreForLastAbbreviation = 0.0;
+		_navigationSequence = navigationSequence;
+		_menuHierarchy = menuHierarchy;
 	}
+	
+	NSLog( @"%@", [self description] );
 	
 	return self;
 }
 
 - (NSString *)description {
-	return [NSString stringWithFormat:@"Freeman Module<%@> (%f)", [self name], [self scoreForLastAbbreviation]];
+	return [NSString stringWithFormat:@"Freeman Module<%@> (%f) (%@)", [self name], [self scoreForLastAbbreviation], [self navigationSequence]];
 }
 
 @end
