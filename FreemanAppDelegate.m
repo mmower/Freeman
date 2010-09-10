@@ -174,7 +174,7 @@ OSStatus AppSwitchHandler( EventHandlerCallRef nextHandler, EventRef theEvent, v
 	
 	GetFrontProcess( &psn );
 	CopyProcessName( &psn, (CFStringRef*)&processName );
-	NSLog( @"Front process is now: %@", processName );
+	// NSLog( @"Front process is now: %@", processName );
 	
 	if( [processName isEqualToString:@"Reaktor 5"] ) {
 		[gDelegate setReaktorProcess:[FreemanRemoteProcess remoteProcessWithSerialNumber:psn]];

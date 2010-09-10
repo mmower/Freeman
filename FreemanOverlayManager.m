@@ -11,6 +11,7 @@
 #import "FreemanAppDelegate.h"
 #import "FreemanModuleDatabase.h"
 #import "FreemanModule.h"
+#import "FreemanResultsView.h"
 
 @interface FreemanOverlayManager (PrivateMethods)
 
@@ -42,10 +43,7 @@
 
 - (void)windowDidLoad {
 	[self addObserver:self forKeyPath:@"searchString" options:NSKeyValueObservingOptionNew context:NULL];
-	
-	[[self resultsTable] setTarget:self];
-	[[self resultsTable] setDoubleAction:@selector(insertModule:)];
-	
+	[[self resultsTable] setOverlayManager:self];
 	[[self searchField] setDelegate:self];
 }
 
@@ -137,6 +135,7 @@
 	} else if( commandSelector == @selector(insertNewline:) ) {
 		[self insertModule:self];
 	} else {
+		NSLog( @"Unregistered selector: %@", NSStringFromSelector(commandSelector));
 		return NO;
 	}
 	return YES;

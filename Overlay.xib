@@ -2,7 +2,7 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1060</int>
-		<string key="IBDocument.SystemVersion">10F2521</string>
+		<string key="IBDocument.SystemVersion">10F569</string>
 		<string key="IBDocument.InterfaceBuilderVersion">788</string>
 		<string key="IBDocument.AppKitVersion">1038.29</string>
 		<string key="IBDocument.HIToolboxVersion">461.00</string>
@@ -41,12 +41,12 @@
 			<object class="NSWindowTemplate" id="1005">
 				<int key="NSWindowStyleMask">3</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{196, 311}, {475, 199}}</string>
+				<string key="NSWindowRect">{{196, 269}, {475, 241}}</string>
 				<int key="NSWTFlags">544735232</int>
 				<string key="NSWindowTitle">Freeman</string>
 				<string key="NSWindowClass">NSWindow</string>
 				<nil key="NSViewClass"/>
-				<string key="NSWindowContentMaxSize">{1.79769e+308, 1.79769e+308}</string>
+				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<object class="NSView" key="NSWindowView" id="1006">
 					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
@@ -55,7 +55,7 @@
 						<object class="NSTextField" id="50014653">
 							<reference key="NSNextResponder" ref="1006"/>
 							<int key="NSvFlags">266</int>
-							<string key="NSFrame">{{20, 157}, {435, 22}}</string>
+							<string key="NSFrame">{{20, 199}, {435, 22}}</string>
 							<reference key="NSSuperview" ref="1006"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="284341171">
@@ -146,12 +146,12 @@
 															<int key="NSColorSpace">6</int>
 															<string key="NSCatalogName">System</string>
 															<string key="NSColorName">controlBackgroundColor</string>
-															<object class="NSColor" key="NSColor">
+															<object class="NSColor" key="NSColor" id="972983576">
 																<int key="NSColorSpace">3</int>
-																<bytes key="NSWhite">MC42NjY2NjY2NjY3AA</bytes>
+																<bytes key="NSWhite">MC42NjY2NjY2ODY1AA</bytes>
 															</object>
 														</object>
-														<object class="NSColor" key="NSTextColor">
+														<object class="NSColor" key="NSTextColor" id="141598309">
 															<int key="NSColorSpace">6</int>
 															<string key="NSCatalogName">System</string>
 															<string key="NSColorName">controlTextColor</string>
@@ -200,7 +200,7 @@
 									<reference key="NSSuperview" ref="91815563"/>
 									<reference key="NSTarget" ref="91815563"/>
 									<string key="NSAction">_doScroller:</string>
-									<double key="NSPercent">0.9925373134328358</double>
+									<double key="NSPercent">0.99253731966018677</double>
 								</object>
 								<object class="NSScroller" id="204811814">
 									<reference key="NSNextResponder" ref="91815563"/>
@@ -210,10 +210,10 @@
 									<int key="NSsFlags">1</int>
 									<reference key="NSTarget" ref="91815563"/>
 									<string key="NSAction">_doScroller:</string>
-									<double key="NSPercent">0.99581589958159</double>
+									<double key="NSPercent">0.99581587314605713</double>
 								</object>
 							</object>
-							<string key="NSFrame">{{20, 20}, {435, 129}}</string>
+							<string key="NSFrame">{{20, 62}, {435, 129}}</string>
 							<reference key="NSSuperview" ref="1006"/>
 							<reference key="NSNextKeyView" ref="220411007"/>
 							<int key="NSsFlags">562</int>
@@ -222,17 +222,40 @@
 							<reference key="NSContentView" ref="220411007"/>
 							<bytes key="NSScrollAmts">QSAAAEEgAABBmAAAQZgAAA</bytes>
 						</object>
+						<object class="NSTextField" id="850767824">
+							<reference key="NSNextResponder" ref="1006"/>
+							<int key="NSvFlags">268</int>
+							<string key="NSFrame">{{17, 37}, {441, 17}}</string>
+							<reference key="NSSuperview" ref="1006"/>
+							<bool key="NSEnabled">YES</bool>
+							<object class="NSTextFieldCell" key="NSCell" id="572059761">
+								<int key="NSCellFlags">68288064</int>
+								<int key="NSCellFlags2">272630784</int>
+								<string key="NSContents">Label</string>
+								<reference key="NSSupport" ref="442430129"/>
+								<reference key="NSControlView" ref="850767824"/>
+								<object class="NSColor" key="NSBackgroundColor">
+									<int key="NSColorSpace">6</int>
+									<string key="NSCatalogName">System</string>
+									<string key="NSColorName">controlColor</string>
+									<reference key="NSColor" ref="972983576"/>
+								</object>
+								<reference key="NSTextColor" ref="141598309"/>
+							</object>
+						</object>
 					</object>
-					<string key="NSFrameSize">{475, 199}</string>
+					<string key="NSFrameSize">{475, 241}</string>
 					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1680, 1028}}</string>
-				<string key="NSMaxSize">{1.79769e+308, 1.79769e+308}</string>
+				<string key="NSMaxSize">{3.40282e+38, 3.40282e+38}</string>
 			</object>
 			<object class="NSArrayController" id="994573088">
 				<object class="NSMutableArray" key="NSDeclaredKeys">
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>name</string>
+					<string>menuHierarchy</string>
+					<string>menuPath</string>
 				</object>
 				<string key="NSObjectClassName">FreemanModule</string>
 				<object class="_NSManagedProxy" key="_NSManagedProxy"/>
@@ -355,6 +378,26 @@
 					</object>
 					<int key="connectionID">42</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: selection.menuPath</string>
+						<reference key="source" ref="850767824"/>
+						<reference key="destination" ref="994573088"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="850767824"/>
+							<reference key="NSDestination" ref="994573088"/>
+							<string key="NSLabel">value: selection.menuPath</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">selection.menuPath</string>
+							<object class="NSDictionary" key="NSOptions">
+								<string key="NS.key.0">NSNullPlaceholder</string>
+								<string key="NS.object.0">-</string>
+							</object>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">53</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -399,6 +442,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="50014653"/>
 							<reference ref="91815563"/>
+							<reference ref="850767824"/>
 						</object>
 						<reference key="parent" ref="1005"/>
 					</object>
@@ -466,6 +510,20 @@
 						<reference key="parent" ref="0"/>
 						<string key="objectName">Search Results Controller</string>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">45</int>
+						<reference key="object" ref="850767824"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="572059761"/>
+						</object>
+						<reference key="parent" ref="1006"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">46</int>
+						<reference key="object" ref="572059761"/>
+						<reference key="parent" ref="850767824"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -481,23 +539,29 @@
 					<string>16.IBPluginDependency</string>
 					<string>17.IBPluginDependency</string>
 					<string>18.IBPluginDependency</string>
+					<string>19.CustomClassName</string>
 					<string>19.IBPluginDependency</string>
 					<string>2.IBPluginDependency</string>
 					<string>21.IBPluginDependency</string>
 					<string>24.IBPluginDependency</string>
 					<string>3.IBPluginDependency</string>
 					<string>34.IBPluginDependency</string>
+					<string>45.IBPluginDependency</string>
+					<string>46.IBPluginDependency</string>
 					<string>8.IBPluginDependency</string>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<string>{{985, 279}, {475, 199}}</string>
+					<string>{{653, 237}, {475, 241}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{985, 279}, {475, 199}}</string>
+					<string>{{653, 237}, {475, 241}}</string>
 					<integer value="1"/>
 					<string>{196, 240}</string>
 					<string>{{202, 428}, {480, 270}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>FreemanResultsView</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -525,7 +589,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">44</int>
+			<int key="maxID">53</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -553,7 +617,7 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>NSTableView</string>
+							<string>FreemanResultsView</string>
 							<string>NSTextField</string>
 						</object>
 					</object>
@@ -568,7 +632,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="IBToOneOutletInfo">
 								<string key="name">resultsTable</string>
-								<string key="candidateClassName">NSTableView</string>
+								<string key="candidateClassName">FreemanResultsView</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">searchField</string>
@@ -579,6 +643,14 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">FreemanOverlayManager.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">FreemanResultsView</string>
+					<string key="superclassName">NSTableView</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">FreemanResultsView.h</string>
 					</object>
 				</object>
 			</object>

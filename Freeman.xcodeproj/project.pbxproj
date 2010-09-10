@@ -12,6 +12,7 @@
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		C9219C03123A5B07009E5829 /* FreemanResultsView.m in Sources */ = {isa = PBXBuildFile; fileRef = C9219C02123A5B07009E5829 /* FreemanResultsView.m */; };
 		C9266BF912383783002619C7 /* FreemanOverlayManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C9266BF812383783002619C7 /* FreemanOverlayManager.m */; };
 		C9266C1C12383B79002619C7 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9266C1B12383B79002619C7 /* Carbon.framework */; };
 		C9266C7212384B46002619C7 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9266C7112384B46002619C7 /* Quartz.framework */; };
@@ -36,6 +37,8 @@
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		8D1107310486CEB800E47090 /* Freeman-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Freeman-Info.plist"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Freeman.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Freeman.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C9219C01123A5B07009E5829 /* FreemanResultsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreemanResultsView.h; sourceTree = "<group>"; };
+		C9219C02123A5B07009E5829 /* FreemanResultsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreemanResultsView.m; sourceTree = "<group>"; };
 		C9266BF712383783002619C7 /* FreemanOverlayManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreemanOverlayManager.h; sourceTree = "<group>"; };
 		C9266BF812383783002619C7 /* FreemanOverlayManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreemanOverlayManager.m; sourceTree = "<group>"; };
 		C9266C1B12383B79002619C7 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
@@ -81,6 +84,8 @@
 				C993DF8412391D5A00FCB461 /* FreemanModule.m */,
 				C993E13C123952E900FCB461 /* NSString+FreemanRanking.h */,
 				C993E13D123952E900FCB461 /* NSString+FreemanRanking.m */,
+				C9219C01123A5B07009E5829 /* FreemanResultsView.h */,
+				C9219C02123A5B07009E5829 /* FreemanResultsView.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -222,6 +227,7 @@
 				C993DF8212391D3A00FCB461 /* FreemanModuleDatabase.m in Sources */,
 				C993DF8512391D5A00FCB461 /* FreemanModule.m in Sources */,
 				C993E13E123952E900FCB461 /* NSString+FreemanRanking.m in Sources */,
+				C9219C03123A5B07009E5829 /* FreemanResultsView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

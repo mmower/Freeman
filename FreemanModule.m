@@ -15,6 +15,7 @@
 @synthesize scoreForLastAbbreviation = _scoreForLastAbbreviation;
 @synthesize navigationSequence = _navigationSequence;
 @synthesize menuHierarchy = _menuHierarchy;
+@synthesize menuPath = _menuPath;
 
 - (id)initWithName:(NSString *)name navigationSequence:(NSString *)navigationSequence menuHierarchy:(NSArray *)menuHierarchy {
 	if( ( self = [super init] ) ) {
@@ -22,9 +23,16 @@
 		_scoreForLastAbbreviation = 0.0;
 		_navigationSequence = navigationSequence;
 		_menuHierarchy = menuHierarchy;
+		
+		NSMutableString *menuPath = [NSMutableString stringWithCapacity:30];
+		for( NSString *menu in menuHierarchy ) {
+			if( [menuPath length] > 0 ) {
+				[menuPath appendString:@" : "];
+			}
+			[menuPath appendString:menu];
+		}
+		_menuPath = [menuPath copy];
 	}
-	
-//	NSLog( @"%@", [self description] );
 	
 	return self;
 }
