@@ -8,11 +8,11 @@
 
 #import "FreemanRemoteProcess.h"
 
-
-#define CGKEYCODE_RIGHT (124)
-#define CGKEYCODE_DOWN (125) //125
-#define CGKEYCODE_UP (126)
 #define CGKEYCODE_RETURN (36)
+#define CGKEYCODE_LEFT (123)
+#define CGKEYCODE_RIGHT (124)
+#define CGKEYCODE_DOWN (125)
+#define CGKEYCODE_UP (126)
 
 
 typedef CGEventRef (^EventRefGeneratingBlock)();
@@ -86,39 +86,30 @@ typedef CGEventRef (^EventRefGeneratingBlock)();
 	for( int i = 0; i < [keys length]; i++ ) {
 		NSString *specifier = [keys substringWithRange:NSMakeRange(i, 1)];
 		[self sendKeyStroke:[self mapSpecifierToKeyCode:specifier]];
+		
+		// This is a gross hack. For some reason if we send a cursor-down right after a cursor-right
+		// (to open a submenu) then instead of moving the menu selection down one item, the selection
+		// jumps to the bottom of the menu. This. is. not. good.
+		// So we add a 125ms delay after opening the menu before allowing any other actions. On
+		// my system at least this seems to work reliably but hard-coded delays are a sure indicator
+		// of pain to come and I don't expect this one to be any different.
 		if( [specifier isEqualToString:@"R"] ) {
-			usleep(125000);
+			//usleep(125000);
 		}
 	}
-}
-
-
-- (void)sendRightKey {
-	[self sendKeyStroke:CGKEYCODE_RIGHT];
-}
-
-
-- (void)sendDownKey {
-	[self sendKeyStroke:CGKEYCODE_DOWN];
-}
-
-
-- (void)sendUpKey {
-	[self sendKeyStroke:CGKEYCODE_UP];
-}
-
-
-- (void)sendReturnKey {
-	[self sendKeyStroke:CGKEYCODE_RETURN];
 }
 
 
 - (CGKeyCode)mapSpecifierToKeyCode:(NSString *)specifier {
 	if( [specifier isEqualToString:@"D"] ) {
 		return CGKEYCODE_DOWN;
-	} else if( [specifier isEqualToString:@"R" ] ) {
+	} else if( [specifier isEqualToString:@"U"] ) {
+		return CGKEYCODE_UP;
+	} else if( [specifier isEqualToString:@"L"] ) {
+		return CGKEYCODE_LEFT;
+	} else if( [specifier isEqualToString:@"R"] ) {
 		return CGKEYCODE_RIGHT;
-	} else if( [specifier isEqualToString:@"!" ] ) {
+	} else if( [specifier isEqualToString:@"!"] ) {
 		return CGKEYCODE_RETURN;
 	} else {
 		NSAssert1( NO, @"Unknown specified %@ encountered", specifier );
