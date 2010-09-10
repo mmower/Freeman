@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 
-@interface FreemanOverlayManager : NSWindowController {
+@interface FreemanOverlayManager : NSWindowController <NSTextFieldDelegate> {
 	id				_delegate;
 	BOOL			_enabled;
 	
@@ -17,7 +17,6 @@
 	NSArray			*_searchResults;
 	
 	NSTextField		*_searchField;
-	NSButton		*_insertButton;
 	NSTableView		*_resultsTable;
 	
 	NSThread		*_searchThread;
@@ -30,7 +29,6 @@
 @property (assign) NSArray *searchResults;
 
 @property (assign) IBOutlet NSTextField *searchField;
-@property (assign) IBOutlet NSButton *insertButton;
 @property (assign) IBOutlet NSTableView *resultsTable;
 
 - (id)initWithDelegate:(id)delegate;

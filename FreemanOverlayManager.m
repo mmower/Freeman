@@ -12,6 +12,13 @@
 #import "FreemanModuleDatabase.h"
 #import "FreemanModule.h"
 
+@interface FreemanOverlayManager (PrivateMethods)
+
+- (void)selectPreviousResult;
+- (void)selectNextResult;
+
+@end
+
 
 @implementation FreemanOverlayManager
 
@@ -22,7 +29,6 @@
 @synthesize searchResults = _searchResults;
 
 @synthesize searchField = _searchField;
-@synthesize insertButton = _insertButton;
 @synthesize resultsTable = _resultsTable;
 
 - (id)initWithDelegate:(id)delegate {
@@ -39,6 +45,8 @@
 	
 	[[self resultsTable] setTarget:self];
 	[[self resultsTable] setDoubleAction:@selector(insertModule:)];
+	
+	[[self searchField] setDelegate:self];
 }
 
 
@@ -85,21 +93,30 @@
 			});
 		}
 	}
-	
-//	NSLog( @"Result count = %d", [[self searchResults] count] );
-//	if( [[self searchResults] count] > 0 ) {
-//		NSLog( @"Ask to select result 0" );
-//		dispatch_async( dispatch_get_main_queue(), ^{
-//			NSLog( @"Select result 0" );
-//			
-//		} );
-//	}
+}
+
+
+- (void)selectPreviousResult {
+	int currentRow = [[self resultsTable] selectedRow];
+	if( currentRow > 0 ) {
+		[[self resultsTable] selectRowIndexes:[NSIndexSet indexSetWithIndex:(currentRow-1)] byExtendingSelection:NO];
+		[[self resultsTable] scrollRowToVisible:(currentRow-1)];
+	}
+}
+
+
+- (void)selectNextResult {
+	int currentRow = [[self resultsTable] selectedRow];
+	if( currentRow < ([[self searchResults] count]-1) ) {
+		[[self resultsTable] selectRowIndexes:[NSIndexSet indexSetWithIndex:(currentRow+1)] byExtendingSelection:NO];
+		[[self resultsTable] scrollRowToVisible:(currentRow+1)];
+	}
 }
 
 
 - (IBAction)insertModule:(id)sender {
+	NSLog( @"insertModule:" );
 	[[self window] orderOut:sender];
-	NSLog( @"Sender = %@", sender );
 	if( [[self resultsTable] selectedRow] != -1 ) {
 		FreemanModule *module = [[self searchResults] objectAtIndex:[[self resultsTable] selectedRow]];
 		if( [_delegate respondsToSelector:@selector(insertModule:)] ) {
@@ -109,6 +126,21 @@
 	
 }
 
+
+#pragma mark NSTextField delegate
+
+- (BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector {
+	if( commandSelector == @selector(moveUp:) ) {
+		[self selectPreviousResult];
+	} else if( commandSelector == @selector(moveDown:) ) {
+		[self selectNextResult];
+	} else if( commandSelector == @selector(insertNewline:) ) {
+		[self insertModule:self];
+	} else {
+		return NO;
+	}
+	return YES;
+}
 
 
 @end
