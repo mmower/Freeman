@@ -13,6 +13,9 @@
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		C9219C03123A5B07009E5829 /* FreemanResultsView.m in Sources */ = {isa = PBXBuildFile; fileRef = C9219C02123A5B07009E5829 /* FreemanResultsView.m */; };
+		C9219C5C123A8C03009E5829 /* Freeman.icns in Resources */ = {isa = PBXBuildFile; fileRef = C9219C5B123A8C03009E5829 /* Freeman.icns */; };
+		C9219C5F123A8C26009E5829 /* MenuActive.png in Resources */ = {isa = PBXBuildFile; fileRef = C9219C5D123A8C26009E5829 /* MenuActive.png */; };
+		C9219C60123A8C26009E5829 /* MenuNormal.png in Resources */ = {isa = PBXBuildFile; fileRef = C9219C5E123A8C26009E5829 /* MenuNormal.png */; };
 		C9266BF912383783002619C7 /* FreemanOverlayManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C9266BF812383783002619C7 /* FreemanOverlayManager.m */; };
 		C9266C1C12383B79002619C7 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9266C1B12383B79002619C7 /* Carbon.framework */; };
 		C9266C7212384B46002619C7 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9266C7112384B46002619C7 /* Quartz.framework */; };
@@ -39,6 +42,9 @@
 		8D1107320486CEB800E47090 /* Freeman.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Freeman.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9219C01123A5B07009E5829 /* FreemanResultsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreemanResultsView.h; sourceTree = "<group>"; };
 		C9219C02123A5B07009E5829 /* FreemanResultsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreemanResultsView.m; sourceTree = "<group>"; };
+		C9219C5B123A8C03009E5829 /* Freeman.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Freeman.icns; sourceTree = "<group>"; };
+		C9219C5D123A8C26009E5829 /* MenuActive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MenuActive.png; sourceTree = "<group>"; };
+		C9219C5E123A8C26009E5829 /* MenuNormal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MenuNormal.png; sourceTree = "<group>"; };
 		C9266BF712383783002619C7 /* FreemanOverlayManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreemanOverlayManager.h; sourceTree = "<group>"; };
 		C9266BF812383783002619C7 /* FreemanOverlayManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreemanOverlayManager.m; sourceTree = "<group>"; };
 		C9266C1B12383B79002619C7 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
@@ -142,6 +148,9 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				C9219C5D123A8C26009E5829 /* MenuActive.png */,
+				C9219C5E123A8C26009E5829 /* MenuNormal.png */,
+				C9219C5B123A8C03009E5829 /* Freeman.icns */,
 				8D1107310486CEB800E47090 /* Freeman-Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
@@ -210,6 +219,9 @@
 				1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */,
 				C993DFAD12392D6600FCB461 /* modules.xml in Resources */,
 				C993E0001239324000FCB461 /* Overlay.xib in Resources */,
+				C9219C5C123A8C03009E5829 /* Freeman.icns in Resources */,
+				C9219C5F123A8C26009E5829 /* MenuActive.png in Resources */,
+				C9219C60123A8C26009E5829 /* MenuNormal.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

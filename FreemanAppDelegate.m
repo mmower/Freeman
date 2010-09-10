@@ -65,7 +65,7 @@ FreemanAppDelegate *gDelegate = nil;
 	} else {
 		gDelegate = self;
 		_overlayManager = [[FreemanOverlayManager alloc] initWithDelegate:self];
-		[self registerHotKeys];
+		// [self registerHotKeys];
 		[self registerAppSwitch];
 		
 		[NSEvent addGlobalMonitorForEventsMatchingMask:NSEventMaskFromType(NSLeftMouseDown) handler:^(NSEvent *event) {
@@ -78,7 +78,8 @@ FreemanAppDelegate *gDelegate = nil;
 - (void)awakeFromNib {
 	_statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
 	[_statusItem setMenu:_statusMenu];
-	[_statusItem setTitle:@"R"];
+	[_statusItem setImage:[NSImage imageNamed:@"MenuNormal.png"]];
+	// [_statusItem setTitle:@"R"];
 	[_statusItem setHighlightMode:YES];
 }
 
@@ -178,15 +179,14 @@ OSStatus AppSwitchHandler( EventHandlerCallRef nextHandler, EventRef theEvent, v
 	
 	if( [processName isEqualToString:@"Reaktor 5"] ) {
 		[gDelegate setReaktorProcess:[FreemanRemoteProcess remoteProcessWithSerialNumber:psn]];
-		[[gDelegate statusItem] setTitle:@"R!"];
+		[[gDelegate statusItem] setImage:[NSImage imageNamed:@"MenuActive.png"]];
 		[[gDelegate overlayManager] setEnabled:YES];
 	} else {
-		[[gDelegate statusItem] setTitle:@"R"];
+		[[gDelegate statusItem] setImage:[NSImage imageNamed:@"MenuNormal.png"]];
 		[[gDelegate overlayManager] setEnabled:NO];
 	}
 	
 	return noErr;
 }
-
 
 @end
