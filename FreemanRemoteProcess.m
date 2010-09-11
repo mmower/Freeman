@@ -88,6 +88,7 @@ typedef CGEventRef (^EventRefGeneratingBlock)();
 
 
 - (void)sendKeySequence:(NSString *)keys {
+	NSLog( @"SEND KEY SEQUENCE: %@", keys );
 	for( int i = 0; i < [keys length]; i++ ) {
 		NSString *specifier = [keys substringWithRange:NSMakeRange(i, 1)];
 		[self sendKeyStroke:[self mapSpecifierToKeyCode:specifier]];
@@ -99,7 +100,7 @@ typedef CGEventRef (^EventRefGeneratingBlock)();
 		// my system at least this seems to work reliably but hard-coded delays are a sure indicator
 		// of pain to come and I don't expect this one to be any different.
 		if( [specifier isEqualToString:@"R"] ) {
-			//usleep(125000);
+			usleep(125000);
 		}
 	}
 }
