@@ -1,5 +1,5 @@
 Freeman.xcodeproj/*.pbxuser
-Freeman.xcodeproj/*.perspectivev3
-Freeman.xcodeproj/*.mode2v3
+Freeman.xcodeproj/*.perspective*
+Freeman.xcodeproj/*.mode*
 build
 
