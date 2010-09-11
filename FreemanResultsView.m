@@ -10,9 +10,8 @@
 
 #import "FreemanOverlayManager.h"
 
-#define KEYCODE_ENTER (36)
-#define KEYCODE_RETURN (76)
-#define KEYCODE_ESCAPE (53)
+#import "FreemanKeyCodes.h"
+
 
 @implementation FreemanResultsView
 

@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 
 @class FreemanResultsView;
+@class FreemanSearchField;
+@class FreemanFieldEditor;
 
 @interface FreemanOverlayManager : NSWindowController <NSTextFieldDelegate> {
 	id									_delegate;
@@ -17,8 +19,9 @@
 	NSString						*_searchString;
 	NSArray							*_searchResults;
 	
-	NSTextField					*_searchField;
+	FreemanSearchField	*_searchField;
 	FreemanResultsView	*_resultsTable;
+	FreemanFieldEditor	*_fieldEditor;
 	
 	NSThread						*_searchThread;
 }
@@ -29,7 +32,7 @@
 @property (assign) NSString *searchString;
 @property (assign) NSArray *searchResults;
 
-@property (assign) IBOutlet NSTextField *searchField;
+@property (assign) IBOutlet FreemanSearchField *searchField;
 @property (assign) IBOutlet FreemanResultsView *resultsTable;
 
 - (id)initWithDelegate:(id)delegate;

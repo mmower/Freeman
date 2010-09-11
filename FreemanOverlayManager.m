@@ -12,6 +12,8 @@
 #import "FreemanModuleDatabase.h"
 #import "FreemanModule.h"
 #import "FreemanResultsView.h"
+#import "FreemanSearchField.h"
+#import "FreemanFieldEditor.h"
 
 @interface FreemanOverlayManager (PrivateMethods)
 
@@ -45,18 +47,19 @@
 	[self addObserver:self forKeyPath:@"searchString" options:NSKeyValueObservingOptionNew context:NULL];
 	[[self resultsTable] setOverlayManager:self];
 	[[self searchField] setDelegate:self];
+	[[self searchField] setOverlayManager:self];
 }
 
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if( [keyPath isEqualToString:@"searchString"] ) {
 		if( _searchThread ) {
-			NSLog( @"Cancelling active search" );
+			// NSLog( @"Cancelling active search" );
 			[_searchThread cancel];
 		}
 		
 		_searchThread = [[NSThread alloc] initWithTarget:self selector:@selector(search:) object:nil];
-		NSLog( @"Start new search for: %@", [self searchString] );
+		// NSLog( @"Start new search for: %@", [self searchString] );
 		[_searchThread start];
 	}
 }
@@ -87,7 +90,7 @@
 		});
 		return;
 	} else {
-		NSLog( @"Search for %@", [self searchString] );
+		// NSLog( @"Search for %@", [self searchString] );
 		
 		NSArray *results = [[[self delegate] moduleDatabase] searchFor:[self searchString]];
 		if( [results count] > 0 && ![[NSThread currentThread] isCancelled] ) {
@@ -145,6 +148,20 @@
 		return NO;
 	}
 	return YES;
+}
+
+
+#pragma mark NSWindow delegate
+
+- (id)windowWillReturnFieldEditor:(NSWindow *)sender toObject:(id)object {
+	if( [object isKindOfClass:[NSTextField class]] ) {
+		if( !_fieldEditor ) {
+			_fieldEditor = [[FreemanFieldEditor alloc] init];
+			[_fieldEditor setFieldEditor:YES];
+		}
+		return _fieldEditor;
+	}
+	return nil;
 }
 
 
