@@ -44,8 +44,8 @@
 }
 
 - (void)addedModule {
-	[_navigationSequence appendString:@"D"];
 	NSLog( @"addedModule navigationSequence=(%@)", _navigationSequence );
+	[_navigationSequence appendString:@"D"];
 }
 
 
