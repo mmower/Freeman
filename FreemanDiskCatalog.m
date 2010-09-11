@@ -33,18 +33,25 @@
 	
 	NSFileManager *fileManager = [[NSFileManager alloc] init];
 	
+	// Because of the way macros and core-cells are presented we iterate twice through each folder
+	// the first time to find all sub-folders and process them, the second time to add modules in
+	// the current folder
+	
 	NSArray *files = [fileManager contentsOfDirectoryAtPath:path error:&error];
 	for( NSString *file in files ) {
 		BOOL isDirectory;
-		
 		[fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/%@",path,file] isDirectory:&isDirectory];
 		if( isDirectory ) {
 			[self findFilesFromPath:[NSString stringWithFormat:@"%@/%@",path,file] withFileType:fileType];
-		} else if( [[file pathExtension] isEqualToString:fileType] ) {
+		}		
+	}
+	
+	for( NSString *file in files ) {
+		BOOL isDirectory;
+		[fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/%@",path,file] isDirectory:&isDirectory];
+		if( !isDirectory && [[file pathExtension] isEqualToString:fileType] ) {
 			[self addModule:[NSDictionary dictionaryWithObject:[file stringByDeletingPathExtension] forKey:@"name"]];
 		}
-		
-		NSLog( @"%@", file );
 	}
 	
 	[self closeMenu];
