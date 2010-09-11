@@ -11,14 +11,7 @@
 
 @interface FreemanModuleDatabase : NSObject <NSXMLParserDelegate> {
 	NSMutableArray			*_modules;
-	
-	NSMutableArray			*_menuStack;
-	NSMutableArray			*_sequenceStack;
-	NSMutableString			*_navigationSequence;
-	NSUInteger				_currentMenuLength;
 }
-
-- (id)initWithDatabasePath:(NSString *)databasePath;
 
 - (NSArray *)searchFor:(NSString *)query;
 

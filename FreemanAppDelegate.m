@@ -52,7 +52,7 @@ FreemanAppDelegate *gDelegate = nil;
 
 - (id)init {
 	if( ( self = [super init] ) ) {
-		_moduleDatabase = [[FreemanModuleDatabase alloc] initWithDatabasePath:[[NSBundle mainBundle] pathForResource:@"modules" ofType:@"xml"]];
+		_moduleDatabase = [[FreemanModuleDatabase alloc] init];
 	}
 	
 	return self;

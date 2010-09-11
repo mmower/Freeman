@@ -8,6 +8,7 @@
 
 #import "FreemanXMLCatalog.h"
 
+#import "FreemanModule.h"
 
 @interface FreemanXMLCatalog (PrivateMethods)
 
@@ -18,11 +19,10 @@
 @end
 
 
-
 @implementation FreemanXMLCatalog
 
-- (id)initWithCatalogFile:(NSString *)catalogFile {
-	if( ( self = [super init] ) ) {
+- (id)initWithName:(NSString *)name catalogFile:(NSString *)catalogFile {
+	if( ( self = [super initWithName:name] ) ) {
 		NSData *xmlData = [[NSFileManager defaultManager] contentsAtPath:catalogFile];
 		if( xmlData ) {
 			NSXMLParser *parser = [[NSXMLParser alloc] initWithData:xmlData];
@@ -41,13 +41,11 @@
 
 
 - (void)parserDidStartDocument:(NSXMLParser *)parser {
-	_modules = [NSMutableArray array];
-	_menuStack = [NSMutableArray array];
-	_sequenceStack = [NSMutableArray array];
+	_menuStack          = [NSMutableArray array];
+	_sequenceStack      = [NSMutableArray array];
+	_currentMenuLength  = 0;
 	_navigationSequence = [NSMutableString stringWithCapacity:20];
 	[_navigationSequence appendString:@"R"];
-	_currentMenuLength = 0;
-	
 }
 
 
@@ -83,7 +81,7 @@
 
 
 - (void)addModule:(NSDictionary *)attributes {
-	[_modules addObject:[[FreemanModule alloc] initWithName:[attributes objectForKey:@"name"] navigationSequence:[NSString stringWithFormat:@"%@!",[_navigationSequence copy]] menuHierarchy:[_menuStack copy]]];
+	[[self modules] addObject:[[FreemanModule alloc] initWithName:[attributes objectForKey:@"name"] navigationSequence:[NSString stringWithFormat:@"%@!",[_navigationSequence copy]] menuHierarchy:[_menuStack copy]]];
 	[_navigationSequence appendString:@"D"];
 }
 

@@ -8,12 +8,15 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "FreemanCatalog.h"
 
-@interface FreemanXMLCatalog : NSObject {
-
+@interface FreemanXMLCatalog : FreemanCatalog <NSXMLParserDelegate> {
+	NSMutableArray			*_menuStack;
+	NSMutableArray			*_sequenceStack;
+	NSMutableString			*_navigationSequence;
+	NSUInteger					_currentMenuLength;
 }
 
-- (id)initWithCatalogFile:(NSString *)catalogFile;
-
+- (id)initWithName:(NSString *)name catalogFile:(NSString *)catalogFile;
 
 @end
