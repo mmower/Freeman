@@ -48,7 +48,7 @@
 
 
 - (NSString *)completeNavigationSequence {
-	return [NSString stringWithFormat:@"%@%@", [[self catalog] navigationSequence], [self navigationSequence]];
+	return [NSString stringWithFormat:@"%@%@!", [[self catalog] navigationSequence], [self navigationSequence]];
 }
 
 
