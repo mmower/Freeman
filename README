@@ -9,12 +9,23 @@ Freeman will appear in your menubar to show you it is running but does not displ
 
 Now switch to Reaktor (Freeman was tested with v5.5 but should also work with v5.1.5) and you will notice the Freeman icon switches to yellow on blue. This lets you know that Freeman is waiting for your input.
 
-To use Freeman Option-Click on your structure window where you want a new module to appear. The Freeman browser will appear with a search box and a menu of results. Initially it will be empty.
+To use Freeman Option-Click on your structure window where you want a new module to appear. The Freeman browser will appear with a search box and a menu of results. Initially both will be empty.
 
-Start typing the name of a module you want, bearing in mind Freeman has a smart 'abbreviation' search. Let's say you want the "Audio Voice Combiner" from Built-In's/Auxilliary. You could type `audio voice combiner` but it would be quicker to type `avc`. In fact, it's enough to type `av` since this is a unique enough combination to identify the module. To insert the module press the `Return` key.
+Start typing the name of a module you want, bearing in mind Freeman has a smart 'abbreviation' search. Let's say you want the "Audio Voice Combiner" from Built-In's/Auxilliary. You could type `audio voice combiner` but it would be quicker to type `avc`. In fact, it's enough to type `av` since this is a unique enough combination to identify the module.
 
-When typing in the search field you will notice that results appear and disappear as you type. At any time the first result will be highlighted with a gray background. You can change the selection using the cursor keys.
+Notice that the menu of search results updates while you are typing and, automatically, selects the first (best matching) result. You can see this by the gray background of the first result. To insert this module into your structure simply press the `Return` key.
 
-Let's say you want the "Snap Value" module. Type `sn` and you will see that "Snapshot" is selected with "Snap Value" one further down. Hit the down arrow (you don't need to focus on the menu, you can type the down arrow while editing the search field) and then return to insert it.
+Let's say you want the "Snap Value" module. Type `sn` and you will see that "Snapshot" is selected with "Snap Value" one further down. Simply press the down arrow to select it. You don't need to switch focus from the search field to do this, just press down and, when you have selected the right module, hit return to insert it.
 
 If you find it more convenient you can also browse directly in the menu and hit return to insert a module.
+
+Notes
+=====
+
+Freeman 0.5 is for Mac OS X 10.6 ("Snow Leopard") only and will not work on previous releases. Additionally it has only been tested on OSX 10.6.4 although it may work on earlier releases of 10.6.
+
+Freeman 0.5 only supports the built-in modules at primary level. Invoking it on a Core structure will have unpredictable (but not disastrous) results. Invoking it on a panel window may potentially be destructive so this should be avoided.
+
+At this point, please report any bugs and/or feature requests to me: self@mattmower.com
+
+
