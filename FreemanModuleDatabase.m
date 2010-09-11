@@ -9,14 +9,17 @@
 #import "FreemanModuleDatabase.h"
 
 #import "FreemanXMLCatalog.h"
+#import "FreemanDiskCatalog.h"
 #import "FreemanModule.h"
 
 #import "NSString+FreemanRanking.h"
 
 
 @interface FreemanModuleDatabase (PrivateMethods)
-@end
 
+- (NSString *)catalogNavigationSequence;
+
+@end
 
 
 @implementation FreemanModuleDatabase
@@ -24,12 +27,28 @@
 
 - (id)init {
 	if( ( self = [super init] ) ) {
-		FreemanXMLCatalog *builtsInCatalog = [[FreemanXMLCatalog alloc] initWithName:@""
-                                                                     catalogFile:[[NSBundle mainBundle] pathForResource:@"modules" ofType:@"xml"]];
-		_modules = [builtsInCatalog modules];
+		_catalogs = [NSMutableArray array];
+		_modules = [NSMutableArray array];
+		[self addCatalog:[[FreemanXMLCatalog alloc] initWithName:@"Built-In Module"
+		                                                 catalogFile:[[NSBundle mainBundle] pathForResource:@"modules" ofType:@"xml"]]];
+		[self addCatalog:[[FreemanDiskCatalog alloc] initWithName:@"Core Cell"
+                                                 fromRootPath:@"/Volumes/Corrino/NativeInstruments/Reaktor 5/Library/Core Cells"
+                                                 withFileType:@"rcc"]];
+		[self addCatalog:[[FreemanDiskCatalog alloc] initWithName:@"Macro"
+                                                 fromRootPath:@"/Volumes/Corrino/NativeInstruments/Reaktor 5/Library/Macros"
+                                                 withFileType:@"mdl"]];
 	}
 	
 	return self;
+}
+
+
+- (void)addCatalog:(FreemanCatalog *)catalog {
+	NSLog( @"Set catalog navigation sequence = %@", [self catalogNavigationSequence] );
+	[catalog setNavigationSequence:[self catalogNavigationSequence]];
+	[_catalogs addObject:catalog];
+	[_modules addObjectsFromArray:[catalog modules]];
+	[catalog list];
 }
 
 
@@ -54,5 +73,14 @@
 	}];
 }
 
+
+- (NSString *)catalogNavigationSequence {
+	NSMutableString *sequence = [NSMutableString stringWithCapacity:10];
+	[sequence appendString:@"R"];
+	for( int i = 0; i < [_catalogs count]; i++ ) {
+		[sequence appendString:@"D"];
+	}
+	return [sequence copy];	
+}
 
 @end

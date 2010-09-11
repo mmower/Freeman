@@ -10,14 +10,6 @@
 
 #import "FreemanModule.h"
 
-@interface FreemanXMLCatalog (PrivateMethods)
-
-- (void)openMenu:(NSDictionary *)attributes;
-- (void)addModule:(NSDictionary *)attributes;
-- (void)closeMenu;
-
-@end
-
 
 @implementation FreemanXMLCatalog
 
@@ -41,16 +33,11 @@
 
 
 - (void)parserDidStartDocument:(NSXMLParser *)parser {
-	_menuStack          = [NSMutableArray array];
-	_sequenceStack      = [NSMutableArray array];
-	_currentMenuLength  = 0;
-	_navigationSequence = [NSMutableString stringWithCapacity:20];
-	[_navigationSequence appendString:@"R"];
 }
 
 
 - (void)parserDidEndDocument:(NSXMLParser *)parser {
-	_menuStack = nil;
+	[self catalogLoaded];
 }
 
 
@@ -69,28 +56,6 @@
 	if( [elementName isEqualToString:@"menu"] ) {
 		[self closeMenu];
 	}		
-}
-
-
-- (void)openMenu:(NSDictionary *)attributes {
-	NSString *name = [attributes objectForKey:@"name"];
-	[_menuStack addObject:name];
-	[_sequenceStack addObject:[_navigationSequence mutableCopy]];
-	[_navigationSequence appendString:@"R"];
-}
-
-
-- (void)addModule:(NSDictionary *)attributes {
-	[[self modules] addObject:[[FreemanModule alloc] initWithName:[attributes objectForKey:@"name"] navigationSequence:[NSString stringWithFormat:@"%@!",[_navigationSequence copy]] menuHierarchy:[_menuStack copy]]];
-	[_navigationSequence appendString:@"D"];
-}
-
-
-- (void)closeMenu {
-	[_menuStack removeLastObject];
-	_navigationSequence = [_sequenceStack objectAtIndex:([_sequenceStack count]-1)];
-	[_navigationSequence appendString:@"D"];
-	[_sequenceStack removeLastObject];
 }
 
 @end

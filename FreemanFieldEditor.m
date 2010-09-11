@@ -17,20 +17,21 @@
 - (void)keyDown:(NSEvent *)event {
 	NSLog( @"keyCode = %03d OPT=%@", [event keyCode], ([event modifierFlags] & NSAlternateKeyMask) ? @"Y" : @"N" );
 	
-	if( ([event modifierFlags] & NSAlternateKeyMask) && [event charactersIgnoringModifi] >= 18 && [event keyCode] <= 22 ) {
-		NSBeep();
-	} else {
-		[super keyDown:event];
-	}
+	NSString *chars = [event charactersIgnoringModifiers];
+	NSLog( @"chars = %d", [chars integerValue] );
+	
+	[super keyDown:event];
 }
 
 
 // Swallow key-up events for the key-down events we are special processing
 - (void)keyUp:(NSEvent *)event {
-	if( !(([event modifierFlags] & NSAlternateKeyMask) && [event keyCode] >= 18 && [event keyCode] <= 22) ) {
-		[super keyUp:event];
-	}
+	[super keyUp:event];
 }
 
 
-end
+// - (int)favouriteNumber:(NSString *)chars {
+// }
+
+
+@end

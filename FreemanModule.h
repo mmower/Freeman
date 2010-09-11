@@ -8,13 +8,15 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class FreemanCatalog;
 
 @interface FreemanModule : NSObject {
-	NSString		*_name;
-	float				_scoreForLastAbbreviation;
-	NSString		*_navigationSequence;
-	NSArray			*_menuHierarchy;
-	NSString		*_menuPath;
+	NSString				*_name;
+	float						_scoreForLastAbbreviation;
+	NSString				*_navigationSequence;
+	NSArray					*_menuHierarchy;
+	NSString				*_menuPath;
+	FreemanCatalog	*_catalog;
 }
 
 @property (assign) NSString *name;
@@ -22,7 +24,10 @@
 @property (assign) NSString *navigationSequence;
 @property (assign) NSArray *menuHierarchy;
 @property (readonly) NSString *menuPath;
+@property (assign) FreemanCatalog *catalog;
 
-- (id)initWithName:(NSString *)name navigationSequence:(NSString *)navigationSequence menuHierarchy:(NSArray *)menuHierarchy;
+- (id)initWithName:(NSString *)name catalog:(FreemanCatalog *)catalog navigationSequence:(NSString *)navigationSequence menuHierarchy:(NSArray *)menuHierarchy;
+
+- (NSString *)completeNavigationSequence;
 
 @end

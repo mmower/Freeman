@@ -27,6 +27,7 @@
 		C975FB35123B83D900C2AC4E /* FreemanDiskCatalog.m in Sources */ = {isa = PBXBuildFile; fileRef = C975FB32123B83D900C2AC4E /* FreemanDiskCatalog.m */; };
 		C975FB36123B83D900C2AC4E /* FreemanXMLCatalog.m in Sources */ = {isa = PBXBuildFile; fileRef = C975FB34123B83D900C2AC4E /* FreemanXMLCatalog.m */; };
 		C975FB39123B849800C2AC4E /* FreemanCatalog.m in Sources */ = {isa = PBXBuildFile; fileRef = C975FB38123B849800C2AC4E /* FreemanCatalog.m */; };
+		C975FBBE123B9BD900C2AC4E /* FreemanNavigationStack.m in Sources */ = {isa = PBXBuildFile; fileRef = C975FBBD123B9BD900C2AC4E /* FreemanNavigationStack.m */; };
 		C993DDFB1238D6C000FCB461 /* FreemanRemoteProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = C993DDFA1238D6C000FCB461 /* FreemanRemoteProcess.m */; };
 		C993DF8212391D3A00FCB461 /* FreemanModuleDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = C993DF8112391D3A00FCB461 /* FreemanModuleDatabase.m */; };
 		C993DF8512391D5A00FCB461 /* FreemanModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C993DF8412391D5A00FCB461 /* FreemanModule.m */; };
@@ -84,6 +85,8 @@
 		C975FB34123B83D900C2AC4E /* FreemanXMLCatalog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreemanXMLCatalog.m; sourceTree = "<group>"; };
 		C975FB37123B849800C2AC4E /* FreemanCatalog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreemanCatalog.h; sourceTree = "<group>"; };
 		C975FB38123B849800C2AC4E /* FreemanCatalog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreemanCatalog.m; sourceTree = "<group>"; };
+		C975FBBC123B9BD900C2AC4E /* FreemanNavigationStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreemanNavigationStack.h; sourceTree = "<group>"; };
+		C975FBBD123B9BD900C2AC4E /* FreemanNavigationStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreemanNavigationStack.m; sourceTree = "<group>"; };
 		C993DDF91238D6C000FCB461 /* FreemanRemoteProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreemanRemoteProcess.h; sourceTree = "<group>"; };
 		C993DDFA1238D6C000FCB461 /* FreemanRemoteProcess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreemanRemoteProcess.m; sourceTree = "<group>"; };
 		C993DF7F123912C200FCB461 /* modules.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = modules.xml; sourceTree = "<group>"; };
@@ -139,6 +142,8 @@
 				C975FAF7123B0E1600C2AC4E /* FreemanFieldEditor.m */,
 				C975FB37123B849800C2AC4E /* FreemanCatalog.h */,
 				C975FB38123B849800C2AC4E /* FreemanCatalog.m */,
+				C975FBBC123B9BD900C2AC4E /* FreemanNavigationStack.h */,
+				C975FBBD123B9BD900C2AC4E /* FreemanNavigationStack.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -296,6 +301,7 @@
 				C975FB35123B83D900C2AC4E /* FreemanDiskCatalog.m in Sources */,
 				C975FB36123B83D900C2AC4E /* FreemanXMLCatalog.m in Sources */,
 				C975FB39123B849800C2AC4E /* FreemanCatalog.m in Sources */,
+				C975FBBE123B9BD900C2AC4E /* FreemanNavigationStack.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

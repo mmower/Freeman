@@ -8,9 +8,12 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "FreemanCatalog.h"
 
-@interface FreemanDiskCatalog : NSObject {
+@interface FreemanDiskCatalog : FreemanCatalog {
 
 }
+
+- (id)initWithName:(NSString *)name fromRootPath:(NSString *)rootPath withFileType:(NSString *)fileType;
 
 @end

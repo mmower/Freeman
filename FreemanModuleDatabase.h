@@ -8,10 +8,14 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class FreemanCatalog;
 
-@interface FreemanModuleDatabase : NSObject <NSXMLParserDelegate> {
+@interface FreemanModuleDatabase : NSObject {
+	NSMutableArray			*_catalogs;
 	NSMutableArray			*_modules;
 }
+
+- (void)addCatalog:(FreemanCatalog *)catalog;
 
 - (NSArray *)searchFor:(NSString *)query;
 

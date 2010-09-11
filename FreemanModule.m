@@ -8,21 +8,25 @@
 
 #import "FreemanModule.h"
 
+#import "FreemanCatalog.h"
 
 @implementation FreemanModule
 
-@synthesize name = _name;
+@synthesize name                     = _name;
 @synthesize scoreForLastAbbreviation = _scoreForLastAbbreviation;
-@synthesize navigationSequence = _navigationSequence;
-@synthesize menuHierarchy = _menuHierarchy;
-@synthesize menuPath = _menuPath;
+@synthesize navigationSequence       = _navigationSequence;
+@synthesize menuHierarchy            = _menuHierarchy;
+@synthesize menuPath                 = _menuPath;
+@synthesize catalog                  = _catalog;
 
-- (id)initWithName:(NSString *)name navigationSequence:(NSString *)navigationSequence menuHierarchy:(NSArray *)menuHierarchy {
+
+- (id)initWithName:(NSString *)name catalog:(FreemanCatalog *)catalog navigationSequence:(NSString *)navigationSequence menuHierarchy:(NSArray *)menuHierarchy {
 	if( ( self = [super init] ) ) {
-		_name = name;
+		_name                     = name;
+		_catalog                  = catalog;
 		_scoreForLastAbbreviation = 0.0;
-		_navigationSequence = navigationSequence;
-		_menuHierarchy = menuHierarchy;
+		_navigationSequence       = navigationSequence;
+		_menuHierarchy            = menuHierarchy;
 		
 		NSMutableString *menuPath = [NSMutableString stringWithCapacity:30];
 		for( NSString *menu in menuHierarchy ) {
@@ -37,8 +41,15 @@
 	return self;
 }
 
+
 - (NSString *)description {
 	return [NSString stringWithFormat:@"Freeman Module<%@> (%f) (%@)", [self name], [self scoreForLastAbbreviation], [self navigationSequence]];
 }
+
+
+- (NSString *)completeNavigationSequence {
+	return [NSString stringWithFormat:@"%@%@", [[self catalog] navigationSequence], [self navigationSequence]];
+}
+
 
 @end

@@ -11,10 +11,6 @@
 #import "FreemanCatalog.h"
 
 @interface FreemanXMLCatalog : FreemanCatalog <NSXMLParserDelegate> {
-	NSMutableArray			*_menuStack;
-	NSMutableArray			*_sequenceStack;
-	NSMutableString			*_navigationSequence;
-	NSUInteger					_currentMenuLength;
 }
 
 - (id)initWithName:(NSString *)name catalogFile:(NSString *)catalogFile;
