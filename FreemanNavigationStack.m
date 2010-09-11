@@ -27,7 +27,6 @@
 	return self;
 }
 
-
 - (void)enterMenu:(NSString *)name {
 	[_menuStack addObject:name];
 	[_sequenceStack addObject:[_navigationSequence mutableCopy]];
@@ -40,12 +39,16 @@
 	_navigationSequence = [_sequenceStack objectAtIndex:([_sequenceStack count]-1)];
 	[_navigationSequence appendString:@"D"];
 	[_sequenceStack removeLastObject];	
-	NSLog( @"exitMenu navigationSequence=(%@)", _navigationSequence );
+	// NSLog( @"exitMenu navigationSequence=(%@)", _navigationSequence );
 }
 
 - (void)addedModule {
-	NSLog( @"addedModule navigationSequence=(%@)", _navigationSequence );
+	// NSLog( @"addedModule navigationSequence=(%@)", _navigationSequence );
 	[_navigationSequence appendString:@"D"];
+}
+
+- (void)unwind {
+	[_navigationSequence deleteCharactersInRange:NSMakeRange([_navigationSequence length]-1,1)];
 }
 
 

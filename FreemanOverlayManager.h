@@ -39,6 +39,7 @@
 
 - (void)prompt;
 - (void)closeAndActivateReaktor;
+- (void)quickSelect:(NSUInteger)result;
 
 - (IBAction)insertModule:(id)sender;
 

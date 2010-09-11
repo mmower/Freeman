@@ -10,6 +10,8 @@
 
 #import "FreemanCatalog.h"
 
+#define AUTO_INSERT	0
+
 @implementation FreemanModule
 
 @synthesize name                     = _name;
@@ -48,7 +50,12 @@
 
 
 - (NSString *)completeNavigationSequence {
+#if AUTO_INSERT
+	NSBeep();
 	return [NSString stringWithFormat:@"%@%@!", [[self catalog] navigationSequence], [self navigationSequence]];
+#else
+	return [NSString stringWithFormat:@"%@%@", [[self catalog] navigationSequence], [self navigationSequence]];
+#endif
 }
 
 

@@ -19,6 +19,7 @@
 
 - (void)selectPreviousResult;
 - (void)selectNextResult;
+- (void)closeAndInsertModule:(FreemanModule *)module;
 
 @end
 
@@ -120,14 +121,26 @@
 	}
 }
 
+- (void)quickSelect:(NSUInteger)result {
+	if( result > 0 && result <= [[self searchResults] count] ) {
+		FreemanModule *selectedModule = [[self searchResults] objectAtIndex:(result-1)];
+		NSLog( @"quickSelect:%d -> %@", result, selectedModule );
+		[self closeAndInsertModule:selectedModule];
+	}
+}
+
 
 - (IBAction)insertModule:(id)sender {
-	[self close];
 	if( [[self resultsTable] selectedRow] != -1 ) {
-		FreemanModule *module = [[self searchResults] objectAtIndex:[[self resultsTable] selectedRow]];
-		if( [_delegate respondsToSelector:@selector(insertModule:)] ) {
-			[_delegate insertModule:module];
-		}
+		[self closeAndInsertModule:[[self searchResults] objectAtIndex:[[self resultsTable] selectedRow]]];
+	}
+}
+
+
+- (void)closeAndInsertModule:(FreemanModule *)module {
+	[self close];
+	if( [_delegate respondsToSelector:@selector(insertModule:)] ) {
+		[_delegate insertModule:module];
 	}
 }
 
@@ -157,6 +170,7 @@
 	if( [object isKindOfClass:[NSTextField class]] ) {
 		if( !_fieldEditor ) {
 			_fieldEditor = [[FreemanFieldEditor alloc] init];
+			[_fieldEditor setOverlayManager:self];
 			[_fieldEditor setFieldEditor:YES];
 		}
 		return _fieldEditor;

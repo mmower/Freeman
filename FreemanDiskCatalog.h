@@ -14,6 +14,6 @@
 
 }
 
-- (id)initWithName:(NSString *)name fromRootPath:(NSString *)rootPath withFileType:(NSString *)fileType;
+- (id)initWithName:(NSString *)name factoryPath:(NSString *)factoryPath userPath:(NSString *)userPath withFileType:(NSString *)fileType;
 
 @end

@@ -24,5 +24,6 @@
 - (void)enterMenu:(NSString *)name;
 - (void)exitMenu;
 - (void)addedModule;
+- (void)unwind;
 
 @end

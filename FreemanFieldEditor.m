@@ -10,28 +10,48 @@
 
 #import "FreemanOverlayManager.h"
 
+@interface FreemanFieldEditor (PrivateMethods)
+
+- (NSUInteger)quickSelect:(NSEvent *)event;
+- (BOOL)optDown:(NSEvent *)event;
+
+@end
+
+
 @implementation FreemanFieldEditor
 
 @synthesize overlayManager = _overlayManager;
 
 - (void)keyDown:(NSEvent *)event {
-	NSLog( @"keyCode = %03d OPT=%@", [event keyCode], ([event modifierFlags] & NSAlternateKeyMask) ? @"Y" : @"N" );
+	// NSLog( @"keyCode = %03d OPT=%@", [event keyCode], ([event modifierFlags] & NSAlternateKeyMask) ? @"Y" : @"N" );
 	
-	NSString *chars = [event charactersIgnoringModifiers];
-	NSLog( @"chars = %d", [chars integerValue] );
-	
-	[super keyDown:event];
+	if( [self optDown:event] && ([self quickSelect:event] > 0) ) {
+		dispatch_async( dispatch_get_main_queue(), ^{
+			
+			});
+		[[self overlayManager] quickSelect:[self quickSelect:event]];
+	} else {
+		[super keyDown:event];
+	}
 }
 
 
 // Swallow key-up events for the key-down events we are special processing
-- (void)keyUp:(NSEvent *)event {
-	[super keyUp:event];
+// - (void)keyUp:(NSEvent *)event {
+// 	if( !( [self optDown:event] && ([self quickSelect:event] > 0) )) {
+// 		[super keyUp:event];
+// 	}
+// }
+
+
+- (NSUInteger)quickSelect:(NSEvent *)event {
+	return [[event charactersIgnoringModifiers] integerValue];
 }
 
 
-// - (int)favouriteNumber:(NSString *)chars {
-// }
+- (BOOL)optDown:(NSEvent *)event {
+	return ([event modifierFlags] & NSAlternateKeyMask) == NSAlternateKeyMask;
+}
 
 
 @end

@@ -18,8 +18,10 @@
 @interface FreemanModuleDatabase (PrivateMethods)
 
 - (NSString *)catalogNavigationSequence;
-- (NSURL *)reaktorLibraryPath;
-- (NSDictionary *)reaktorPreferences;
+- (NSURL *)reaktorFactoryContentPath;
+- (NSURL *)reaktorUserContentPath;
+- (NSDictionary *)reaktorAppPreferences;
+- (NSDictionary *)reaktorUserPreferences;
 
 @end
 
@@ -32,20 +34,21 @@
 		_catalogs = [NSMutableArray array];
 		_modules = [NSMutableArray array];
 		
-		NSURL *reaktorContentURL = [self reaktorLibraryPath];
-		NSLog( @"Reaktor content should be at: %@", [reaktorContentURL absoluteString] );
+		NSURL *reaktorFactoryContentURL = [self reaktorFactoryContentPath];
+		NSURL *reaktorUserContentURL = [self reaktorUserContentPath];
 		
 		[self addCatalog:[[FreemanXMLCatalog alloc] initWithName:@"Built-In Module"
-		                                                 catalogFile:[[NSBundle mainBundle] pathForResource:@"modules" ofType:@"xml"]]];
-		[self addCatalog:[[FreemanDiskCatalog alloc] initWithName:@"Core Cell"
-                                                 fromRootPath:[[reaktorContentURL URLByAppendingPathComponent:@"Core Cells"] path] // @"/Volumes/Corrino/NativeInstruments/Reaktor 5/Library/Core Cells"
-                                                 withFileType:@"rcc"]];
-		[self addCatalog:[[FreemanDiskCatalog alloc] initWithName:@"Macro"
-		                                                 fromRootPath:[[reaktorContentURL URLByAppendingPathComponent:@"Macros"] path] // @"/Volumes/Corrino/NativeInstruments/Reaktor 5/Library/Macros"
-		                                                 withFileType:@"mdl"]];
+                                                 catalogFile:[[NSBundle mainBundle] pathForResource:@"modules" ofType:@"xml"]]];
 
-		// This was toll-free bridge from a CFURLRef so we're still responsible for it
-		[reaktorContentURL release];
+		[self addCatalog:[[FreemanDiskCatalog alloc] initWithName:@"Core Cell"
+                                                  factoryPath:[[reaktorFactoryContentURL URLByAppendingPathComponent:@"Core Cells"] path]
+                                                     userPath:[[reaktorUserContentURL URLByAppendingPathComponent:@"Core Cells"] path]
+                                                 withFileType:@"rcc"]];
+
+		[self addCatalog:[[FreemanDiskCatalog alloc] initWithName:@"Macro"
+                                                  factoryPath:[[reaktorFactoryContentURL URLByAppendingPathComponent:@"Macros"] path]
+                                                     userPath:[[reaktorUserContentURL URLByAppendingPathComponent:@"Macros"] path]
+                                                 withFileType:@"mdl"]];
 	}
 	
 	return self;
@@ -53,11 +56,11 @@
 
 
 - (void)addCatalog:(FreemanCatalog *)catalog {
-	NSLog( @"Set catalog navigation sequence = %@", [self catalogNavigationSequence] );
 	[catalog setNavigationSequence:[self catalogNavigationSequence]];
 	[_catalogs addObject:catalog];
 	[_modules addObjectsFromArray:[catalog modules]];
-	[catalog list];
+	NSLog( @"Set catalog-%@ navigation sequence = %@", [catalog name], [self catalogNavigationSequence] );
+	// [catalog list];
 }
 
 
@@ -93,15 +96,28 @@
 }
 
 
-- (NSURL *)reaktorLibraryPath {
-	NSDictionary *reaktorPreferences = [self reaktorPreferences];
+- (NSURL *)reaktorFactoryContentPath {
+	NSDictionary *reaktorPreferences = [self reaktorAppPreferences];
 	NSString *reaktorLibraryHFSPath = [reaktorPreferences objectForKey:@"SystemContentDir"];
 	NSAssert( reaktorLibraryHFSPath, @"SystemContentDir could not be found in Reaktor preferences" );
-	return (NSURL *)CFURLCreateWithFileSystemPath( kCFAllocatorDefault, (CFStringRef)reaktorLibraryHFSPath, kCFURLHFSPathStyle, true );
+	CFURLRef urlRef = CFURLCreateWithFileSystemPath( kCFAllocatorDefault, (CFStringRef)reaktorLibraryHFSPath, kCFURLHFSPathStyle, true );
+	CFMakeCollectable( urlRef );
+	return (NSURL *)urlRef;
 }
 
 
-- (NSDictionary *)reaktorPreferences {
+- (NSURL *)reaktorUserContentPath {
+	NSDictionary *reaktorPreferences = [self reaktorUserPreferences];
+	NSString *reaktorLibraryHFSPath = [reaktorPreferences objectForKey:@"UserContentDir"];
+	NSAssert( reaktorLibraryHFSPath, @"UserContentDir could not be found in Reaktor preferences" );
+	CFURLRef urlRef = CFURLCreateWithFileSystemPath( kCFAllocatorDefault, (CFStringRef)reaktorLibraryHFSPath, kCFURLHFSPathStyle, true );
+	CFMakeCollectable( urlRef );
+	return (NSURL *)urlRef;
+}
+
+
+
+- (NSDictionary *)reaktorAppPreferences {
 	BOOL isDirectory;
 
 	NSArray *paths = NSSearchPathForDirectoriesInDomains( NSLibraryDirectory, NSLocalDomainMask, YES );
@@ -120,6 +136,26 @@
 	NSAssert1( !isDirectory, @"Preferences file at %@ is actually a folder!", prefsFilePath );
 	
 	return [NSDictionary dictionaryWithContentsOfFile:prefsFilePath];
+}
+
+
+- (NSDictionary *)reaktorUserPreferences {
+	BOOL isDirectory;
+	
+	NSString *libraryFolderPath = [NSHomeDirectory() stringByAppendingPathComponent:@"Library"];
+	NSAssert1( [[NSFileManager defaultManager] fileExistsAtPath:libraryFolderPath isDirectory:&isDirectory], @"Library folder path does not exist at: %@", libraryFolderPath );
+	NSAssert1( isDirectory, @"Library folder path at %@ is not a folder", libraryFolderPath );
+	
+	NSString *prefsFolderPath = [libraryFolderPath stringByAppendingPathComponent:@"Preferences"];
+	NSAssert1( [[NSFileManager defaultManager] fileExistsAtPath:prefsFolderPath isDirectory:&isDirectory], @"Preferencs folder path does not exist at: %@", prefsFolderPath );
+	NSAssert1( isDirectory, @"Preferences folder path at %@ is not a folder", prefsFolderPath );
+	
+	NSString *prefsFilePath = [prefsFolderPath stringByAppendingPathComponent:@"com.native-instruments.Reaktor5.5.plist"];
+	NSAssert1( [[NSFileManager defaultManager] fileExistsAtPath:prefsFilePath isDirectory:&isDirectory], @"Preferences file does not exist at: %@", prefsFilePath );
+	NSAssert1( !isDirectory, @"Preferences file at %@ is actually a folder!", prefsFilePath );
+	
+	return [NSDictionary dictionaryWithContentsOfFile:prefsFilePath];
+	
 }
 
 
