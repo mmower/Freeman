@@ -26,6 +26,8 @@
 @property (readonly) NSString *menuPath;
 @property (assign) FreemanCatalog *catalog;
 
+- (id)initWithName:(NSString *)name;
+
 - (id)initWithName:(NSString *)name catalog:(FreemanCatalog *)catalog navigationSequence:(NSString *)navigationSequence menuHierarchy:(NSArray *)menuHierarchy;
 
 - (NSString *)completeNavigationSequence;

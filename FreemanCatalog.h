@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class FreemanMenu;
+
 @class FreemanNavigationStack;
 
 @interface FreemanCatalog : NSObject {
@@ -15,12 +17,18 @@
 	NSMutableArray					*_modules;
 	NSString								*_navigationSequence;
 	
+	FreemanMenu							*_factoryMenu;
+	FreemanMenu							*_userMenu;
+	
 	FreemanNavigationStack	*_navigationStack;
 }
 
 @property (readonly) NSString *name;
 @property (readonly) NSMutableArray *modules;
 @property (assign) NSString *navigationSequence;
+
+@property (assign) FreemanMenu *factoryMenu;
+@property (assign) FreemanMenu *userMenu;
 
 - (id)initWithName:(NSString *)name;
 

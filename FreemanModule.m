@@ -22,6 +22,15 @@
 @synthesize catalog                  = _catalog;
 
 
+- (id)initWithName:(NSString *)name {
+	if( ( self = [super init] ) ) {
+		_name = name;
+	}
+	
+	return self;
+}
+
+
 - (id)initWithName:(NSString *)name catalog:(FreemanCatalog *)catalog navigationSequence:(NSString *)navigationSequence menuHierarchy:(NSArray *)menuHierarchy {
 	if( ( self = [super init] ) ) {
 		_name                     = name;

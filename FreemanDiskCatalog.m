@@ -8,68 +8,54 @@
 
 #import "FreemanDiskCatalog.h"
 
+#import "FreemanMenu.h"
+#import "FreemanModule.h"
 #import "FreemanNavigationStack.h"
 
 @interface FreemanDiskCatalog (PrivateMethods)
 
-- (void)findFilesFromPath:(NSString *)path withFileType:(NSString *)fileType openMenu:(BOOL)openMenu;
-- (void)iterateFiles:(NSArray *)files ofType:fileType fromPath:(NSString *)path;
+- (FreemanMenu *)menuFromPath:(NSString *)path withFileType:(NSString *)fileType;
 
 @end
 
 
 @implementation FreemanDiskCatalog
 
-
 - (id)initWithName:(NSString *)name factoryPath:(NSString *)factoryPath userPath:(NSString *)userPath withFileType:(NSString *)fileType {
 	if( ( self = [super initWithName:name] ) ) {
-		[self openMenu:[NSDictionary dictionaryWithObject:[factoryPath lastPathComponent] forKey:@"name"]];
-		[self findFilesFromPath:factoryPath withFileType:fileType openMenu:NO];
+		[self setFactoryMenu:[self menuFromPath:factoryPath withFileType:fileType]];
 		if( userPath ) {
-			[self findFilesFromPath:userPath withFileType:fileType openMenu:NO];
+			[self setUserMenu:[self menuFromPath:userPath withFileType:fileType]];
 		}
-		[self closeMenu];
+		[self catalogLoaded];
 	}
 	
 	return self;
 }
 
 
-- (void)findFilesFromPath:(NSString *)path withFileType:(NSString *)fileType openMenu:(BOOL)openMenu {
-	NSError *error;
+- (FreemanMenu *)menuFromPath:(NSString *)path withFileType:(NSString *)fileType {
+	FreemanMenu *menu = [[FreemanMenu alloc] initWithName:[path lastPathComponent]];
 	
-	if( openMenu ) {
-		[self openMenu:[NSDictionary dictionaryWithObject:[path lastPathComponent] forKey:@"name"]];
-	}
+	NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:NULL];
 	
-	[self iterateFiles:[[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:&error] ofType:fileType fromPath:path];
-	
-	if( openMenu ) {
-		[self closeMenu];
-	}
-}
-
-
-- (void)iterateFiles:(NSArray *)files ofType:fileType fromPath:(NSString *)path {
-	// Because of the way macros and core-cells are presented we iterate twice through each folder
-	// the first time to find all sub-folders and process them, the second time to add modules in
-	// the current folder
-
 	for( NSString *file in files ) {
 		BOOL isDirectory;
 		[[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@/%@",path,file] isDirectory:&isDirectory];
 		if( isDirectory ) {
-			[self findFilesFromPath:[NSString stringWithFormat:@"%@/%@",path,file] withFileType:fileType openMenu:YES];
-		}		
+			[menu addSubMenu:[self menuFromPath:[path stringByAppendingPathComponent:file] withFileType:fileType]];
+		}
 	}
 	
 	for( NSString *file in files ) {
 		BOOL isDirectory;
 		[[NSFileManager defaultManager]  fileExistsAtPath:[NSString stringWithFormat:@"%@/%@",path,file] isDirectory:&isDirectory];
 		if( !isDirectory && [[file pathExtension] isEqualToString:fileType] ) {
-			[self addModule:[NSDictionary dictionaryWithObject:[file stringByDeletingPathExtension] forKey:@"name"]];
+			[menu addModule:[[FreemanModule alloc] initWithName:[file stringByDeletingPathExtension]]];
 		}
 	}
+	
+	return menu;
 }
 
 @end

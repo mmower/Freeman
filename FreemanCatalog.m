@@ -10,13 +10,15 @@
 
 #import "FreemanModule.h"
 #import "FreemanNavigationStack.h"
-
+#import "FreemanMenu.h"
 
 @implementation FreemanCatalog
 
 @synthesize name = _name;
 @synthesize modules = _modules;
 @synthesize navigationSequence = _navigationSequence;
+@synthesize factoryMenu = _factoryMenu;
+@synthesize userMenu = _userMenu;
 
 - (id)initWithName:(NSString *)name {
 	if( ( self = [super init] ) ) {
@@ -30,7 +32,17 @@
 
 
 - (void)catalogLoaded {
-	_navigationStack = nil;
+	_modules = [NSMutableArray array];
+	[_modules addObjectsFromArray:[[self factoryMenu] allModules];
+	if( [self userMenu] ) {
+		[_modules addObjectsFromArray]
+	}
+	
+	[factoryMenu set]
+	
+	int sequence = 0;
+	sequence = [_factoryMenu ]
+	
 }
 
 

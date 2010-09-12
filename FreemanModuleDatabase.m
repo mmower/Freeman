@@ -56,8 +56,10 @@
 
 
 - (void)addCatalog:(FreemanCatalog *)catalog {
-	[catalog setNavigationSequence:[self catalogNavigationSequence]];
+	// [catalog setNavigationSequence:[self catalogNavigationSequence]];
 	[_catalogs addObject:catalog];
+	[catalog collectModulesInto:[self modules]];
+	
 	[_modules addObjectsFromArray:[catalog modules]];
 	NSLog( @"Set catalog-%@ navigation sequence = %@", [catalog name], [self catalogNavigationSequence] );
 	// [catalog list];
