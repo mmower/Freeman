@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class FreemanModule;
+
 @interface FreemanMenu : NSObject {
 	FreemanMenu			*_parent;
 	NSString				*_name;
@@ -25,7 +27,7 @@
 - (id)initWithName:(NSString *)name;
 
 - (void)addSubMenu:(FreemanMenu *)menu;
-- (void)addModule:(FreemanMenu *)module;
+- (void)addModule:(FreemanModule *)module;
 
 - (NSString *)path;
 

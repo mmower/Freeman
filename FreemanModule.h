@@ -8,28 +8,28 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class FreemanMenu;
 @class FreemanCatalog;
+@class FreemanRemoteProcess;
 
 @interface FreemanModule : NSObject {
 	NSString				*_name;
 	float						_scoreForLastAbbreviation;
-	NSString				*_navigationSequence;
-	NSArray					*_menuHierarchy;
+	FreemanMenu			*_menu;
 	NSString				*_menuPath;
+	NSArray					*_menuHierarchy;
 	FreemanCatalog	*_catalog;
 }
 
 @property (assign) NSString *name;
 @property (assign) float scoreForLastAbbreviation;
-@property (assign) NSString *navigationSequence;
+@property (assign) FreemanMenu *menu;
 @property (assign) NSArray *menuHierarchy;
-@property (readonly) NSString *menuPath;
+@property (assign) NSString *menuPath;
 @property (assign) FreemanCatalog *catalog;
 
-- (id)initWithName:(NSString *)name;
+- (id)initWithName:(NSString *)name catalog:(FreemanCatalog *)catalog;
 
-- (id)initWithName:(NSString *)name catalog:(FreemanCatalog *)catalog navigationSequence:(NSString *)navigationSequence menuHierarchy:(NSArray *)menuHierarchy;
-
-- (NSString *)completeNavigationSequence;
+- (void)insertAt:(CGPoint)point inReaktorProcess:(FreemanRemoteProcess *)reaktorProcess;
 
 @end

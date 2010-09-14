@@ -14,7 +14,7 @@
 
 @interface FreemanDiskCatalog (PrivateMethods)
 
-- (FreemanMenu *)menuFromPath:(NSString *)path withFileType:(NSString *)fileType;
+- (void)loadModulesFrom:(NSString *)path withFileType:(NSString *)fileType intoMenu:(FreemanMenu *)menu;
 
 @end
 
@@ -23,9 +23,11 @@
 
 - (id)initWithName:(NSString *)name factoryPath:(NSString *)factoryPath userPath:(NSString *)userPath withFileType:(NSString *)fileType {
 	if( ( self = [super initWithName:name] ) ) {
-		[self setFactoryMenu:[self menuFromPath:factoryPath withFileType:fileType]];
+		_fileManager = [[NSFileManager alloc] init];
+		
+		[self loadModulesFrom:factoryPath withFileType:fileType intoMenu:[self menu]];
 		if( userPath ) {
-			[self setUserMenu:[self menuFromPath:userPath withFileType:fileType]];
+			[self loadModulesFrom:userPath withFileType:fileType intoMenu:[self menu]];
 		}
 		[self catalogLoaded];
 	}
@@ -34,28 +36,20 @@
 }
 
 
-- (FreemanMenu *)menuFromPath:(NSString *)path withFileType:(NSString *)fileType {
-	FreemanMenu *menu = [[FreemanMenu alloc] initWithName:[path lastPathComponent]];
-	
-	NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:NULL];
-	
-	for( NSString *file in files ) {
-		BOOL isDirectory;
-		[[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@/%@",path,file] isDirectory:&isDirectory];
+- (void)loadModulesFrom:(NSString *)path withFileType:(NSString *)fileType intoMenu:(FreemanMenu *)menu {
+	BOOL isDirectory;
+	for( NSString *file in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:NULL] ) {
+		[[NSFileManager defaultManager] fileExistsAtPath:[path stringByAppendingPathComponent:file] isDirectory:&isDirectory];
 		if( isDirectory ) {
-			[menu addSubMenu:[self menuFromPath:[path stringByAppendingPathComponent:file] withFileType:fileType]];
+			NSLog( @"Create new subMenu: %@", file );
+			FreemanMenu *subMenu = [[FreemanMenu alloc] initWithName:file];
+			[menu addSubMenu:subMenu];
+			[self loadModulesFrom:[path stringByAppendingPathComponent:file] withFileType:fileType intoMenu:subMenu];
+		} else if( [[file pathExtension] isEqualToString:fileType] ) {
+			FreemanModule *module = [[FreemanModule alloc] initWithName:[file stringByDeletingPathExtension] catalog:self];
+			[menu addModule:module];
 		}
 	}
-	
-	for( NSString *file in files ) {
-		BOOL isDirectory;
-		[[NSFileManager defaultManager]  fileExistsAtPath:[NSString stringWithFormat:@"%@/%@",path,file] isDirectory:&isDirectory];
-		if( !isDirectory && [[file pathExtension] isEqualToString:fileType] ) {
-			[menu addModule:[[FreemanModule alloc] initWithName:[file stringByDeletingPathExtension]]];
-		}
-	}
-	
-	return menu;
 }
 
 @end

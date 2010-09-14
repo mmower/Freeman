@@ -43,7 +43,7 @@ typedef CGEventRef (^EventRefGeneratingBlock)();
 
 - (id)initWithProcessSerialNumber:(ProcessSerialNumber)psn {
 	if( ( self = [super init] ) ) {
-		_eventSourceRef = CGEventSourceCreate( kCGEventSourceStateCombinedSessionState );
+		_eventSourceRef = CGEventSourceCreate( kCGEventSourceStateCombinedSessionState ); // kCGEventSourceStateHIDSystemState );
 		_psn = psn;
 	}
 	
@@ -87,23 +87,97 @@ typedef CGEventRef (^EventRefGeneratingBlock)();
 }
 
 
-- (void)sendKeySequence:(NSString *)keys {
-	NSLog( @"SEND KEY SEQUENCE: %@", keys );
-	for( int i = 0; i < [keys length]; i++ ) {
-		NSString *specifier = [keys substringWithRange:NSMakeRange(i, 1)];
-		[self sendKeyStroke:[self mapSpecifierToKeyCode:specifier]];
-		
-		// This is a gross hack. For some reason if we send a cursor-down right after a cursor-right
-		// (to open a submenu) then instead of moving the menu selection down one item, the selection
-		// jumps to the bottom of the menu. This. is. not. good.
-		// So we add a 125ms delay after opening the menu before allowing any other actions. On
-		// my system at least this seems to work reliably but hard-coded delays are a sure indicator
-		// of pain to come and I don't expect this one to be any different.
-		if( [specifier isEqualToString:@"R"] ) {
-			usleep(125000);
-		}
+- (CGEventRef)createKeyboardEventForKey:(unichar)key keyDown:(BOOL)keyDown {
+	CGEventRef ref = CGEventCreateKeyboardEvent( _eventSourceRef, 0, keyDown );
+	CGEventKeyboardSetUnicodeString( ref, 1, &key );
+	
+	CGEventFlags flags = CGEventGetFlags( ref );
+	// flags = 256;
+	// CGEventSetFlags( ref, flags );
+	NSLog( @"Flags" );
+	if( flags & kCGEventFlagMaskAlphaShift ) {
+		NSLog( @"NX_ALPHASHIFTMASK");
 	}
+	if( flags & kCGEventFlagMaskShift ) {
+		NSLog( @"NX_SHIFTMASK");
+	}
+	if( flags & kCGEventFlagMaskControl ) {
+		NSLog( @"NX_CONTROLMASK");
+	}
+	if( flags & kCGEventFlagMaskAlternate ) {
+		NSLog( @"NX_ALTERNATEMASK");
+	}
+	if( flags & kCGEventFlagMaskCommand ) {
+		NSLog( @"NX_COMMANDMASK");
+	}
+	if( flags & kCGEventFlagMaskHelp ) {
+		NSLog( @"NX_HELPMASK");
+	}
+	if( flags & kCGEventFlagMaskSecondaryFn ) {
+		NSLog( @"NX_SECONDARYFNMASK");
+	}
+	if( flags & kCGEventFlagMaskNumericPad ) {
+		NSLog( @"NX_NUMERICPADMASK");
+	}
+	if( flags & kCGEventFlagMaskNonCoalesced ) {
+		NSLog( @"NX_NONCOALSESCEDMASK");
+	}
+	
+	return ref;
 }
+
+
+- (void)pressKey:(unichar)key {
+	[self postEvent:^() { return [self createKeyboardEventForKey:key keyDown:YES]; }];
+	[self postEvent:^() { return [self createKeyboardEventForKey:key keyDown:NO]; }];
+}
+
+
+- (void)sendString:(NSString *)string {
+	// string = [string lowercaseString];
+	// [self pressKey:[string characterAtIndex:0]];
+	
+	[self pressKey:'b'];
+	// [self sendKeyStroke:11];
+	
+	// [self sendKeySequence:@"RD"];
+	
+	// for( int i = 0; i < [string length]; i++ ) {
+	// 	unichar key = [string characterAtIndex:i];
+	// 	NSLog( @"Press '%c'", key );
+	// 	[self pressKey:key];
+	// 	usleep(100000);
+	// }
+}
+
+
+- (void)navigateMenu:(NSArray *)selections {
+	[selections enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+		NSLog( @"Send: [%@]", [obj name] );
+		[self sendString:[obj name]];
+		*stop = YES;
+		// [self sendKeyStroke:CGKEYCODE_RETURN];
+	}];
+}
+
+
+// - (void)sendKeySequence:(NSString *)keys {
+// 	NSLog( @"SEND KEY SEQUENCE: %@", keys );
+// 	for( int i = 0; i < [keys length]; i++ ) {
+// 		NSString *specifier = [keys substringWithRange:NSMakeRange(i, 1)];
+// 		[self sendKeyStroke:[self mapSpecifierToKeyCode:specifier]];
+// 		
+// 		// This is a gross hack. For some reason if we send a cursor-down right after a cursor-right
+// 		// (to open a submenu) then instead of moving the menu selection down one item, the selection
+// 		// jumps to the bottom of the menu. This. is. not. good.
+// 		// So we add a 125ms delay after opening the menu before allowing any other actions. On
+// 		// my system at least this seems to work reliably but hard-coded delays are a sure indicator
+// 		// of pain to come and I don't expect this one to be any different.
+// 		if( [specifier isEqualToString:@"R"] ) {
+// 			usleep(125000);
+// 		}
+// 	}
+// }
 
 
 - (CGKeyCode)mapSpecifierToKeyCode:(NSString *)specifier {

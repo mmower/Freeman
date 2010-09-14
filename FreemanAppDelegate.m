@@ -140,8 +140,10 @@ OSStatus HotKeyHandler( EventHandlerCallRef nextHandler, EventRef theEvent, void
 - (void)insertModule:(FreemanModule *)module {
 	CGFloat ydepth = [[NSScreen mainScreen] frame].size.height;
 	CGPoint clickPoint = CGPointMake([_event locationInWindow].x, ydepth-[_event locationInWindow].y);
-	[_reaktorProcess sendRightMouseClick:clickPoint];
-	[_reaktorProcess sendKeySequence:[module completeNavigationSequence]];
+	[module insertAt:clickPoint inReaktorProcess:_reaktorProcess];
+	// 
+	// [_reaktorProcess sendRightMouseClick:clickPoint];
+	// [_reaktorProcess sendKeySequence:[module completeNavigationSequence]];
 }
 
 

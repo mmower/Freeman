@@ -11,6 +11,7 @@
 #import "FreemanCatalog.h"
 
 @interface FreemanDiskCatalog : FreemanCatalog {
+	NSFileManager *_fileManager;
 
 }
 

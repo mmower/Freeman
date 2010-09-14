@@ -10,7 +10,11 @@
 
 #import "FreemanCatalog.h"
 
+@class FreemanMenu;
+
 @interface FreemanXMLCatalog : FreemanCatalog <NSXMLParserDelegate> {
+	NSMutableArray *_menuStack;
+	FreemanMenu *_currentMenu;
 }
 
 - (id)initWithName:(NSString *)name catalogFile:(NSString *)catalogFile;

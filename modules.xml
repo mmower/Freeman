@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<menu name="Built-in Module">
+<menuset>
 	<menu name="Panel">
 		<module name="Fader" />
 		<module name="Knob" />
@@ -293,4 +293,4 @@
 		<module name="OSC Send" />
 		<module name="OSC Receive" />
 	</menu>
-</menu>
+</menuset>

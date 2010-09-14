@@ -56,13 +56,9 @@
 
 
 - (void)addCatalog:(FreemanCatalog *)catalog {
-	// [catalog setNavigationSequence:[self catalogNavigationSequence]];
 	[_catalogs addObject:catalog];
-	[catalog collectModulesInto:[self modules]];
-	
 	[_modules addObjectsFromArray:[catalog modules]];
-	NSLog( @"Set catalog-%@ navigation sequence = %@", [catalog name], [self catalogNavigationSequence] );
-	// [catalog list];
+	[catalog list];
 }
 
 
@@ -85,16 +81,6 @@
 			return (NSComparisonResult)NSOrderedSame;
 		}
 	}];
-}
-
-
-- (NSString *)catalogNavigationSequence {
-	NSMutableString *sequence = [NSMutableString stringWithCapacity:10];
-	[sequence appendString:@"R"];
-	for( int i = 0; i < [_catalogs count]; i++ ) {
-		[sequence appendString:@"D"];
-	}
-	return [sequence copy];	
 }
 
 

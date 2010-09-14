@@ -8,6 +8,8 @@
 
 #import "FreemanMenu.h"
 
+#import "FreemanModule.h"
+
 
 @implementation FreemanMenu
 
@@ -31,24 +33,30 @@
 }
 
 
+- (NSString *)description {
+	return [self name];
+}
+
+
 - (void)addSubMenu:(FreemanMenu *)menu {
 	[menu setParent:self];
 	[_subMenus addObject:menu];
 }
 
 
-- (void)addModule:(FreemanMenu *)module {
+- (void)addModule:(FreemanModule *)module {
+	[module setMenu:self];
 	[_modules addObject:module];
 }
 
 
 - (NSArray *)allModules {
 	NSMutableArray *modules = [NSMutableArray array];
-	[array addObjectsFromArray:[self modules]];
+	[modules addObjectsFromArray:[self modules]];
 	for( FreemanMenu *subMenu in [self subMenus] ) {
-		[array addObjectsFromArray:[subMenu allModules]];
+		[modules addObjectsFromArray:[subMenu allModules]];
 	}
-	return modules
+	return modules;
 }
 
 

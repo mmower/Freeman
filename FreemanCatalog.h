@@ -15,28 +15,17 @@
 @interface FreemanCatalog : NSObject {
 	NSString								*_name;
 	NSMutableArray					*_modules;
-	NSString								*_navigationSequence;
-	
-	FreemanMenu							*_factoryMenu;
-	FreemanMenu							*_userMenu;
-	
-	FreemanNavigationStack	*_navigationStack;
+	FreemanMenu							*_menu;
 }
 
 @property (readonly) NSString *name;
 @property (readonly) NSMutableArray *modules;
-@property (assign) NSString *navigationSequence;
 
-@property (assign) FreemanMenu *factoryMenu;
-@property (assign) FreemanMenu *userMenu;
+@property (assign) FreemanMenu *menu;
 
 - (id)initWithName:(NSString *)name;
 
 - (void)catalogLoaded;
-
-- (void)openMenu:(NSDictionary *)attributes;
-- (void)addModule:(NSDictionary *)attributes;
-- (void)closeMenu;
 
 - (void)list;
 
