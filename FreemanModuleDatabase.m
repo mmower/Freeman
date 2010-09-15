@@ -35,6 +35,16 @@
 		_contents = [NSMutableArray array];
 		_catalogs = [NSMutableArray array];
 		_modules  = [NSMutableArray array];
+		_primary  = YES;
+	}
+	
+	return self;
+}
+
+
+- (id)initPrimaryModuleDatabase {
+	if( ( self = [self init] ) ) {
+		_primary = YES;
 		
 		NSURL *reaktorFactoryContentURL = [self reaktorFactoryContentPath];
 		NSURL *reaktorUserContentURL = [self reaktorUserContentPath];
@@ -58,6 +68,47 @@
 	
 	return self;
 }
+
+
+- (id)initCoreModuleDatabase {
+	if( ( self = [self init] ) ) {
+		_primary = NO;
+		
+		NSURL *reaktorFactoryContentURL = [self reaktorFactoryContentPath];
+		// NSURL *reaktorUserContentURL = [self reaktorUserContentPath];
+		
+		[self addCatalog:[[FreemanXMLCatalog alloc] initWithOwner:self
+                                                         name:@"Built-In Module"
+                                                  catalogFile:[[NSBundle mainBundle] pathForResource:@"coremodules" ofType:@"xml"]]];
+
+		// [self addCatalog:[[FreemanDiskCatalog alloc] initWithOwner:self
+		//                                                           name:@"Core Cell"
+		//                                                    factoryPath:[[reaktorFactoryContentURL URLByAppendingPathComponent:@"Core Cells"] path]
+		//                                                       userPath:[[reaktorUserContentURL URLByAppendingPathComponent:@"Core Cells"] path]
+		//                                                   withFileType:@"rcc"]];
+		// 
+		
+		NSURL *expertMacrosURL = [[reaktorFactoryContentURL URLByAppendingPathComponent:@"Core Macros"] URLByAppendingPathComponent:@"Expert"];
+		[self addCatalog:[[FreemanDiskCatalog alloc] initWithOwner:self
+		                                                          name:@"Expert Macro"
+		                                                   factoryPath:[expertMacrosURL path]
+		                                                      userPath:nil
+		                                                  withFileType:@"rcm"]];
+		
+		NSURL *standardMacrosURL = [[reaktorFactoryContentURL URLByAppendingPathComponent:@"Core Macros"] URLByAppendingPathComponent:@"Standard"];
+		[self addCatalog:[[FreemanDiskCatalog alloc] initWithOwner:self
+		                                                          name:@"Standard Macro"
+		                                                   factoryPath:[standardMacrosURL path]
+		                                                      userPath:nil
+		                                                  withFileType:@"rcm"]];
+		
+		//[[reaktorUserContentURL URLByAppendingPathComponent:@"Core Macros"] path]
+	}
+	
+	return self;
+}
+
+#define DEBUG_FREEMAN 1
 
 
 - (void)addCatalog:(FreemanCatalog *)catalog {
@@ -178,7 +229,11 @@
 
 
 - (NSString *)navigationSequence {
-	return @"R";
+	if( _primary ) {
+		return @"R";
+	} else {
+		return @"";
+	}
 }
 
 

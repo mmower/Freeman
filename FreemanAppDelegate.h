@@ -19,7 +19,8 @@
 	NSStatusItem						*_statusItem;	
 	FreemanOverlayManager		*_overlayManager;
 	FreemanRemoteProcess		*_reaktorProcess;
-	FreemanModuleDatabase		*_moduleDatabase;
+	FreemanModuleDatabase		*_primaryModuleDatabase;
+	FreemanModuleDatabase		*_coreModuleDatabase;
 	NSEvent									*_event;
 }
 
@@ -27,7 +28,8 @@
 @property (assign) IBOutlet NSMenu *statusMenu;
 @property (assign) NSStatusItem *statusItem;
 @property (assign) FreemanOverlayManager *overlayManager;
-@property (assign) FreemanModuleDatabase *moduleDatabase;
+@property (assign) FreemanModuleDatabase *primaryModuleDatabase;
+@property (assign) FreemanModuleDatabase *coreModuleDatabase;
 @property (assign) FreemanRemoteProcess *reaktorProcess;
 
 - (void)insertModule:(FreemanModule *)module;

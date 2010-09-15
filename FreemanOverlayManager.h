@@ -8,27 +8,31 @@
 
 #import <Foundation/Foundation.h>
 
+@class FreemanModuleDatabase;
 @class FreemanResultsView;
 @class FreemanSearchField;
 @class FreemanFieldEditor;
 
 @interface FreemanOverlayManager : NSWindowController <NSTextFieldDelegate> {
-	id									_delegate;
-	BOOL								_enabled;
+	id										_delegate;
+	BOOL									_enabled;
 	
-	NSString						*_searchString;
-	NSArray							*_searchResults;
+	NSString							*_searchString;
+	NSArray								*_searchResults;
 	
-	FreemanSearchField	*_searchField;
-	FreemanResultsView	*_resultsTable;
-	FreemanFieldEditor	*_fieldEditor;
+	FreemanModuleDatabase	*_moduleDatabase;
 	
-	NSThread						*_searchThread;
+	FreemanSearchField		*_searchField;
+	FreemanResultsView		*_resultsTable;
+	FreemanFieldEditor		*_fieldEditor;
+	
+	NSThread							*_searchThread;
 }
 
 @property (assign) id delegate;
 @property (assign) BOOL enabled;
 
+@property (assign) FreemanModuleDatabase *moduleDatabase;
 @property (assign) NSString *searchString;
 @property (assign) NSArray *searchResults;
 
@@ -37,7 +41,7 @@
 
 - (id)initWithDelegate:(id)delegate;
 
-- (void)prompt;
+- (void)searchModules:(FreemanModuleDatabase *)moduleDatabase;
 - (void)closeAndActivateReaktor;
 // - (void)quickSelect:(NSUInteger)result;
 

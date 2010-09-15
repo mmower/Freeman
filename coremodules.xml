@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<menuset>
+	<module name="Const" />
+	<menu name="Math">
+		<module name="+" />
+		<module name="-" />
+		<module name="*" />
+		<module name="/" />
+		<module name="|x|" />
+		<module name="-x" />
+		<module name="DN Cancel" />
+		<module name="~log(x)" />
+		<module name="~exp(x)" />
+	</menu>
+	<menu name="Bit">
+		<module name="Bit AND" />
+		<module name="Bit OR" />
+		<module name="Bit XOR" />
+		<module name="Bit NOT" />
+		<module name="Bit &lt;&lt;" />
+		<module name="Bit &gt;&gt;" />
+	</menu>
+	<menu name="Flow">
+		<module name="Router" />
+		<module name="Compare" />
+		<module name="Compare Sign" />
+		<module name="ES Ctl" />
+		<module name="~BoolCtl" />
+		<module name="Merge" />
+		<module name="EvtMerge" />
+	</menu>
+	<menu name="Memory">
+		<module name="Read" />
+		<module name="Write" />
+		<module name="R/W Order" />
+		<module name="Array" />
+		<module name="Size []" />
+		<module name="Index" />
+		<module name="Table" />
+	</menu>
+	<module name="Macro" />
+</menuset>

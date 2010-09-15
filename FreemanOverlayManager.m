@@ -29,6 +29,8 @@
 @synthesize delegate = _delegate;
 @synthesize enabled = _enabled;
 
+@synthesize moduleDatabase = _moduleDatabase;
+
 @synthesize searchString = _searchString;
 @synthesize searchResults = _searchResults;
 
@@ -38,6 +40,7 @@
 - (id)initWithDelegate:(id)delegate {
 	if( ( self = [self initWithWindowNibName:@"Overlay"] ) ) {
 		_delegate = delegate;
+		_moduleDatabase = nil;
 	}
 	
 	return self;
@@ -70,7 +73,9 @@
 }
 
 
-- (void)prompt {
+- (void)searchModules:(FreemanModuleDatabase *)moduleDatabase {
+	[self setModuleDatabase:moduleDatabase];
+	
 	[self setSearchString:@""];
 	[self setSearchResults:[NSArray array]];
 	
@@ -99,7 +104,7 @@
 		NSLog( @"Search for %@", [self searchString] );
 		#endif
 		
-		NSArray *results = [[[self delegate] moduleDatabase] searchFor:[self searchString]];
+		NSArray *results = [_moduleDatabase searchFor:[self searchString]];
 		if( [results count] > 0 && ![[NSThread currentThread] isCancelled] ) {
 			dispatch_async( dispatch_get_main_queue(), ^{
 				[self setSearchResults:results];

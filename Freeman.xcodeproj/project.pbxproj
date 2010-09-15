@@ -13,6 +13,8 @@
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		C910CA0D123EB9BC00585490 /* NSArray+Freeman.m in Sources */ = {isa = PBXBuildFile; fileRef = C910CA0C123EB9BC00585490 /* NSArray+Freeman.m */; };
+		C91B7E8B12417BCB00A3390C /* NSColor+Freeman.m in Sources */ = {isa = PBXBuildFile; fileRef = C91B7E8A12417BCB00A3390C /* NSColor+Freeman.m */; };
+		C91B7EB41241819000A3390C /* coremodules.xml in Resources */ = {isa = PBXBuildFile; fileRef = C91B7EB31241819000A3390C /* coremodules.xml */; };
 		C9219C03123A5B07009E5829 /* FreemanResultsView.m in Sources */ = {isa = PBXBuildFile; fileRef = C9219C02123A5B07009E5829 /* FreemanResultsView.m */; };
 		C9219C5C123A8C03009E5829 /* Freeman.icns in Resources */ = {isa = PBXBuildFile; fileRef = C9219C5B123A8C03009E5829 /* Freeman.icns */; };
 		C9219C5F123A8C26009E5829 /* MenuActive.png in Resources */ = {isa = PBXBuildFile; fileRef = C9219C5D123A8C26009E5829 /* MenuActive.png */; };
@@ -66,6 +68,9 @@
 		8D1107320486CEB800E47090 /* Freeman.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Freeman.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C910CA0B123EB9BC00585490 /* NSArray+Freeman.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Freeman.h"; sourceTree = "<group>"; };
 		C910CA0C123EB9BC00585490 /* NSArray+Freeman.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Freeman.m"; sourceTree = "<group>"; };
+		C91B7E8912417BCB00A3390C /* NSColor+Freeman.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSColor+Freeman.h"; sourceTree = "<group>"; };
+		C91B7E8A12417BCB00A3390C /* NSColor+Freeman.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSColor+Freeman.m"; sourceTree = "<group>"; };
+		C91B7EB31241819000A3390C /* coremodules.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = coremodules.xml; sourceTree = "<group>"; };
 		C9219C01123A5B07009E5829 /* FreemanResultsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreemanResultsView.h; sourceTree = "<group>"; };
 		C9219C02123A5B07009E5829 /* FreemanResultsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreemanResultsView.m; sourceTree = "<group>"; };
 		C9219C5B123A8C03009E5829 /* Freeman.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Freeman.icns; sourceTree = "<group>"; };
@@ -151,6 +156,8 @@
 				C910CA0B123EB9BC00585490 /* NSArray+Freeman.h */,
 				C910CA0C123EB9BC00585490 /* NSArray+Freeman.m */,
 				C953D2D5123FD91900A2491B /* FreemanModularObject.h */,
+				C91B7E8912417BCB00A3390C /* NSColor+Freeman.h */,
+				C91B7E8A12417BCB00A3390C /* NSColor+Freeman.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -208,6 +215,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				C91B7EB31241819000A3390C /* coremodules.xml */,
 				C9219C5D123A8C26009E5829 /* MenuActive.png */,
 				C9219C5E123A8C26009E5829 /* MenuNormal.png */,
 				C9219C5B123A8C03009E5829 /* Freeman.icns */,
@@ -286,6 +294,7 @@
 				C9219C5F123A8C26009E5829 /* MenuActive.png in Resources */,
 				C9219C60123A8C26009E5829 /* MenuNormal.png in Resources */,
 				C9219C9C123A95A4009E5829 /* Credits.rtf in Resources */,
+				C91B7EB41241819000A3390C /* coremodules.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -328,6 +337,7 @@
 				C975FB39123B849800C2AC4E /* FreemanCatalog.m in Sources */,
 				C975FDB3123C4D3C00C2AC4E /* FreemanMenu.m in Sources */,
 				C910CA0D123EB9BC00585490 /* NSArray+Freeman.m in Sources */,
+				C91B7E8B12417BCB00A3390C /* NSColor+Freeman.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

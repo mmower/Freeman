@@ -17,9 +17,14 @@
 	
 	NSMutableArray			*_catalogs;
 	NSMutableArray			*_modules;
+	
+	BOOL								_primary;
 }
 
 @property (readonly) NSMutableArray *contents;
+
+- (id)initPrimaryModuleDatabase;
+- (id)initCoreModuleDatabase;
 
 - (void)addCatalog:(FreemanCatalog *)catalog;
 

@@ -17,7 +17,12 @@
 #import "FreemanModuleDatabase.h"
 #import "FreemanModule.h"
 
-#define TRIGGER_ACTION (0x01)
+#import "NSColor+Freeman.h"
+
+// #define TRIGGER_ACTION (0x01)
+
+#define STRUCTURE_BACKGROUND @"#454E58"
+#define CORE_BACKGROUND @"#242A30"
 
 
 OSStatus HotKeyHandler( EventHandlerCallRef nextHandler, EventRef theEvent, void *userData );
@@ -34,6 +39,7 @@ FreemanAppDelegate *gDelegate = nil;
 - (void)registerEvent:(NSEvent *)event;
 - (void)respondToHotKey;
 - (void)trigger;
+- (NSColor *)sampleWindow:(CGWindowID)windowID atPoint:(CGPoint)point;
 
 @end
 
@@ -46,13 +52,15 @@ FreemanAppDelegate *gDelegate = nil;
 @synthesize statusItem = _statusItem;
 
 @synthesize overlayManager = _overlayManager;
-@synthesize moduleDatabase = _moduleDatabase;
+@synthesize primaryModuleDatabase = _primaryModuleDatabase;
+@synthesize coreModuleDatabase = _coreModuleDatabase;
 @synthesize reaktorProcess = _reaktorProcess;
 
 
 - (id)init {
 	if( ( self = [super init] ) ) {
-		_moduleDatabase = [[FreemanModuleDatabase alloc] init];
+		_primaryModuleDatabase = [[FreemanModuleDatabase alloc] initPrimaryModuleDatabase];
+		_coreModuleDatabase = [[FreemanModuleDatabase alloc] initCoreModuleDatabase];
 	}
 	
 	return self;
@@ -90,60 +98,62 @@ FreemanAppDelegate *gDelegate = nil;
 
 #pragma mark Hotkey management
 
-- (void)registerHotKeys {
-    EventHotKeyID hotKeyID;
-    EventHotKeyRef hotKeyRef;
-	
-    EventTypeSpec eventType;
-    eventType.eventClass=kEventClassKeyboard;
-    eventType.eventKind=kEventHotKeyPressed;
-    
-    InstallApplicationEventHandler( &HotKeyHandler, 1, &eventType, NULL, NULL );
-    
-    hotKeyID.signature = 'grp1';
-    hotKeyID.id = TRIGGER_ACTION;
-    RegisterEventHotKey( 34 /* i */, cmdKey+optionKey, hotKeyID, GetApplicationEventTarget(), 0, &hotKeyRef );
-}
+// - (void)registerHotKeys {
+//     EventHotKeyID hotKeyID;
+//     EventHotKeyRef hotKeyRef;
+// 	
+//     EventTypeSpec eventType;
+//     eventType.eventClass=kEventClassKeyboard;
+//     eventType.eventKind=kEventHotKeyPressed;
+//     
+//     InstallApplicationEventHandler( &HotKeyHandler, 1, &eventType, NULL, NULL );
+//     
+//     hotKeyID.signature = 'grp1';
+//     hotKeyID.id = TRIGGER_ACTION;
+//     RegisterEventHotKey( 34 /* i */, cmdKey+optionKey, hotKeyID, GetApplicationEventTarget(), 0, &hotKeyRef );
+// }
 
 
-OSStatus HotKeyHandler( EventHandlerCallRef nextHandler, EventRef theEvent, void *userData ) {
-#pragma unused(nextHandler)
-#pragma unused(theEvent)
-#pragma unused(userData)
-    
-    //Do something once the key is pressed 
-    
-    EventHotKeyID keyId;
-    GetEventParameter( theEvent,
-					  kEventParamDirectObject,
-					  typeEventHotKeyID,
-					  NULL,
-					  sizeof( keyId ),
-					  NULL,
-					  &keyId);
-    
-    switch( keyId.id ) {
-        case TRIGGER_ACTION:
-			[gDelegate respondToHotKey];
-            break;
-    }
-    
-    return noErr;
-}
+// OSStatus HotKeyHandler( EventHandlerCallRef nextHandler, EventRef theEvent, void *userData ) {
+// #pragma unused(nextHandler)
+// #pragma unused(theEvent)
+// #pragma unused(userData)
+//     
+//     //Do something once the key is pressed 
+//     
+//     EventHotKeyID keyId;
+//     GetEventParameter( theEvent,
+// 					  kEventParamDirectObject,
+// 					  typeEventHotKeyID,
+// 					  NULL,
+// 					  sizeof( keyId ),
+// 					  NULL,
+// 					  &keyId);
+//     
+//     switch( keyId.id ) {
+//         case TRIGGER_ACTION:
+// 			[gDelegate respondToHotKey];
+//             break;
+//     }
+//     
+//     return noErr;
+// }
 
 
-- (void)respondToHotKey {
-	[_overlayManager prompt];
+// - (void)respondToHotKey {
+// 	[_overlayManager prompt];
+// }
+
+
+- (CGPoint)screenCoordinateForEvent:(NSEvent *)event {
+	CGFloat ydepth = [[NSScreen mainScreen] frame].size.height;
+	CGPoint clickPoint = CGPointMake([_event locationInWindow].x, ydepth-[_event locationInWindow].y);
+	return clickPoint;
 }
 
 
 - (void)insertModule:(FreemanModule *)module {
-	CGFloat ydepth = [[NSScreen mainScreen] frame].size.height;
-	CGPoint clickPoint = CGPointMake([_event locationInWindow].x, ydepth-[_event locationInWindow].y);
-	[module insertAt:clickPoint inReaktorProcess:_reaktorProcess];
-	// 
-	// [_reaktorProcess sendRightMouseClick:clickPoint];
-	// [_reaktorProcess sendKeySequence:[module completeNavigationSequence]];
+	[module insertAt:[self screenCoordinateForEvent:_event] inReaktorProcess:_reaktorProcess];
 }
 
 
@@ -158,9 +168,30 @@ OSStatus HotKeyHandler( EventHandlerCallRef nextHandler, EventRef theEvent, void
 	if( [[self overlayManager] enabled] ) {
 		if( [event modifierFlags] & NSAlternateKeyMask ) {
 			_event = event;
-			[_overlayManager prompt];
+			CGPoint point = [self screenCoordinateForEvent:event];
+			NSInteger windowNumber = [NSWindow windowNumberAtPoint:(NSPoint)point belowWindowWithWindowNumber:0];
+			NSColor *color = [self sampleWindow:windowNumber atPoint:point];
+			NSLog( @"COLOR = %@", [color asHexString] );
+			
+			if( [[color asHexString] isEqualToString:STRUCTURE_BACKGROUND] ) {
+				[_overlayManager searchModules:[self primaryModuleDatabase]];	
+			} else if( [[color asHexString] isEqualToString:CORE_BACKGROUND] ) {
+				[_overlayManager searchModules:[self coreModuleDatabase]];
+			} else {
+				NSBeep();
+			}
 		}
 	}
+}
+
+
+-(NSColor *)sampleWindow:(CGWindowID)windowID atPoint:(CGPoint)point {
+	CGRect imageBounds = CGRectMake( point.x, point.y, 1, 1 );
+	CGImageRef windowImage = CGWindowListCreateImage( imageBounds, kCGWindowListOptionIncludingWindow, windowID, kCGWindowImageDefault );
+	NSBitmapImageRep *rep = [[NSBitmapImageRep alloc] initWithCGImage:windowImage];
+	NSColor *color = [rep colorAtX:0 y:0];
+	CGImageRelease(windowImage);
+	return color;
 }
 
 
