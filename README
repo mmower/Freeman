@@ -1,4 +1,4 @@
-Freeman v0.5(1) 10.09.2010
+Freeman v0.7 15.09.2010
 by Matt Mower <self@mattmower.com>
 
 Freeman is a tool for users of Native Instruments Reaktor on Mac OSX (10.6.4) that offers a new way to insert modules into structure windows. The default Reaktor approach is to use a right-click context menu and navigate to find the module you want. Using Freeman you get a window with smart type-as-you-go search to find & insert the module you want.
@@ -22,10 +22,8 @@ If you find it more convenient you can also browse directly in the menu and hit 
 Notes
 =====
 
-Freeman 0.5 is for Mac OS X 10.6 ("Snow Leopard") only and will not work on previous releases. Additionally it has only been tested on OSX 10.6.4 although it may work on earlier releases of 10.6.
+Freeman 0.7 is for Mac OS X 10.6 ("Snow Leopard") only and will not work on previous releases. Additionally it has only been tested on OSX 10.6.4 although it may work on earlier releases of 10.6.
 
-Freeman 0.5 only supports the built-in modules at primary level. Invoking it on a Core structure will have unpredictable (but not disastrous) results. Invoking it on a panel window may potentially be destructive so this should be avoided.
+Freeman 0.7 supports the primary level built-in modules, core cells, and macros (including user core cells and macros). Invoking it inside a Core structure or in a Panel window will likely have unpredictable, and possibly destructive, results.
 
 At this point, please report any bugs and/or feature requests to me: self@mattmower.com
-
-
