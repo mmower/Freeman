@@ -75,19 +75,12 @@
 		_primary = NO;
 		
 		NSURL *reaktorFactoryContentURL = [self reaktorFactoryContentPath];
-		// NSURL *reaktorUserContentURL = [self reaktorUserContentPath];
+		NSURL *reaktorUserContentURL = [self reaktorUserContentPath];
 		
 		[self addCatalog:[[FreemanXMLCatalog alloc] initWithOwner:self
                                                          name:@"Built-In Module"
                                                   catalogFile:[[NSBundle mainBundle] pathForResource:@"coremodules" ofType:@"xml"]]];
 
-		// [self addCatalog:[[FreemanDiskCatalog alloc] initWithOwner:self
-		//                                                           name:@"Core Cell"
-		//                                                    factoryPath:[[reaktorFactoryContentURL URLByAppendingPathComponent:@"Core Cells"] path]
-		//                                                       userPath:[[reaktorUserContentURL URLByAppendingPathComponent:@"Core Cells"] path]
-		//                                                   withFileType:@"rcc"]];
-		// 
-		
 		NSURL *expertMacrosURL = [[reaktorFactoryContentURL URLByAppendingPathComponent:@"Core Macros"] URLByAppendingPathComponent:@"Expert"];
 		[self addCatalog:[[FreemanDiskCatalog alloc] initWithOwner:self
 		                                                          name:@"Expert Macro"
@@ -102,13 +95,16 @@
 		                                                      userPath:nil
 		                                                  withFileType:@"rcm"]];
 		
-		//[[reaktorUserContentURL URLByAppendingPathComponent:@"Core Macros"] path]
+		NSURL *userMacrosURL = [reaktorUserContentURL URLByAppendingPathComponent:@"Core Macros"];
+		[self addCatalog:[[FreemanDiskCatalog alloc] initWithOwner:self
+		                                                          name:@"User Macro"
+		                                                   factoryPath:[userMacrosURL path]
+		                                                      userPath:nil
+		                                                  withFileType:@"rcm"]];
 	}
 	
 	return self;
 }
-
-#define DEBUG_FREEMAN 1
 
 
 - (void)addCatalog:(FreemanCatalog *)catalog {
