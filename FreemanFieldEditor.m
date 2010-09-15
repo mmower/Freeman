@@ -12,11 +12,10 @@
 
 @interface FreemanFieldEditor (PrivateMethods)
 
-- (NSUInteger)quickSelect:(NSEvent *)event;
-- (BOOL)optDown:(NSEvent *)event;
+// - (NSUInteger)quickSelect:(NSEvent *)event;
+// - (BOOL)optDown:(NSEvent *)event;
 
 @end
-
 
 @implementation FreemanFieldEditor
 
@@ -26,34 +25,38 @@
 	#ifdef DEBUG_FREEMAN
 	NSLog( @"keyCode = %03d OPT=%@", [event keyCode], ([event modifierFlags] & NSAlternateKeyMask) ? @"Y" : @"N" );
 	#endif
+	[super keyDown:event];
 	
-	if( [self optDown:event] && ([self quickSelect:event] > 0) ) {
-		dispatch_async( dispatch_get_main_queue(), ^{
-			
-			});
-		[[self overlayManager] quickSelect:[self quickSelect:event]];
-	} else {
-		[super keyDown:event];
-	}
+	// if( [self optDown:event] && ([self quickSelect:event] > 0) ) {
+	// 	// Swallow opt+quickselect key
+	// } else {
+	// 	[super keyDown:event];
+	// }
 }
 
 
 // Swallow key-up events for the key-down events we are special processing
-// - (void)keyUp:(NSEvent *)event {
-// 	if( !( [self optDown:event] && ([self quickSelect:event] > 0) )) {
-// 		[super keyUp:event];
-// 	}
+- (void)keyUp:(NSEvent *)event {
+	[super keyUp:event];
+	// if( ( [self optDown:event] && ([self quickSelect:event] > 0) )) {
+	// 	NSLog( @"Dispatching quick-select" );
+	// 	dispatch_async( dispatch_get_main_queue(), ^{
+	// 		[[self overlayManager] quickSelect:[self quickSelect:event]];
+	// 		});
+	// } else {
+	// 	[super keyUp:event];
+	// }
+}
+
+
+// - (NSUInteger)quickSelect:(NSEvent *)event {
+// 	return [[event charactersIgnoringModifiers] integerValue];
 // }
-
-
-- (NSUInteger)quickSelect:(NSEvent *)event {
-	return [[event charactersIgnoringModifiers] integerValue];
-}
-
-
-- (BOOL)optDown:(NSEvent *)event {
-	return ([event modifierFlags] & NSAlternateKeyMask) == NSAlternateKeyMask;
-}
+// 
+// 
+// - (BOOL)optDown:(NSEvent *)event {
+// 	return ([event modifierFlags] & NSAlternateKeyMask) == NSAlternateKeyMask;
+// }
 
 
 @end

@@ -127,15 +127,19 @@
 	}
 }
 
-- (void)quickSelect:(NSUInteger)result {
-	if( result > 0 && result <= [[self searchResults] count] ) {
-		FreemanModule *selectedModule = [[self searchResults] objectAtIndex:(result-1)];
-		#ifdef DEBUG_FREEMAN
-		NSLog( @"quickSelect:%d -> %@", result, selectedModule );
-		#endif
-		[self closeAndInsertModule:selectedModule];
-	}
-}
+// - (void)quickSelect:(NSUInteger)result {
+// 	NSLog( @"quickSelect: %d", result );
+// 	if( result > 0 && result <= [[self searchResults] count] ) {
+// 		FreemanModule *selectedModule = [[self searchResults] objectAtIndex:(result-1)];
+// 		dispatch_async( dispatch_get_main_queue(), ^{
+// 			[self closeAndInsertModule:selectedModule];
+// 		});
+// 		
+// 		#ifdef DEBUG_FREEMAN
+// 		NSLog( @"quickSelect:%@", [selectedModule name] );
+// 		#endif
+// 	}
+// }
 
 
 - (IBAction)insertModule:(id)sender {

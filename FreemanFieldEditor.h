@@ -11,7 +11,9 @@
 @class FreemanOverlayManager;
 
 @interface FreemanFieldEditor : NSTextView {
-	FreemanOverlayManager *_overlayManager;
+	FreemanOverlayManager		*_overlayManager;
+	BOOL										_inQuickSelect;
+	NSUInteger							_quickSelection;
 }
 
 @property (assign) FreemanOverlayManager *overlayManager;
