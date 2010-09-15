@@ -168,9 +168,10 @@ FreemanAppDelegate *gDelegate = nil;
 	if( [[self overlayManager] enabled] ) {
 		if( [event modifierFlags] & NSAlternateKeyMask ) {
 			_event = event;
-			CGPoint point = [self screenCoordinateForEvent:event];
-			NSInteger windowNumber = [NSWindow windowNumberAtPoint:(NSPoint)point belowWindowWithWindowNumber:0];
-			NSColor *color = [self sampleWindow:windowNumber atPoint:point];
+			CGPoint screenPoint = [self screenCoordinateForEvent:event];
+			NSPoint windowPoint = NSMakePoint( screenPoint.x, screenPoint.y );
+			NSInteger windowNumber = [NSWindow windowNumberAtPoint:windowPoint belowWindowWithWindowNumber:0];
+			NSColor *color = [self sampleWindow:windowNumber atPoint:screenPoint];
 			NSLog( @"COLOR = %@", [color asHexString] );
 			
 			if( [[color asHexString] isEqualToString:STRUCTURE_BACKGROUND] ) {
