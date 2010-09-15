@@ -78,6 +78,7 @@
 		C9266BF812383783002619C7 /* FreemanOverlayManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreemanOverlayManager.m; sourceTree = "<group>"; };
 		C9266C1B12383B79002619C7 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		C9266C7112384B46002619C7 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
+		C953D2D5123FD91900A2491B /* FreemanModularObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreemanModularObject.h; sourceTree = "<group>"; };
 		C975FA97123AE8A300C2AC4E /* FreemanSearchField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreemanSearchField.h; sourceTree = "<group>"; };
 		C975FA98123AE8A300C2AC4E /* FreemanSearchField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreemanSearchField.m; sourceTree = "<group>"; };
 		C975FAA8123AE9EA00C2AC4E /* FreemanKeyCodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreemanKeyCodes.h; sourceTree = "<group>"; };
@@ -154,6 +155,7 @@
 				C975FDB2123C4D3C00C2AC4E /* FreemanMenu.m */,
 				C910CA0B123EB9BC00585490 /* NSArray+Freeman.h */,
 				C910CA0C123EB9BC00585490 /* NSArray+Freeman.m */,
+				C953D2D5123FD91900A2491B /* FreemanModularObject.h */,
 			);
 			name = Classes;
 			sourceTree = "<group>";

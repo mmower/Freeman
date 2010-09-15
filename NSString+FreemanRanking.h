@@ -14,5 +14,7 @@
 - (float)scoreForAbbreviation:(NSString *)abbreviation;
 - (float)scoreForAbbreviation:(NSString *)abbreviation hitMask:(NSMutableIndexSet *)mask;
 - (float)scoreForAbbreviation:(NSString *)abbreviation inRange:(NSRange)searchRange fromRange:(NSRange)abbreviationRange hitMask:(NSMutableIndexSet *)mask;
+
+- (NSString *)formatInGroupsOf:(NSUInteger)count;
 	
 @end

@@ -161,23 +161,23 @@ typedef CGEventRef (^EventRefGeneratingBlock)();
 }
 
 
-// - (void)sendKeySequence:(NSString *)keys {
-// 	NSLog( @"SEND KEY SEQUENCE: %@", keys );
-// 	for( int i = 0; i < [keys length]; i++ ) {
-// 		NSString *specifier = [keys substringWithRange:NSMakeRange(i, 1)];
-// 		[self sendKeyStroke:[self mapSpecifierToKeyCode:specifier]];
-// 		
-// 		// This is a gross hack. For some reason if we send a cursor-down right after a cursor-right
-// 		// (to open a submenu) then instead of moving the menu selection down one item, the selection
-// 		// jumps to the bottom of the menu. This. is. not. good.
-// 		// So we add a 125ms delay after opening the menu before allowing any other actions. On
-// 		// my system at least this seems to work reliably but hard-coded delays are a sure indicator
-// 		// of pain to come and I don't expect this one to be any different.
-// 		if( [specifier isEqualToString:@"R"] ) {
-// 			usleep(125000);
-// 		}
-// 	}
-// }
+- (void)sendKeySequence:(NSString *)keys {
+	NSLog( @"SEND KEY SEQUENCE: %@", keys );
+	for( int i = 0; i < [keys length]; i++ ) {
+		NSString *specifier = [keys substringWithRange:NSMakeRange(i, 1)];
+		[self sendKeyStroke:[self mapSpecifierToKeyCode:specifier]];
+		
+		// This is a gross hack. For some reason if we send a cursor-down right after a cursor-right
+		// (to open a submenu) then instead of moving the menu selection down one item, the selection
+		// jumps to the bottom of the menu. This. is. not. good.
+		// So we add a 125ms delay after opening the menu before allowing any other actions. On
+		// my system at least this seems to work reliably but hard-coded delays are a sure indicator
+		// of pain to come and I don't expect this one to be any different.
+		if( [specifier isEqualToString:@"R"] ) {
+			usleep(125000);
+		}
+	}
+}
 
 
 - (CGKeyCode)mapSpecifierToKeyCode:(NSString *)specifier {

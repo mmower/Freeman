@@ -8,22 +8,25 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "FreemanModularObject.h"
+
 @class FreemanMenu;
 
 @class FreemanNavigationStack;
 
-@interface FreemanCatalog : NSObject {
-	NSString								*_name;
-	NSMutableArray					*_modules;
-	FreemanMenu							*_menu;
+@interface FreemanCatalog : NSObject <FreemanModularObject> {
+	id<FreemanModularObject>	_owner;
+	NSString									*_name;
+	NSMutableArray						*_contents;
+	NSMutableArray						*_modules;
 }
 
 @property (readonly) NSString *name;
+@property (assign) id<FreemanModularObject> owner;
+@property (readonly) NSMutableArray *contents;
 @property (readonly) NSMutableArray *modules;
 
-@property (assign) FreemanMenu *menu;
-
-- (id)initWithName:(NSString *)name;
+- (id)initWithOwner:(id)owner name:(NSString *)name;
 
 - (void)catalogLoaded;
 

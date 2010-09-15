@@ -8,28 +8,32 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class FreemanMenu;
-@class FreemanCatalog;
-@class FreemanRemoteProcess;
+#import "FreemanModularObject.h"
 
-@interface FreemanModule : NSObject {
-	NSString				*_name;
-	float						_scoreForLastAbbreviation;
-	FreemanMenu			*_menu;
-	NSString				*_menuPath;
-	NSArray					*_menuHierarchy;
-	FreemanCatalog	*_catalog;
+@class FreemanRemoteProcess;
+@class FreemanModularObject;
+@class FreemanCatalog;
+
+@interface FreemanModule : NSObject <FreemanModularObject> {
+	id<FreemanModularObject>	_owner;
+	NSString									*_name;
+	float											_scoreForLastAbbreviation;
+	FreemanCatalog						*	_catalog;
+	// NSString									*_path;
+	// NSArray										*_menuHierarchy;
 }
 
+@property (assign) id<FreemanModularObject> owner;
 @property (assign) NSString *name;
 @property (assign) float scoreForLastAbbreviation;
-@property (assign) FreemanMenu *menu;
-@property (assign) NSArray *menuHierarchy;
-@property (assign) NSString *menuPath;
 @property (assign) FreemanCatalog *catalog;
+// @property (assign) NSArray *menuHierarchy;
+// @property (assign) NSString *path;
 
-- (id)initWithName:(NSString *)name catalog:(FreemanCatalog *)catalog;
+- (id)initWithOwner:(id<FreemanModularObject>)owner catalog:(FreemanCatalog *)catalog name:(NSString *)name;
 
 - (void)insertAt:(CGPoint)point inReaktorProcess:(FreemanRemoteProcess *)reaktorProcess;
+
+- (NSString *)menuPath;
 
 @end

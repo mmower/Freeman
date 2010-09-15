@@ -18,40 +18,33 @@
 
 @interface FreemanModule (PrivateMethods)
 
-- (NSArray *)generateMenuHierarchy;
-- (NSString *)generateMenuPath;
+// - (NSArray *)generateMenuHierarchy;
+// - (NSString *)generateMenuPath;
 
 @end
 
 
 @implementation FreemanModule
 
+@synthesize owner                    = _owner;
+@synthesize catalog                  = _catalog;
 @synthesize name                     = _name;
 @synthesize scoreForLastAbbreviation = _scoreForLastAbbreviation;
-@synthesize menu                     = _menu;
-@synthesize menuPath                 = _menuPath;
-@synthesize menuHierarchy            = _menuHierarchy;
-@synthesize catalog                  = _catalog;
+// @synthesize path                 		= _path;
+// @synthesize menuHierarchy            = _menuHierarchy;
 
 
-- (id)initWithName:(NSString *)name catalog:(FreemanCatalog *)catalog {
+- (id)initWithOwner:(id<FreemanModularObject>)owner catalog:(FreemanCatalog *)catalog name:(NSString *)name {
 	if( ( self = [super init] ) ) {
-		_name                     = name;
+		_owner                    = owner;
 		_catalog                  = catalog;
+		_name                     = name;
 		_scoreForLastAbbreviation = 0.0;
-		_menu                     = nil;
-		_menuHierarchy            = nil;
-		_menuPath                 = nil;
+		// _menuHierarchy            = nil;
+		// _path                     = nil;
 	}
 	
 	return self;
-}
-
-
-- (void)setMenu:(FreemanMenu *)menu {
-	_menu          = menu;
-	_menuHierarchy = [self generateMenuHierarchy];
-	_menuPath      = [self generateMenuPath];
 }
 
 
@@ -60,10 +53,7 @@
 	[reaktorProcess sendRightMouseClick:point];
 	
 	// Navigate the menu hierarchy
-	
-	NSArray *navigation = [[self menuHierarchy] arrayByAddingObject:self];
-	NSLog( @"Navigate and select: %@", [navigation pretty] );
-	[reaktorProcess navigateMenu:navigation];
+	[reaktorProcess sendKeySequence:[self navigationSequence]];
 }
 
 
@@ -72,26 +62,52 @@
 }
 
 
-- (NSArray *)generateMenuHierarchy {
-	NSMutableArray *menus = [NSMutableArray array];
-	FreemanMenu *menu = _menu;
-	while( menu != nil ) {
-		[menus addObject:menu];
-		menu = [menu parent];
+#pragma mark FreemanModularObject
+
+- (NSArray *)contents {
+	return [NSArray array];
+}
+
+
+- (NSUInteger)indexOfContent:(id<FreemanModularObject>)content {
+	return NSNotFound;
+}
+
+
+- (BOOL)isModule {
+	return YES;
+}
+
+
+- (void)addContent:(id<FreemanModularObject>)content {
+	NSAssert( NO, @"Should never get here" );
+}
+
+
+- (NSArray *)allModules {
+	return [NSArray array];
+}
+
+
+- (NSString *)navigationSequence {
+	NSMutableString *sequence = [NSMutableString string];
+	[sequence appendString:[[self owner] navigationSequence]];
+	for( int i = 0; i < [[self owner] indexOfContent:self]; i++ ) {
+		[sequence appendString:@"D"];
 	}
-	return [menus reverse];
+	[sequence appendString:@"!"];
+	return [sequence copy];
 }
 
 
-- (NSString *)generateMenuPath {
-	NSMutableString *path = [NSMutableString stringWithCapacity:32];
-	[[self menuHierarchy] enumerateObjectsUsingBlock:^(id obj,NSUInteger idx,BOOL *stop) {
-		if( idx > 0 ) {
-			[path appendString:@" : "];
-		}
-		[path appendString:[obj name]];
-	}];
-	return [path copy];
+- (NSString *)menuPath {
+	return [[self owner] path];
 }
+
+
+- (NSString *)path {
+	return [[[self owner] path] stringByAppendingString:[NSString stringWithFormat:@" : %@", [self name]]];
+}
+
 
 @end

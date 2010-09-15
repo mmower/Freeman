@@ -9,14 +9,15 @@
 #import <Cocoa/Cocoa.h>
 
 #import "FreemanCatalog.h"
+#import "FreemanModularObject.h"
 
 @class FreemanMenu;
 
 @interface FreemanXMLCatalog : FreemanCatalog <NSXMLParserDelegate> {
-	NSMutableArray *_menuStack;
-	FreemanMenu *_currentMenu;
+	NSMutableArray						*_menuStack;
+	id<FreemanModularObject>	_currentContainer;
 }
 
-- (id)initWithName:(NSString *)name catalogFile:(NSString *)catalogFile;
+- (id)initWithOwner:(id<FreemanModularObject>)owner name:(NSString *)name catalogFile:(NSString *)catalogFile;
 
 @end

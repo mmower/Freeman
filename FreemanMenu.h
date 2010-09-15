@@ -8,29 +8,33 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "FreemanModularObject.h"
+
 @class FreemanModule;
 
-@interface FreemanMenu : NSObject {
-	FreemanMenu			*_parent;
+@interface FreemanMenu : NSObject <FreemanModularObject> {
+	id<FreemanModularObject>	_owner;
 	NSString				*_name;
-	NSMutableArray	*_subMenus;
-	NSMutableArray	*_modules;
-	NSString				*_navigationSequence;
+	NSMutableArray	*_contents;
+	// NSMutableArray	*_subMenus;
+	// NSMutableArray	*_modules;
+	// NSString				*_navigationSequence;
 }
 
-@property (assign) FreemanMenu *parent;
+@property (assign) id<FreemanModularObject> owner;
 @property (assign) NSString *name;
-@property (readonly) NSMutableArray *subMenus;
-@property (readonly) NSMutableArray *modules;
-@property (assign) NSString *navigationSequence;
+@property (readonly) NSMutableArray *contents;
+// @property (readonly) NSMutableArray *subMenus;
+// @property (readonly) NSMutableArray *modules;
+// @property (assign) NSString *navigationSequence;
 
-- (id)initWithName:(NSString *)name;
+- (id)initWithOwner:(id<FreemanModularObject>)owner name:(NSString *)name;
 
-- (void)addSubMenu:(FreemanMenu *)menu;
-- (void)addModule:(FreemanModule *)module;
+// - (void)addSubMenu:(FreemanMenu *)menu;
+// - (void)addModule:(FreemanModule *)module;
 
-- (NSString *)path;
+// - (NSString *)path;
 
-- (NSArray *)allModules;
+// - (NSArray *)allModules;
 
 @end

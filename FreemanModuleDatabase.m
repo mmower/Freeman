@@ -28,27 +28,32 @@
 
 @implementation FreemanModuleDatabase
 
+@synthesize contents = _contents;
 
 - (id)init {
 	if( ( self = [super init] ) ) {
+		_contents = [NSMutableArray array];
 		_catalogs = [NSMutableArray array];
-		_modules = [NSMutableArray array];
+		_modules  = [NSMutableArray array];
 		
 		NSURL *reaktorFactoryContentURL = [self reaktorFactoryContentPath];
 		NSURL *reaktorUserContentURL = [self reaktorUserContentPath];
 		
-		[self addCatalog:[[FreemanXMLCatalog alloc] initWithName:@"Built-In Module"
-                                                 catalogFile:[[NSBundle mainBundle] pathForResource:@"modules" ofType:@"xml"]]];
+		[self addCatalog:[[FreemanXMLCatalog alloc] initWithOwner:self
+                                                         name:@"Built-In Module"
+                                                  catalogFile:[[NSBundle mainBundle] pathForResource:@"modules" ofType:@"xml"]]];
 
-		[self addCatalog:[[FreemanDiskCatalog alloc] initWithName:@"Core Cell"
-                                                  factoryPath:[[reaktorFactoryContentURL URLByAppendingPathComponent:@"Core Cells"] path]
-                                                     userPath:[[reaktorUserContentURL URLByAppendingPathComponent:@"Core Cells"] path]
-                                                 withFileType:@"rcc"]];
+		[self addCatalog:[[FreemanDiskCatalog alloc] initWithOwner:self
+                                                          name:@"Core Cell"
+                                                   factoryPath:[[reaktorFactoryContentURL URLByAppendingPathComponent:@"Core Cells"] path]
+                                                      userPath:[[reaktorUserContentURL URLByAppendingPathComponent:@"Core Cells"] path]
+                                                  withFileType:@"rcc"]];
 
-		[self addCatalog:[[FreemanDiskCatalog alloc] initWithName:@"Macro"
-                                                  factoryPath:[[reaktorFactoryContentURL URLByAppendingPathComponent:@"Macros"] path]
-                                                     userPath:[[reaktorUserContentURL URLByAppendingPathComponent:@"Macros"] path]
-                                                 withFileType:@"mdl"]];
+		[self addCatalog:[[FreemanDiskCatalog alloc] initWithOwner:self
+                                                          name:@"Macro"
+                                                   factoryPath:[[reaktorFactoryContentURL URLByAppendingPathComponent:@"Macros"] path]
+                                                      userPath:[[reaktorUserContentURL URLByAppendingPathComponent:@"Macros"] path]
+                                                  withFileType:@"mdl"]];
 	}
 	
 	return self;
@@ -57,7 +62,8 @@
 
 - (void)addCatalog:(FreemanCatalog *)catalog {
 	[_catalogs addObject:catalog];
-	[_modules addObjectsFromArray:[catalog modules]];
+	[_contents addObject:catalog];
+	[_modules addObjectsFromArray:[catalog allModules]];
 	[catalog list];
 }
 
@@ -144,6 +150,58 @@
 	
 	return [NSDictionary dictionaryWithContentsOfFile:prefsFilePath];
 	
+}
+
+
+#pragma mark FreemanModularObject
+
+- (id<FreemanModularObject>)owner {
+	return nil;
+}
+
+
+- (NSString *)name {
+	return nil;
+}
+
+
+- (NSUInteger)indexOfContent:(id<FreemanModularObject>)content {
+	return [[self contents] indexOfObject:content];
+}
+
+
+// - (NSArray *)generateOwnerHierarchy {
+// 	return [NSArray array];
+// }
+
+
+- (NSString *)path {
+	return @"";
+}
+
+
+- (NSString *)navigationSequence {
+	return @"R";
+}
+
+
+- (BOOL)isModule {
+	return NO;
+}
+
+
+- (NSArray *)allModules {
+	NSLog( @"FreemanModularDatabase -allModules" );
+	NSMutableArray *modules = [NSMutableArray array];
+	[[self contents] enumerateObjectsUsingBlock:^(id obj,NSUInteger idx,BOOL *stop) {
+		[modules addObjectsFromArray:[obj allModules]];
+	}];
+	return [modules copy];
+}
+
+
+- (void)addContent:(id<FreemanModularObject>)content {
+	[[self contents] addObject:content];
 }
 
 

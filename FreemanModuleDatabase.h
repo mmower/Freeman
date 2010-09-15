@@ -8,12 +8,18 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "FreemanModularObject.h"
+
 @class FreemanCatalog;
 
-@interface FreemanModuleDatabase : NSObject {
+@interface FreemanModuleDatabase : NSObject <FreemanModularObject> {
+	NSMutableArray			*_contents;
+	
 	NSMutableArray			*_catalogs;
 	NSMutableArray			*_modules;
 }
+
+@property (readonly) NSMutableArray *contents;
 
 - (void)addCatalog:(FreemanCatalog *)catalog;
 

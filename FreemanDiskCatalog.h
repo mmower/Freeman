@@ -10,11 +10,13 @@
 
 #import "FreemanCatalog.h"
 
+@class FreemanModuleDatabase;
+
 @interface FreemanDiskCatalog : FreemanCatalog {
 	NSFileManager *_fileManager;
 
 }
 
-- (id)initWithName:(NSString *)name factoryPath:(NSString *)factoryPath userPath:(NSString *)userPath withFileType:(NSString *)fileType;
+- (id)initWithOwner:(id<FreemanModularObject>)owner name:(NSString *)name factoryPath:(NSString *)factoryPath userPath:(NSString *)userPath withFileType:(NSString *)fileType;
 
 @end

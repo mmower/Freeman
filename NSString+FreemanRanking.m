@@ -64,4 +64,16 @@
 	return 0;
 }
 
+
+- (NSString *)formatInGroupsOf:(NSUInteger)count {
+	NSMutableString *result = [NSMutableString string];
+	int padding = [self length] % count;
+	for( int i = 0; i < (([self length]-padding)/count); i++ ) {
+		[result appendString:[self substringWithRange:NSMakeRange(i*count,count)]];
+		[result appendString:@"-"];
+	};
+	[result appendString:[self substringWithRange:NSMakeRange([self length]-padding,padding)]];
+	return result;
+}
+
 @end
