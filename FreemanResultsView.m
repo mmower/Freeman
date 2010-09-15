@@ -24,7 +24,9 @@
 	} else if( [event keyCode] == KEYCODE_ESCAPE ) {
 		[[self overlayManager] closeAndActivateReaktor];
 	} else {
-		// NSLog( @"Key code = %d", [event keyCode] );
+		#ifdef DEBUG_FREEMAN
+		NSLog( @"Key code = %d", [event keyCode] );
+		#endif
 		[super keyDown:event];
 	}
 }

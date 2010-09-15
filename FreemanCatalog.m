@@ -46,7 +46,7 @@
 - (void)list {
 	NSLog( @"Catalog: %@", [self name] );
 	[_modules enumerateObjectsUsingBlock:^(id obj,NSUInteger idx,BOOL *stop) {
-		// NSLog( @"Module %@ %@", [obj name], [[obj navigationSequence] formatInGroupsOf:4] );
+		NSLog( @"Module %@ %@", [obj name], [[obj navigationSequence] formatInGroupsOf:4] );
 		}];
 }
 
@@ -56,11 +56,6 @@
 - (NSUInteger)indexOfContent:(id<FreemanModularObject>)content {
 	return [_contents indexOfObject:content];
 }
-
-
-// - (NSArray *)generateOwnerHierarchy {
-// 	return [[[self owner] generateOwnerHierarchy] arrayByAddingObject:[self owner]];
-// }
 
 
 - (NSString *)path {
@@ -79,25 +74,19 @@
 		[sequence appendString:@"D"];
 	};
 	[sequence appendString:@"R"];
-	// NSLog( @"Catalog %@ navigation sequence: %@", [self name], sequence );
 	return [sequence copy];
 }
 
 
 - (void)addContent:(id<FreemanModularObject>)content {
-	if( [content isModule] ) {
-		NSLog( @"Adding module: %@", [content name] );
-	}
 	[_contents addObject:content];
 }
 
 
 - (NSArray *)allModules {
-	NSLog( @"FreemanCatalog -allModules" );
 	NSMutableArray *modules = [NSMutableArray array];
 	[[self contents] enumerateObjectsUsingBlock:^(id obj,NSUInteger idx,BOOL *stop) {
 		if( [obj isModule] ) {
-			NSLog( @"AllModule: %@", [obj name] );
 			[modules addObject:obj];
 		} else {
 			[modules addObjectsFromArray:[obj allModules]];

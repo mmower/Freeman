@@ -19,16 +19,12 @@
 	NSString									*_name;
 	float											_scoreForLastAbbreviation;
 	FreemanCatalog						*	_catalog;
-	// NSString									*_path;
-	// NSArray										*_menuHierarchy;
 }
 
 @property (assign) id<FreemanModularObject> owner;
 @property (assign) NSString *name;
 @property (assign) float scoreForLastAbbreviation;
 @property (assign) FreemanCatalog *catalog;
-// @property (assign) NSArray *menuHierarchy;
-// @property (assign) NSString *path;
 
 - (id)initWithOwner:(id<FreemanModularObject>)owner catalog:(FreemanCatalog *)catalog name:(NSString *)name;
 

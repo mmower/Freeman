@@ -30,8 +30,6 @@
 @synthesize catalog                  = _catalog;
 @synthesize name                     = _name;
 @synthesize scoreForLastAbbreviation = _scoreForLastAbbreviation;
-// @synthesize path                 		= _path;
-// @synthesize menuHierarchy            = _menuHierarchy;
 
 
 - (id)initWithOwner:(id<FreemanModularObject>)owner catalog:(FreemanCatalog *)catalog name:(NSString *)name {
@@ -40,8 +38,6 @@
 		_catalog                  = catalog;
 		_name                     = name;
 		_scoreForLastAbbreviation = 0.0;
-		// _menuHierarchy            = nil;
-		// _path                     = nil;
 	}
 	
 	return self;
@@ -59,6 +55,11 @@
 
 - (NSString *)description {
 	return [NSString stringWithFormat:@"Freeman Module<%@> (%f)", [self name], [self scoreForLastAbbreviation]];
+}
+
+
+- (NSString *)menuPath {
+	return [[self owner] path];
 }
 
 
@@ -97,11 +98,6 @@
 	}
 	[sequence appendString:@"!"];
 	return [sequence copy];
-}
-
-
-- (NSString *)menuPath {
-	return [[self owner] path];
 }
 
 

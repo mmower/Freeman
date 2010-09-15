@@ -55,12 +55,16 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if( [keyPath isEqualToString:@"searchString"] ) {
 		if( _searchThread ) {
-			// NSLog( @"Cancelling active search" );
+			#ifdef DEBUG_FREEMAN
+			NSLog( @"Cancelling active search" );
+			#endif
 			[_searchThread cancel];
 		}
 		
 		_searchThread = [[NSThread alloc] initWithTarget:self selector:@selector(search:) object:nil];
-		// NSLog( @"Start new search for: %@", [self searchString] );
+		#ifdef DEBUG_FREEMAN
+		NSLog( @"Start new search for: %@", [self searchString] );
+		#endif
 		[_searchThread start];
 	}
 }
@@ -91,7 +95,9 @@
 		});
 		return;
 	} else {
-		// NSLog( @"Search for %@", [self searchString] );
+		#ifdef DEBUG_FREEMAN
+		NSLog( @"Search for %@", [self searchString] );
+		#endif
 		
 		NSArray *results = [[[self delegate] moduleDatabase] searchFor:[self searchString]];
 		if( [results count] > 0 && ![[NSThread currentThread] isCancelled] ) {
@@ -124,7 +130,9 @@
 - (void)quickSelect:(NSUInteger)result {
 	if( result > 0 && result <= [[self searchResults] count] ) {
 		FreemanModule *selectedModule = [[self searchResults] objectAtIndex:(result-1)];
+		#ifdef DEBUG_FREEMAN
 		NSLog( @"quickSelect:%d -> %@", result, selectedModule );
+		#endif
 		[self closeAndInsertModule:selectedModule];
 	}
 }
@@ -157,7 +165,9 @@
 	} else if( commandSelector == @selector(cancelOperation:) ) {
 		[self closeAndActivateReaktor];
 	} else {
+		#ifdef DEBUG_FREEMAN
 		NSLog( @"Unregistered selector: %@", NSStringFromSelector(commandSelector));
+		#endif
 		return NO;
 	}
 	return YES;

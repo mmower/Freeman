@@ -23,7 +23,9 @@
 @synthesize overlayManager = _overlayManager;
 
 - (void)keyDown:(NSEvent *)event {
-	// NSLog( @"keyCode = %03d OPT=%@", [event keyCode], ([event modifierFlags] & NSAlternateKeyMask) ? @"Y" : @"N" );
+	#ifdef DEBUG_FREEMAN
+	NSLog( @"keyCode = %03d OPT=%@", [event keyCode], ([event modifierFlags] & NSAlternateKeyMask) ? @"Y" : @"N" );
+	#endif
 	
 	if( [self optDown:event] && ([self quickSelect:event] > 0) ) {
 		dispatch_async( dispatch_get_main_queue(), ^{

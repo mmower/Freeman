@@ -17,10 +17,6 @@
 
 typedef CGEventRef (^EventRefGeneratingBlock)();
 
-//CGEventTimestamp delayEventByMillis( CGEventTimestamp timeStamp, int millis ) {
-//	return timeStamp + (millis * 1000000);
-//}
-
 
 @interface FreemanRemoteProcess (PrivateMethods)
 
@@ -87,82 +83,92 @@ typedef CGEventRef (^EventRefGeneratingBlock)();
 }
 
 
-- (CGEventRef)createKeyboardEventForKey:(unichar)key keyDown:(BOOL)keyDown {
-	CGEventRef ref = CGEventCreateKeyboardEvent( _eventSourceRef, 0, keyDown );
-	CGEventKeyboardSetUnicodeString( ref, 1, &key );
-	
-	CGEventFlags flags = CGEventGetFlags( ref );
-	// flags = 256;
-	// CGEventSetFlags( ref, flags );
-	NSLog( @"Flags" );
-	if( flags & kCGEventFlagMaskAlphaShift ) {
-		NSLog( @"NX_ALPHASHIFTMASK");
-	}
-	if( flags & kCGEventFlagMaskShift ) {
-		NSLog( @"NX_SHIFTMASK");
-	}
-	if( flags & kCGEventFlagMaskControl ) {
-		NSLog( @"NX_CONTROLMASK");
-	}
-	if( flags & kCGEventFlagMaskAlternate ) {
-		NSLog( @"NX_ALTERNATEMASK");
-	}
-	if( flags & kCGEventFlagMaskCommand ) {
-		NSLog( @"NX_COMMANDMASK");
-	}
-	if( flags & kCGEventFlagMaskHelp ) {
-		NSLog( @"NX_HELPMASK");
-	}
-	if( flags & kCGEventFlagMaskSecondaryFn ) {
-		NSLog( @"NX_SECONDARYFNMASK");
-	}
-	if( flags & kCGEventFlagMaskNumericPad ) {
-		NSLog( @"NX_NUMERICPADMASK");
-	}
-	if( flags & kCGEventFlagMaskNonCoalesced ) {
-		NSLog( @"NX_NONCOALSESCEDMASK");
-	}
-	
-	return ref;
-}
+/*
+ * The code using CGEventKeyboardSetUnicodeString() is probably the best philosophical
+ * approach to the problem since it directly navigates the menus and will handle
+ * language issues transparently. It's just a pity that it doesn't work when the
+ * target application is Reaktor.
+*/
 
-
-- (void)pressKey:(unichar)key {
-	[self postEvent:^() { return [self createKeyboardEventForKey:key keyDown:YES]; }];
-	[self postEvent:^() { return [self createKeyboardEventForKey:key keyDown:NO]; }];
-}
-
-
-- (void)sendString:(NSString *)string {
-	// string = [string lowercaseString];
-	// [self pressKey:[string characterAtIndex:0]];
-	
-	[self pressKey:'b'];
-	// [self sendKeyStroke:11];
-	
-	// [self sendKeySequence:@"RD"];
-	
-	// for( int i = 0; i < [string length]; i++ ) {
-	// 	unichar key = [string characterAtIndex:i];
-	// 	NSLog( @"Press '%c'", key );
-	// 	[self pressKey:key];
-	// 	usleep(100000);
-	// }
-}
-
-
-- (void)navigateMenu:(NSArray *)selections {
-	[selections enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-		NSLog( @"Send: [%@]", [obj name] );
-		[self sendString:[obj name]];
-		*stop = YES;
-		// [self sendKeyStroke:CGKEYCODE_RETURN];
-	}];
-}
-
+// - (CGEventRef)createKeyboardEventForKey:(unichar)key keyDown:(BOOL)keyDown {
+// 	CGEventRef ref = CGEventCreateKeyboardEvent( _eventSourceRef, 0, keyDown );
+// 	CGEventKeyboardSetUnicodeString( ref, 1, &key );
+// 	
+// 	CGEventFlags flags = CGEventGetFlags( ref );
+// 	// flags = 256;
+// 	// CGEventSetFlags( ref, flags );
+// 	NSLog( @"Flags" );
+// 	if( flags & kCGEventFlagMaskAlphaShift ) {
+// 		NSLog( @"NX_ALPHASHIFTMASK");
+// 	}
+// 	if( flags & kCGEventFlagMaskShift ) {
+// 		NSLog( @"NX_SHIFTMASK");
+// 	}
+// 	if( flags & kCGEventFlagMaskControl ) {
+// 		NSLog( @"NX_CONTROLMASK");
+// 	}
+// 	if( flags & kCGEventFlagMaskAlternate ) {
+// 		NSLog( @"NX_ALTERNATEMASK");
+// 	}
+// 	if( flags & kCGEventFlagMaskCommand ) {
+// 		NSLog( @"NX_COMMANDMASK");
+// 	}
+// 	if( flags & kCGEventFlagMaskHelp ) {
+// 		NSLog( @"NX_HELPMASK");
+// 	}
+// 	if( flags & kCGEventFlagMaskSecondaryFn ) {
+// 		NSLog( @"NX_SECONDARYFNMASK");
+// 	}
+// 	if( flags & kCGEventFlagMaskNumericPad ) {
+// 		NSLog( @"NX_NUMERICPADMASK");
+// 	}
+// 	if( flags & kCGEventFlagMaskNonCoalesced ) {
+// 		NSLog( @"NX_NONCOALSESCEDMASK");
+// 	}
+// 	
+// 	return ref;
+// }
+// 
+// 
+// - (void)pressKey:(unichar)key {
+// 	[self postEvent:^() { return [self createKeyboardEventForKey:key keyDown:YES]; }];
+// 	[self postEvent:^() { return [self createKeyboardEventForKey:key keyDown:NO]; }];
+// }
+// 
+// 
+// - (void)sendString:(NSString *)string {
+// 	// string = [string lowercaseString];
+// 	// [self pressKey:[string characterAtIndex:0]];
+// 	
+// 	[self pressKey:'b'];
+// 	// [self sendKeyStroke:11];
+// 	
+// 	// [self sendKeySequence:@"RD"];
+// 	
+// 	// for( int i = 0; i < [string length]; i++ ) {
+// 	// 	unichar key = [string characterAtIndex:i];
+// 	// 	NSLog( @"Press '%c'", key );
+// 	// 	[self pressKey:key];
+// 	// 	usleep(100000);
+// 	// }
+// }
+// 
+// 
+// - (void)navigateMenu:(NSArray *)selections {
+// 	[selections enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+// 		NSLog( @"Send: [%@]", [obj name] );
+// 		[self sendString:[obj name]];
+// 		*stop = YES;
+// 		// [self sendKeyStroke:CGKEYCODE_RETURN];
+// 	}];
+// }
+// 
 
 - (void)sendKeySequence:(NSString *)keys {
-	NSLog( @"SEND KEY SEQUENCE: %@", keys );
+	#ifdef DEBUG_FREEMAN
+	NSLog( @"sendKeySequence: %@", keys );
+	#endif
+	
 	for( int i = 0; i < [keys length]; i++ ) {
 		NSString *specifier = [keys substringWithRange:NSMakeRange(i, 1)];
 		[self sendKeyStroke:[self mapSpecifierToKeyCode:specifier]];

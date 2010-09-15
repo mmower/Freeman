@@ -10,7 +10,6 @@
 
 #import "FreemanMenu.h"
 #import "FreemanModule.h"
-#import "FreemanNavigationStack.h"
 #import "FreemanModuleDatabase.h"
 
 @interface FreemanDiskCatalog (PrivateMethods)
@@ -46,16 +45,14 @@
 		if( [[subMenu allModules] count] > 0 ) {
 			[container addContent:subMenu];
 		} else {
+			#ifdef DEBUG_FREEMAN
 			NSLog( @"** Discarding empty submenu: %@", [subMenu name] );
+			#endif
 		}
 		
 	}];
 	
-	// NSLog( @"Load files from: %@", path );
 	[[self filesInPath:path withFileType:fileType] enumerateObjectsUsingBlock:^(id file, NSUInteger idx, BOOL *stop) {
-		if( [path isEqualToString:@"/Volumes/Corrino/matt/Documents/Native Instruments/Reaktor5/Library/Macros"] ) {
-			NSLog( @"Load %@", file );
-		}
 		FreemanModule *module = [[FreemanModule alloc] initWithOwner:container catalog:self name:[file stringByDeletingPathExtension]];
 		[container addContent:module];
 	}];

@@ -86,25 +86,17 @@
 	NSMutableString *sequence = [NSMutableString string];
 	[sequence appendString:[[self owner] navigationSequence]];
 	
-	// if( [[self name] isEqualToString:@"Effects"] ) {
-	// 	NSLog( @"Menu: %@", [self name] );
-	// 	NSLog( @"Owner: %@", [self owner] );
-	// 	NSLog( @"Index: %d", [[self owner] indexOfContent:self] );
-	// 	NSLog( @"Array: %@", [[[self owner] contents] subarrayWithRange:NSMakeRange(0,[[self owner] indexOfContent:self])] );
-	// }
-	
 	for( int i = 0; i < [[self owner] indexOfContent:self]; i++ ) {
 		[sequence appendString:@"D"];
 	};
 	[sequence appendString:@"R"];
+	
+	#ifdef DEBUG_FREEMAN
 	NSLog( @"Menu %@ navigation sequence: %@", [self name], [sequence formatInGroupsOf:4] );
+	#endif
+	
 	return [sequence copy];
 }
-
-
-// - (NSArray *)generateOwnerHierarchy {
-// 	return [[[self owner] generateOwnerHierarchy] arrayByAddingObject:[self owner]];
-// }
 
 
 - (void)addContent:(id<FreemanModularObject>)content {

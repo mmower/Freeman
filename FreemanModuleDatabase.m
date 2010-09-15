@@ -64,7 +64,9 @@
 	[_catalogs addObject:catalog];
 	[_contents addObject:catalog];
 	[_modules addObjectsFromArray:[catalog allModules]];
+	#ifdef DEBUG_FREEMAN
 	[catalog list];
+	#endif
 }
 
 
@@ -170,11 +172,6 @@
 }
 
 
-// - (NSArray *)generateOwnerHierarchy {
-// 	return [NSArray array];
-// }
-
-
 - (NSString *)path {
 	return @"";
 }
@@ -191,7 +188,6 @@
 
 
 - (NSArray *)allModules {
-	NSLog( @"FreemanModularDatabase -allModules" );
 	NSMutableArray *modules = [NSMutableArray array];
 	[[self contents] enumerateObjectsUsingBlock:^(id obj,NSUInteger idx,BOOL *stop) {
 		[modules addObjectsFromArray:[obj allModules]];

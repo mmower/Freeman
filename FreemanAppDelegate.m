@@ -182,7 +182,10 @@ OSStatus AppSwitchHandler( EventHandlerCallRef nextHandler, EventRef theEvent, v
 	
 	GetFrontProcess( &psn );
 	CopyProcessName( &psn, (CFStringRef*)&processName );
-	// NSLog( @"Front process is now: %@", processName );
+	
+	#ifdef DEBUG_FREEMAN
+	NSLog( @"Front process is now: %@", processName );
+	#endif
 	
 	if( ![processName isEqualToString:@"Freeman"] && [[[gDelegate overlayManager] window] isVisible] ) {
 		[[gDelegate overlayManager] close];

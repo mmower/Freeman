@@ -24,6 +24,6 @@
 - (void)sendRightMouseClick:(CGPoint)clickPoint;
 - (void)sendKeyStroke:(CGKeyCode)keyCode;
 - (void)sendKeySequence:(NSString *)keys;
-- (void)navigateMenu:(NSArray *)selections;
+// - (void)navigateMenu:(NSArray *)selections;
 
 @end
