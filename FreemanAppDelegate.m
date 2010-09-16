@@ -19,13 +19,10 @@
 
 #import "NSColor+Freeman.h"
 
-// #define TRIGGER_ACTION (0x01)
-
 #define STRUCTURE_BACKGROUND @"#454E58"
 #define CORE_BACKGROUND @"#242A30"
 
 
-OSStatus HotKeyHandler( EventHandlerCallRef nextHandler, EventRef theEvent, void *userData );
 OSStatus AppSwitchHandler( EventHandlerCallRef nextHandler, EventRef theEvent, void *userData );
 
 
@@ -100,11 +97,13 @@ FreemanAppDelegate *gDelegate = nil;
 - (void)insertModule:(FreemanModule *)module {
 	_lastInsertedModule = module;
 	[module insertAt:_location inReaktorProcess:_reaktorProcess];
+	[[self reaktorProcess] resumeEventTap];
 }
 
 
 - (void)activateReaktor {
 	[[self reaktorProcess] activate];
+	[[self reaktorProcess] resumeEventTap];
 }
 
 
@@ -118,8 +117,10 @@ FreemanAppDelegate *gDelegate = nil;
 	_location = point;
 	NSColor *color = [self colorAtLocation:[self flipPoint:_location]];
 	if( [[color asHexString] isEqualToString:STRUCTURE_BACKGROUND] ) {
+		[[self reaktorProcess] suspendEventTap]; // BUT WHERE DO WE RESUME IT?
 		[_overlayManager searchModules:[self primaryModuleDatabase]];	
 	} else if( [[color asHexString] isEqualToString:CORE_BACKGROUND] ) {
+		[[self reaktorProcess] suspendEventTap]; // BUT WHERE DO WE RESUME IT?
 		[_overlayManager searchModules:[self coreModuleDatabase]];
 	} else {
 		NSBeep();
@@ -131,11 +132,13 @@ FreemanAppDelegate *gDelegate = nil;
 	NSLog( @"triggerReInsertModuleAtPoint: %@", [_lastInsertedModule name] );
 	if( _lastInsertedModule ) {
 		_location = point;
-		NSColor *color = [self colorAtLocation:_location];
+		NSColor *color = [self colorAtLocation:[self flipPoint:_location]];
 		if( [[color asHexString] isEqualToString:STRUCTURE_BACKGROUND] ) {
-			[_overlayManager insertModule:_lastInsertedModule];	
+			[[self reaktorProcess] suspendEventTap]; // BUT WHERE DO WE RESUME IT?
+			[self insertModule:_lastInsertedModule];	
 		} else if( [[color asHexString] isEqualToString:CORE_BACKGROUND] ) {
-			[_overlayManager insertModule:_lastInsertedModule];
+			[[self reaktorProcess] suspendEventTap]; // BUT WHERE DO WE RESUME IT?
+			[self insertModule:_lastInsertedModule];
 		} else {
 			NSBeep();
 		}
@@ -149,7 +152,7 @@ FreemanAppDelegate *gDelegate = nil;
 	NSPoint windowPoint = NSMakePoint( screenPoint.x, screenPoint.y );
 	NSInteger windowNumber = [NSWindow windowNumberAtPoint:windowPoint belowWindowWithWindowNumber:0];
 	NSColor *color = [self sampleWindow:windowNumber atPoint:[self flipPoint:screenPoint]];
-	NSLog( @"Window %d @ %.0f,%.0f = %d (%@)", windowNumber, screenPoint.x, screenPoint.y, windowNumber, [color asHexString] );
+	NSLog( @"Window %d @ %.0f,%.0f => (%@)", windowNumber, screenPoint.x, screenPoint.y, [color asHexString] );
 	NSLog( @"--------------------------------" );
 	return color;
 }

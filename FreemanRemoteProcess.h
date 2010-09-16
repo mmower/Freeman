@@ -23,6 +23,9 @@
 
 - (id)initWithProcessSerialNumber:(ProcessSerialNumber)psn;
 
+- (void)suspendEventTap;
+- (void)resumeEventTap;
+
 - (void)activate;
 - (void)sendRightMouseClick:(CGPoint)clickPoint;
 - (void)sendKeyStroke:(CGKeyCode)keyCode;

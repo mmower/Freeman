@@ -45,6 +45,7 @@ CGEventRef EventTapCallback( CGEventTapProxy proxy, CGEventType type, CGEventRef
 
 @interface FreemanRemoteProcess (PrivateMethods)
 
+- (void)installEventTap;
 - (void)postEvent:(EventRefGeneratingBlock)block;
 - (CGEventRef)createKeyboardEvent:(CGKeyCode)keyCode keyDown:(BOOL)keyDown;
 - (CGKeyCode)mapSpecifierToKeyCode:(NSString *)specifier;
@@ -67,13 +68,28 @@ CGEventRef EventTapCallback( CGEventTapProxy proxy, CGEventType type, CGEventRef
 	if( ( self = [super init] ) ) {
 		_eventSourceRef = CGEventSourceCreate( kCGEventSourceStateCombinedSessionState ); // kCGEventSourceStateHIDSystemState );
 		_psn = psn;
-		_tapMachPort = CGEventTapCreateForPSN( &_psn, kCGHeadInsertEventTap, kCGEventTapOptionDefault, CGEventMaskBit(kCGEventMouseMoved) | CGEventMaskBit(kCGEventKeyDown), EventTapCallback, (void*)self );
-		NSAssert( _tapMachPort, @"Unable to create Mach Port for event tap!" );
-		CFRunLoopSourceRef runLoopSourceRef = CFMachPortCreateRunLoopSource( kCFAllocatorDefault, _tapMachPort, 0 );
-		CFRunLoopAddSource( CFRunLoopGetCurrent(), runLoopSourceRef, kCFRunLoopDefaultMode );
+		[self installEventTap];
 	}
 	
 	return self;
+}
+
+
+- (void)installEventTap {
+	_tapMachPort = CGEventTapCreateForPSN( &_psn, kCGHeadInsertEventTap, kCGEventTapOptionDefault, CGEventMaskBit(kCGEventMouseMoved) | CGEventMaskBit(kCGEventKeyDown), EventTapCallback, (void*)self );
+	NSAssert( _tapMachPort, @"Unable to create Mach Port for event tap!" );
+	CFRunLoopSourceRef runLoopSourceRef = CFMachPortCreateRunLoopSource( kCFAllocatorDefault, _tapMachPort, 0 );
+	CFRunLoopAddSource( CFRunLoopGetCurrent(), runLoopSourceRef, kCFRunLoopDefaultMode );
+}
+
+
+- (void)suspendEventTap {
+	CGEventTapEnable( _tapMachPort, false );
+}
+
+
+- (void)resumeEventTap {
+	CGEventTapEnable( _tapMachPort, true );
 }
 
 
@@ -83,7 +99,7 @@ CGEventRef EventTapCallback( CGEventTapProxy proxy, CGEventType type, CGEventRef
 
 
 - (BOOL)keyPressed:(UniChar)key withFlags:(CGEventFlags)flags atPoint:(CGPoint)point {
-	NSLog( @"keyPressed at %.0f,%.0f", point.x, point.y );
+	// NSLog( @"keyPressed at %.0f,%.0f", point.x, point.y );
 	if( key == 'm' ) { // Insert module
 		dispatch_async( dispatch_get_main_queue(), ^{
 			[[self delegate] triggerInsertModuleAtPoint:point];
