@@ -34,11 +34,10 @@ FreemanAppDelegate *gDelegate = nil;
 
 @interface FreemanAppDelegate (PrivateMethods)
 
-- (void)registerHotKeys;
 - (void)registerAppSwitch;
-- (void)registerEvent:(NSEvent *)event;
-- (void)respondToHotKey;
-- (void)trigger;
+- (CGPoint)flipPoint:(CGPoint)point;
+- (CGPoint)windowPointToScreenPoint:(CGPoint)point;
+- (NSColor *)colorAtLocation:(CGPoint)location;
 - (NSColor *)sampleWindow:(CGWindowID)windowID atPoint:(CGPoint)point;
 
 @end
@@ -46,10 +45,10 @@ FreemanAppDelegate *gDelegate = nil;
 
 @implementation FreemanAppDelegate
 
-
 @synthesize window = _window;
 @synthesize statusMenu = _statusMenu;
 @synthesize statusItem = _statusItem;
+@synthesize image = _image;
 
 @synthesize overlayManager = _overlayManager;
 @synthesize primaryModuleDatabase = _primaryModuleDatabase;
@@ -67,18 +66,19 @@ FreemanAppDelegate *gDelegate = nil;
 }
 
 
+- (void)setReaktorProcess:(FreemanRemoteProcess *)reaktorProcess {
+	_reaktorProcess = reaktorProcess;
+	[_reaktorProcess setDelegate:self];
+}
+
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	if( !AXAPIEnabled() ) {
 		NSLog( @"Universal access must be enabled or GrapplingIron can't work!" );
 	} else {
 		gDelegate = self;
 		_overlayManager = [[FreemanOverlayManager alloc] initWithDelegate:self];
-		// [self registerHotKeys];
 		[self registerAppSwitch];
-		
-		[NSEvent addGlobalMonitorForEventsMatchingMask:NSEventMaskFromType(NSLeftMouseDown) handler:^(NSEvent *event) {
-			[self registerEvent:event];
-		}];
 	}
 }
 
@@ -87,73 +87,19 @@ FreemanAppDelegate *gDelegate = nil;
 	_statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
 	[_statusItem setMenu:_statusMenu];
 	[_statusItem setImage:[NSImage imageNamed:@"MenuNormal.png"]];
-	// [_statusItem setTitle:@"R"];
 	[_statusItem setHighlightMode:YES];
 }
 
 
-- (void)trigger {
-}
-
-
-#pragma mark Hotkey management
-
-// - (void)registerHotKeys {
-//     EventHotKeyID hotKeyID;
-//     EventHotKeyRef hotKeyRef;
-// 	
-//     EventTypeSpec eventType;
-//     eventType.eventClass=kEventClassKeyboard;
-//     eventType.eventKind=kEventHotKeyPressed;
-//     
-//     InstallApplicationEventHandler( &HotKeyHandler, 1, &eventType, NULL, NULL );
-//     
-//     hotKeyID.signature = 'grp1';
-//     hotKeyID.id = TRIGGER_ACTION;
-//     RegisterEventHotKey( 34 /* i */, cmdKey+optionKey, hotKeyID, GetApplicationEventTarget(), 0, &hotKeyRef );
-// }
-
-
-// OSStatus HotKeyHandler( EventHandlerCallRef nextHandler, EventRef theEvent, void *userData ) {
-// #pragma unused(nextHandler)
-// #pragma unused(theEvent)
-// #pragma unused(userData)
-//     
-//     //Do something once the key is pressed 
-//     
-//     EventHotKeyID keyId;
-//     GetEventParameter( theEvent,
-// 					  kEventParamDirectObject,
-// 					  typeEventHotKeyID,
-// 					  NULL,
-// 					  sizeof( keyId ),
-// 					  NULL,
-// 					  &keyId);
-//     
-//     switch( keyId.id ) {
-//         case TRIGGER_ACTION:
-// 			[gDelegate respondToHotKey];
-//             break;
-//     }
-//     
-//     return noErr;
-// }
-
-
-// - (void)respondToHotKey {
-// 	[_overlayManager prompt];
-// }
-
-
-- (CGPoint)screenCoordinateForEvent:(NSEvent *)event {
+- (CGPoint)windowPointToScreenPoint:(CGPoint)point {
 	CGFloat ydepth = [[NSScreen mainScreen] frame].size.height;
-	CGPoint clickPoint = CGPointMake([_event locationInWindow].x, ydepth-[_event locationInWindow].y);
-	return clickPoint;
+	return CGPointMake(point.x, ydepth-point.y);
 }
 
 
 - (void)insertModule:(FreemanModule *)module {
-	[module insertAt:[self screenCoordinateForEvent:_event] inReaktorProcess:_reaktorProcess];
+	_lastInsertedModule = module;
+	[module insertAt:_location inReaktorProcess:_reaktorProcess];
 }
 
 
@@ -162,36 +108,85 @@ FreemanAppDelegate *gDelegate = nil;
 }
 
 
-#pragma mark mouse detection
+- (CGPoint)flipPoint:(CGPoint)point {
+	NSScreen *screen = [NSScreen mainScreen];
+	return CGPointMake( point.x, screen.frame.size.height - point.y );
+}
 
-- (void)registerEvent:(NSEvent *)event {
-	if( [[self overlayManager] enabled] ) {
-		if( [event modifierFlags] & NSAlternateKeyMask ) {
-			_event = event;
-			CGPoint screenPoint = [self screenCoordinateForEvent:event];
-			NSPoint windowPoint = NSMakePoint( screenPoint.x, screenPoint.y );
-			NSInteger windowNumber = [NSWindow windowNumberAtPoint:windowPoint belowWindowWithWindowNumber:0];
-			NSColor *color = [self sampleWindow:windowNumber atPoint:screenPoint];
-			NSLog( @"COLOR = %@", [color asHexString] );
-			
-			if( [[color asHexString] isEqualToString:STRUCTURE_BACKGROUND] ) {
-				[_overlayManager searchModules:[self primaryModuleDatabase]];	
-			} else if( [[color asHexString] isEqualToString:CORE_BACKGROUND] ) {
-				[_overlayManager searchModules:[self coreModuleDatabase]];
-			} else {
-				NSBeep();
-			}
-		}
+
+- (void)triggerInsertModuleAtPoint:(CGPoint)point {
+	_location = point;
+	NSColor *color = [self colorAtLocation:[self flipPoint:_location]];
+	if( [[color asHexString] isEqualToString:STRUCTURE_BACKGROUND] ) {
+		[_overlayManager searchModules:[self primaryModuleDatabase]];	
+	} else if( [[color asHexString] isEqualToString:CORE_BACKGROUND] ) {
+		[_overlayManager searchModules:[self coreModuleDatabase]];
+	} else {
+		NSBeep();
 	}
 }
 
 
--(NSColor *)sampleWindow:(CGWindowID)windowID atPoint:(CGPoint)point {
-	CGRect imageBounds = CGRectMake( point.x, point.y, 1, 1 );
+- (void)triggerReInsertModuleAtPoint:(CGPoint)point {
+	NSLog( @"triggerReInsertModuleAtPoint: %@", [_lastInsertedModule name] );
+	if( _lastInsertedModule ) {
+		_location = point;
+		NSColor *color = [self colorAtLocation:_location];
+		if( [[color asHexString] isEqualToString:STRUCTURE_BACKGROUND] ) {
+			[_overlayManager insertModule:_lastInsertedModule];	
+		} else if( [[color asHexString] isEqualToString:CORE_BACKGROUND] ) {
+			[_overlayManager insertModule:_lastInsertedModule];
+		} else {
+			NSBeep();
+		}
+	} else {
+		NSBeep();
+	}
+}
+
+
+- (NSColor *)colorAtLocation:(CGPoint)screenPoint {
+	NSPoint windowPoint = NSMakePoint( screenPoint.x, screenPoint.y );
+	NSInteger windowNumber = [NSWindow windowNumberAtPoint:windowPoint belowWindowWithWindowNumber:0];
+	NSColor *color = [self sampleWindow:windowNumber atPoint:[self flipPoint:screenPoint]];
+	NSLog( @"Window %d @ %.0f,%.0f = %d (%@)", windowNumber, screenPoint.x, screenPoint.y, windowNumber, [color asHexString] );
+	NSLog( @"--------------------------------" );
+	return color;
+}
+
+
+// - (NSDictionary *)windowInfo:(CGWindowID)windowID {
+// 	CGWindowID *windowIDs = calloc( 1, sizeof(CGWindowID) );
+// 	windowIDs[0] = windowID;
+// 	NSArray *targetWindowNumbers = (NSArray *)CFArrayCreate( kCFAllocatorDefault, (const void**)windowIDs, 1, NULL );
+// 	free( windowIDs );
+// 	NSArray *windowInfo = (NSArray*)CGWindowListCreateDescriptionFromArray( (CFArrayRef)targetWindowNumbers );
+// 	NSAssert( windowInfo && [windowInfo count] == 1, @"Cannot get info from window server" );
+// 	return [windowInfo objectAtIndex:0];
+// }
+// 
+// 
+// - (CGRect)getWindowBounds:(CGWindowID)windowID {
+// 	CGRect windowBounds;
+// 	NSDictionary *windowInfo = [self windowInfo:windowID];
+// 	CGRectMakeWithDictionaryRepresentation( (CFDictionaryRef)[windowInfo objectForKey:(NSString*)kCGWindowBounds], &windowBounds );
+// 	return windowBounds;
+// }
+
+
+- (NSColor *)sampleWindow:(CGWindowID)windowID atPoint:(CGPoint)point {
+	// CGRect windowBounds = [self getWindowBounds:windowID];
+	// NSLog( @"Window is at %.0f,%.0f", windowBounds.origin.x, windowBounds.origin.y );
+	// CGPoint samplePoint = CGPointMake( point.x - windowBounds.origin.x, point.y - windowBounds.origin.y );
+	CGRect imageBounds = CGRectMake( point.x, point.y, 16, 16 );
 	CGImageRef windowImage = CGWindowListCreateImage( imageBounds, kCGWindowListOptionIncludingWindow, windowID, kCGWindowImageDefault );
+	
+	
 	NSBitmapImageRep *rep = [[NSBitmapImageRep alloc] initWithCGImage:windowImage];
+	[self setImage:[[NSImage alloc] initWithCGImage:windowImage size:NSMakeSize(16,16)]];
 	NSColor *color = [rep colorAtX:0 y:0];
 	CGImageRelease(windowImage);
+	NSLog( @"Sampling %.0f,%.0f = %@", point.x, point.y, [color asHexString] );
 	return color;
 }
 
@@ -224,7 +219,9 @@ OSStatus AppSwitchHandler( EventHandlerCallRef nextHandler, EventRef theEvent, v
 	}
 	
 	if( [processName isEqualToString:@"Reaktor 5"] ) {
-		[gDelegate setReaktorProcess:[FreemanRemoteProcess remoteProcessWithSerialNumber:psn]];
+		if( ![gDelegate reaktorProcess] ) {
+			[gDelegate setReaktorProcess:[FreemanRemoteProcess remoteProcessWithSerialNumber:psn]];
+		}
 		[[gDelegate statusItem] setImage:[NSImage imageNamed:@"MenuActive.png"]];
 		[[gDelegate overlayManager] setEnabled:YES];
 	} else {

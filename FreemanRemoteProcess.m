@@ -8,6 +8,8 @@
 
 #import "FreemanRemoteProcess.h"
 
+#import "FreemanAppDelegate.h"
+
 #define CGKEYCODE_RETURN (36)
 #define CGKEYCODE_LEFT (123)
 #define CGKEYCODE_RIGHT (124)
@@ -16,6 +18,29 @@
 
 
 typedef CGEventRef (^EventRefGeneratingBlock)();
+
+static CGPoint currentPoint;
+
+CGEventRef EventTapCallback( CGEventTapProxy proxy, CGEventType type, CGEventRef ref, void *refCon ) {
+	UniChar key;
+	UniCharCount keyLength;
+	
+	switch( type ) {
+		case kCGEventMouseMoved:
+			currentPoint = CGEventGetLocation( ref );
+			// NSLog( @"Tracked mouse to %.0f,%.0f", currentPoint.x, currentPoint.y );
+			break;
+		case kCGEventKeyDown:
+			CGEventKeyboardGetUnicodeString( ref, 1, &keyLength, &key );
+			FreemanRemoteProcess *remoteProc = (FreemanRemoteProcess *)refCon;
+			if( [remoteProc keyPressed:key withFlags:CGEventGetFlags(ref) atPoint:currentPoint] ) {
+				return NULL;
+			}
+			break;
+	}
+	
+	return ref;
+}
 
 
 @interface FreemanRemoteProcess (PrivateMethods)
@@ -29,7 +54,8 @@ typedef CGEventRef (^EventRefGeneratingBlock)();
 
 @implementation FreemanRemoteProcess
 
-@synthesize psn = _psn;
+@synthesize delegate = _delegate;
+@synthesize psn      = _psn;
 
 
 + (id)remoteProcessWithSerialNumber:(ProcessSerialNumber)psn {
@@ -41,6 +67,10 @@ typedef CGEventRef (^EventRefGeneratingBlock)();
 	if( ( self = [super init] ) ) {
 		_eventSourceRef = CGEventSourceCreate( kCGEventSourceStateCombinedSessionState ); // kCGEventSourceStateHIDSystemState );
 		_psn = psn;
+		_tapMachPort = CGEventTapCreateForPSN( &_psn, kCGHeadInsertEventTap, kCGEventTapOptionDefault, CGEventMaskBit(kCGEventMouseMoved) | CGEventMaskBit(kCGEventKeyDown), EventTapCallback, (void*)self );
+		NSAssert( _tapMachPort, @"Unable to create Mach Port for event tap!" );
+		CFRunLoopSourceRef runLoopSourceRef = CFMachPortCreateRunLoopSource( kCFAllocatorDefault, _tapMachPort, 0 );
+		CFRunLoopAddSource( CFRunLoopGetCurrent(), runLoopSourceRef, kCFRunLoopDefaultMode );
 	}
 	
 	return self;
@@ -49,6 +79,24 @@ typedef CGEventRef (^EventRefGeneratingBlock)();
 
 - (void)activate {
 	SetFrontProcess( &_psn );
+}
+
+
+- (BOOL)keyPressed:(UniChar)key withFlags:(CGEventFlags)flags atPoint:(CGPoint)point {
+	NSLog( @"keyPressed at %.0f,%.0f", point.x, point.y );
+	if( key == 'm' ) { // Insert module
+		dispatch_async( dispatch_get_main_queue(), ^{
+			[[self delegate] triggerInsertModuleAtPoint:point];
+		});
+		return YES;
+	} else if( key == 'r' ) { // Re-insert module
+		dispatch_async( dispatch_get_main_queue(), ^{
+			[[self delegate] triggerReInsertModuleAtPoint:point];
+		});
+		return YES;
+	}
+	
+	return NO;
 }
 
 

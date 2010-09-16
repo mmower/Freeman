@@ -21,16 +21,23 @@
 	FreemanRemoteProcess		*_reaktorProcess;
 	FreemanModuleDatabase		*_primaryModuleDatabase;
 	FreemanModuleDatabase		*_coreModuleDatabase;
-	NSEvent									*_event;
+	FreemanModule						*_lastInsertedModule;
+	CGPoint									_location;
+	
+	NSImage									*_image;
 }
 
 @property (assign) IBOutlet NSWindow *window;
 @property (assign) IBOutlet NSMenu *statusMenu;
+@property (assign) NSImage *image;
 @property (assign) NSStatusItem *statusItem;
 @property (assign) FreemanOverlayManager *overlayManager;
 @property (assign) FreemanModuleDatabase *primaryModuleDatabase;
 @property (assign) FreemanModuleDatabase *coreModuleDatabase;
 @property (assign) FreemanRemoteProcess *reaktorProcess;
+
+- (void)triggerInsertModuleAtPoint:(CGPoint)point;
+- (void)triggerReInsertModuleAtPoint:(CGPoint)point;
 
 - (void)insertModule:(FreemanModule *)module;
 
