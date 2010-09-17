@@ -19,8 +19,12 @@
 
 #import "NSColor+Freeman.h"
 
-#define STRUCTURE_BACKGROUND @"#454E58"
-#define CORE_BACKGROUND @"#242A30"
+#define PRIMARY_STRUCTURE_BACKGROUND @"#454E58"
+#define CORE_STRUCTURE_BACKGROUND @"#242A30"
+
+
+NSColor *primaryStructureColor;
+NSColor *coreStructureColor;
 
 
 OSStatus AppSwitchHandler( EventHandlerCallRef nextHandler, EventRef theEvent, void *userData );
@@ -34,6 +38,7 @@ FreemanAppDelegate *gDelegate = nil;
 - (void)registerAppSwitch;
 - (CGPoint)flipPoint:(CGPoint)point;
 - (CGPoint)windowPointToScreenPoint:(CGPoint)point;
+- (FreemanModuleDatabase *)moduleDatabaseFromBackgroundColor:(NSColor *)backgroundColor;
 - (NSColor *)colorAtLocation:(CGPoint)location;
 - (NSColor *)sampleWindow:(CGWindowID)windowID atPoint:(CGPoint)point;
 
@@ -41,6 +46,14 @@ FreemanAppDelegate *gDelegate = nil;
 
 
 @implementation FreemanAppDelegate
+
++ (void)initialize {
+	if( !primaryStructureColor ) {
+		primaryStructureColor = [NSColor colorFromHexRGB:PRIMARY_STRUCTURE_BACKGROUND];
+		coreStructureColor = [NSColor colorFromHexRGB:CORE_STRUCTURE_BACKGROUND];
+	}
+}
+
 
 @synthesize window = _window;
 @synthesize statusMenu = _statusMenu;
@@ -95,7 +108,12 @@ FreemanAppDelegate *gDelegate = nil;
 
 
 - (void)insertModule:(FreemanModule *)module {
-	_lastInsertedModule = module;
+	if( [module primary] ) {
+		_lastInsertedPrimaryModule = module;
+	} else {
+		_lastInsertedCoreModule = module;
+	}
+	
 	[module insertAt:_location inReaktorProcess:_reaktorProcess];
 	[[self reaktorProcess] resumeEventTap];
 }
@@ -115,36 +133,45 @@ FreemanAppDelegate *gDelegate = nil;
 
 - (void)triggerInsertModuleAtPoint:(CGPoint)point {
 	_location = point;
-	NSColor *color = [self colorAtLocation:[self flipPoint:_location]];
-	if( [[color asHexString] isEqualToString:STRUCTURE_BACKGROUND] ) {
-		[[self reaktorProcess] suspendEventTap]; // BUT WHERE DO WE RESUME IT?
-		[_overlayManager searchModules:[self primaryModuleDatabase]];	
-	} else if( [[color asHexString] isEqualToString:CORE_BACKGROUND] ) {
-		[[self reaktorProcess] suspendEventTap]; // BUT WHERE DO WE RESUME IT?
-		[_overlayManager searchModules:[self coreModuleDatabase]];
-	} else {
+	FreemanModuleDatabase *moduleDatabase = [self moduleDatabaseFromBackgroundColor:[self colorAtLocation:[self flipPoint:_location]]];
+	if( !moduleDatabase ) {
 		NSBeep();
+		return;
 	}
+	
+	[[self reaktorProcess] suspendEventTap];
+	[_overlayManager searchModules:moduleDatabase];
 }
 
 
 - (void)triggerReInsertModuleAtPoint:(CGPoint)point {
-	NSLog( @"triggerReInsertModuleAtPoint: %@", [_lastInsertedModule name] );
-	if( _lastInsertedModule ) {
-		_location = point;
-		NSColor *color = [self colorAtLocation:[self flipPoint:_location]];
-		if( [[color asHexString] isEqualToString:STRUCTURE_BACKGROUND] ) {
-			[[self reaktorProcess] suspendEventTap]; // BUT WHERE DO WE RESUME IT?
-			[self insertModule:_lastInsertedModule];	
-		} else if( [[color asHexString] isEqualToString:CORE_BACKGROUND] ) {
-			[[self reaktorProcess] suspendEventTap]; // BUT WHERE DO WE RESUME IT?
-			[self insertModule:_lastInsertedModule];
-		} else {
-			NSBeep();
-		}
-	} else {
+	_location = point;
+	FreemanModuleDatabase *moduleDatabase = [self moduleDatabaseFromBackgroundColor:[self colorAtLocation:[self flipPoint:_location]]];
+	if( !moduleDatabase ) {
 		NSBeep();
+		return;
 	}
+	
+	if( [moduleDatabase primary] && _lastInsertedPrimaryModule ) {
+		[[self reaktorProcess] suspendEventTap];
+		[self insertModule:_lastInsertedPrimaryModule];
+	} else if( _lastInsertedCoreModule ) {
+		[[self reaktorProcess] suspendEventTap];
+		[self insertModule:_lastInsertedCoreModule];
+	}
+}
+
+
+- (void)triggerInsertConstModuleAtPoint:(CGPoint)point {
+	_location = point;
+	FreemanModuleDatabase *moduleDatabase = [self moduleDatabaseFromBackgroundColor:[self colorAtLocation:[self flipPoint:_location]]];
+	if( !moduleDatabase ) {
+		NSBeep();
+		return;
+	}
+	
+	[[self reaktorProcess] suspendEventTap];
+	[self insertModule:[moduleDatabase constModule]];
 }
 
 
@@ -155,6 +182,17 @@ FreemanAppDelegate *gDelegate = nil;
 	NSLog( @"Window %d @ %.0f,%.0f => (%@)", windowNumber, screenPoint.x, screenPoint.y, [color asHexString] );
 	NSLog( @"--------------------------------" );
 	return color;
+}
+
+
+- (FreemanModuleDatabase *)moduleDatabaseFromBackgroundColor:(NSColor *)backgroundColor {
+	if( [backgroundColor isSameColorInRGB:primaryStructureColor] ) {
+		return _primaryModuleDatabase;
+	} else if( [backgroundColor isSameColorInRGB:coreStructureColor] ) {
+		return _coreModuleDatabase;
+	} else {
+		return nil;
+	}
 }
 
 

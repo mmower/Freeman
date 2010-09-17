@@ -108,4 +108,10 @@
 	return [_contents indexOfObject:content];
 }
 
+
+- (BOOL)primary {
+	return [[self owner] primary];
+}
+
+
 @end

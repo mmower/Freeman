@@ -11,6 +11,7 @@
 #import "FreemanModularObject.h"
 
 @class FreemanCatalog;
+@class FreemanModule;
 
 @interface FreemanModuleDatabase : NSObject <FreemanModularObject> {
 	NSMutableArray			*_contents;
@@ -22,6 +23,7 @@
 }
 
 @property (readonly) NSMutableArray *contents;
+@property (readonly) BOOL primary;
 
 - (id)initPrimaryModuleDatabase;
 - (id)initCoreModuleDatabase;
@@ -29,5 +31,6 @@
 - (void)addCatalog:(FreemanCatalog *)catalog;
 
 - (NSArray *)searchFor:(NSString *)query;
+- (FreemanModule *)constModule;
 
 @end

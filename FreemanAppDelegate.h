@@ -21,7 +21,8 @@
 	FreemanRemoteProcess		*_reaktorProcess;
 	FreemanModuleDatabase		*_primaryModuleDatabase;
 	FreemanModuleDatabase		*_coreModuleDatabase;
-	FreemanModule						*_lastInsertedModule;
+	FreemanModule						*_lastInsertedPrimaryModule;
+	FreemanModule						*_lastInsertedCoreModule;
 	CGPoint									_location;
 	
 	NSImage									*_image;
@@ -38,6 +39,7 @@
 
 - (void)triggerInsertModuleAtPoint:(CGPoint)point;
 - (void)triggerReInsertModuleAtPoint:(CGPoint)point;
+- (void)triggerInsertConstModuleAtPoint:(CGPoint)point;
 
 - (void)insertModule:(FreemanModule *)module;
 

@@ -29,6 +29,7 @@
 @implementation FreemanModuleDatabase
 
 @synthesize contents = _contents;
+@synthesize primary = _primary;
 
 - (id)init {
 	if( ( self = [super init] ) ) {
@@ -114,6 +115,24 @@
 	#ifdef DEBUG_FREEMAN
 	[catalog list];
 	#endif
+}
+
+
+- (FreemanModule *)constModule {
+	NSArray *result;
+	if( _primary ) {
+		result = [_modules filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^(id obj,NSDictionary *bindings) {
+			return (BOOL)([[obj path] isEqualToString:@"Built-In Module : Math : Constant"]);
+		}]];
+		NSAssert( [result count] == 1, @"Could not find primary constant module!" );
+	} else {
+		result = [_modules filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^(id obj,NSDictionary *bindings) {
+			return (BOOL)([[obj path] isEqualToString:@"Built-In Module : Const"]);
+		}]];
+		NSAssert( [result count] == 1, @"Could not find core constant module!" );
+	}
+	
+	return [result objectAtIndex:0];
 }
 
 

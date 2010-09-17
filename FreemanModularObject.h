@@ -18,8 +18,6 @@
 - (NSString *)name;
 - (NSString *)path;
 - (BOOL)isModule;
-
-// - (NSArray *)generateOwnerHierarchy;
-
+- (BOOL)primary;
 
 @end

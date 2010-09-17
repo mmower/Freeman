@@ -84,12 +84,16 @@ CGEventRef EventTapCallback( CGEventTapProxy proxy, CGEventType type, CGEventRef
 
 
 - (void)suspendEventTap {
+	NSLog( @"Event tap suspended" );
 	CGEventTapEnable( _tapMachPort, false );
+	NSAssert( !CGEventTapIsEnabled( _tapMachPort ), @"Failed to suspend event tap!" );
 }
 
 
 - (void)resumeEventTap {
+	NSLog( @"Event tap resumed" );
 	CGEventTapEnable( _tapMachPort, true );
+	NSAssert( CGEventTapIsEnabled( _tapMachPort ), @"Failed to resume event tap!" );
 }
 
 
@@ -108,6 +112,11 @@ CGEventRef EventTapCallback( CGEventTapProxy proxy, CGEventType type, CGEventRef
 	} else if( key == 'r' ) { // Re-insert module
 		dispatch_async( dispatch_get_main_queue(), ^{
 			[[self delegate] triggerReInsertModuleAtPoint:point];
+		});
+		return YES;
+	} else if( key == 'c' ) { // Insert const
+		dispatch_async( dispatch_get_main_queue(), ^{
+			[[self delegate] triggerInsertConstModuleAtPoint:point];
 		});
 		return YES;
 	}

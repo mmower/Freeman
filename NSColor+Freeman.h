@@ -10,6 +10,10 @@
 
 @interface NSColor (Freeman)
 
++ (NSColor *)colorFromHexRGB:(NSString *)hexString;
+
 -(NSString *)asHexString;
+
+- (BOOL)isSameColorInRGB:(NSColor *)otherColor;
 
 @end

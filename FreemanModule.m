@@ -106,4 +106,9 @@
 }
 
 
+- (BOOL)primary {
+	return [[self owner] primary];
+}
+
+
 @end
