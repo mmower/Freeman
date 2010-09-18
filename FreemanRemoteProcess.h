@@ -30,6 +30,5 @@
 - (void)sendRightMouseClick:(CGPoint)clickPoint;
 - (void)sendKeyStroke:(CGKeyCode)keyCode;
 - (void)sendKeySequence:(NSString *)keys;
-- (BOOL)keyPressed:(UniChar)key withFlags:(CGEventFlags)flags atPoint:(CGPoint)point;
 
 @end
