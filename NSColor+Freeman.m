@@ -12,7 +12,7 @@
 
 #import "NSColor+Freeman.h"
 
-#define EPSILON 0.0001
+#import "NSScreen+Freeman.h"
 
 @implementation NSColor (Freeman)
 
@@ -87,5 +87,35 @@
   return nil;
 }
 
+
+#pragma mark Window color sampling
+
+
+
+
++ (NSColor *)colorAtLocation:(CGPoint)screenPoint {
+	NSPoint windowPoint = NSMakePoint( screenPoint.x, screenPoint.y );
+	NSInteger windowNumber = [NSWindow windowNumberAtPoint:windowPoint belowWindowWithWindowNumber:0];
+	NSColor *color = [self colorOfWindow:windowNumber atPoint:[[NSScreen mainScreen] flipPoint:screenPoint]];
+	NSLog( @"Window %d @ %.0f,%.0f => (%@)", windowNumber, screenPoint.x, screenPoint.y, [color asHexString] );
+	NSLog( @"--------------------------------" );
+	return color;
+}
+
+
++ (NSColor *)colorOfWindow:(CGWindowID)windowID atPoint:(CGPoint)point {
+	// CGRect windowBounds = [self getWindowBounds:windowID];
+	// NSLog( @"Window is at %.0f,%.0f", windowBounds.origin.x, windowBounds.origin.y );
+	// CGPoint samplePoint = CGPointMake( point.x - windowBounds.origin.x, point.y - windowBounds.origin.y );
+	CGRect imageBounds = CGRectMake( point.x, point.y, 16, 16 );
+	CGImageRef windowImage = CGWindowListCreateImage( imageBounds, kCGWindowListOptionIncludingWindow, windowID, kCGWindowImageDefault );
+	
+	NSBitmapImageRep *rep = [[NSBitmapImageRep alloc] initWithCGImage:windowImage];
+	// [self setImage:[[NSImage alloc] initWithCGImage:windowImage size:NSMakeSize(16,16)]];
+	NSColor *color = [rep colorAtX:0 y:0];
+	CGImageRelease(windowImage);
+	NSLog( @"Sampling %.0f,%.0f = %@", point.x, point.y, [color asHexString] );
+	return color;
+}
 
 @end

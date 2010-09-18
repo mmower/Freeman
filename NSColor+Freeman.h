@@ -16,4 +16,7 @@
 
 - (BOOL)isSameColorInRGB:(NSColor *)otherColor;
 
++ (NSColor *)colorAtLocation:(CGPoint)location;
++ (NSColor *)colorOfWindow:(CGWindowID)windowID atPoint:(CGPoint)point;
+
 @end

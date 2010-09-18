@@ -18,6 +18,7 @@
 #import "FreemanModule.h"
 
 #import "NSColor+Freeman.h"
+#import "NSScreen+Freeman.h"
 
 #define PRIMARY_STRUCTURE_BACKGROUND @"#454E58"
 #define CORE_STRUCTURE_BACKGROUND @"#242A30"
@@ -36,11 +37,7 @@ FreemanAppDelegate *gDelegate = nil;
 @interface FreemanAppDelegate (PrivateMethods)
 
 - (void)registerAppSwitch;
-- (CGPoint)flipPoint:(CGPoint)point;
-- (CGPoint)windowPointToScreenPoint:(CGPoint)point;
 - (FreemanModuleDatabase *)moduleDatabaseFromBackgroundColor:(NSColor *)backgroundColor;
-- (NSColor *)colorAtLocation:(CGPoint)location;
-- (NSColor *)sampleWindow:(CGWindowID)windowID atPoint:(CGPoint)point;
 
 @end
 
@@ -101,12 +98,6 @@ FreemanAppDelegate *gDelegate = nil;
 }
 
 
-- (CGPoint)windowPointToScreenPoint:(CGPoint)point {
-	CGFloat ydepth = [[NSScreen mainScreen] frame].size.height;
-	return CGPointMake(point.x, ydepth-point.y);
-}
-
-
 - (void)insertModule:(FreemanModule *)module {
 	if( [module primary] ) {
 		_lastInsertedPrimaryModule = module;
@@ -125,15 +116,12 @@ FreemanAppDelegate *gDelegate = nil;
 }
 
 
-- (CGPoint)flipPoint:(CGPoint)point {
-	NSScreen *screen = [NSScreen mainScreen];
-	return CGPointMake( point.x, screen.frame.size.height - point.y );
-}
+
 
 
 - (void)triggerInsertModuleAtPoint:(CGPoint)point {
 	_location = point;
-	FreemanModuleDatabase *moduleDatabase = [self moduleDatabaseFromBackgroundColor:[self colorAtLocation:[self flipPoint:_location]]];
+	FreemanModuleDatabase *moduleDatabase = [self moduleDatabaseFromBackgroundColor:[NSColor colorAtLocation:[[NSScreen mainScreen] flipPoint:_location]]];
 	if( !moduleDatabase ) {
 		NSBeep();
 		return;
@@ -146,7 +134,7 @@ FreemanAppDelegate *gDelegate = nil;
 
 - (void)triggerReInsertModuleAtPoint:(CGPoint)point {
 	_location = point;
-	FreemanModuleDatabase *moduleDatabase = [self moduleDatabaseFromBackgroundColor:[self colorAtLocation:[self flipPoint:_location]]];
+	FreemanModuleDatabase *moduleDatabase = [self moduleDatabaseFromBackgroundColor:[NSColor colorAtLocation:[[NSScreen mainScreen] flipPoint:_location]]];
 	if( !moduleDatabase ) {
 		NSBeep();
 		return;
@@ -164,7 +152,7 @@ FreemanAppDelegate *gDelegate = nil;
 
 - (void)triggerInsertConstModuleAtPoint:(CGPoint)point {
 	_location = point;
-	FreemanModuleDatabase *moduleDatabase = [self moduleDatabaseFromBackgroundColor:[self colorAtLocation:[self flipPoint:_location]]];
+	FreemanModuleDatabase *moduleDatabase = [self moduleDatabaseFromBackgroundColor:[NSColor colorAtLocation:[[NSScreen mainScreen] flipPoint:_location]]];
 	if( !moduleDatabase ) {
 		NSBeep();
 		return;
@@ -175,14 +163,7 @@ FreemanAppDelegate *gDelegate = nil;
 }
 
 
-- (NSColor *)colorAtLocation:(CGPoint)screenPoint {
-	NSPoint windowPoint = NSMakePoint( screenPoint.x, screenPoint.y );
-	NSInteger windowNumber = [NSWindow windowNumberAtPoint:windowPoint belowWindowWithWindowNumber:0];
-	NSColor *color = [self sampleWindow:windowNumber atPoint:[self flipPoint:screenPoint]];
-	NSLog( @"Window %d @ %.0f,%.0f => (%@)", windowNumber, screenPoint.x, screenPoint.y, [color asHexString] );
-	NSLog( @"--------------------------------" );
-	return color;
-}
+
 
 
 - (FreemanModuleDatabase *)moduleDatabaseFromBackgroundColor:(NSColor *)backgroundColor {
@@ -215,21 +196,7 @@ FreemanAppDelegate *gDelegate = nil;
 // }
 
 
-- (NSColor *)sampleWindow:(CGWindowID)windowID atPoint:(CGPoint)point {
-	// CGRect windowBounds = [self getWindowBounds:windowID];
-	// NSLog( @"Window is at %.0f,%.0f", windowBounds.origin.x, windowBounds.origin.y );
-	// CGPoint samplePoint = CGPointMake( point.x - windowBounds.origin.x, point.y - windowBounds.origin.y );
-	CGRect imageBounds = CGRectMake( point.x, point.y, 16, 16 );
-	CGImageRef windowImage = CGWindowListCreateImage( imageBounds, kCGWindowListOptionIncludingWindow, windowID, kCGWindowImageDefault );
-	
-	
-	NSBitmapImageRep *rep = [[NSBitmapImageRep alloc] initWithCGImage:windowImage];
-	[self setImage:[[NSImage alloc] initWithCGImage:windowImage size:NSMakeSize(16,16)]];
-	NSColor *color = [rep colorAtX:0 y:0];
-	CGImageRelease(windowImage);
-	NSLog( @"Sampling %.0f,%.0f = %@", point.x, point.y, [color asHexString] );
-	return color;
-}
+
 
 
 #pragma mark app switch handling
