@@ -106,17 +106,13 @@ FreemanAppDelegate *gDelegate = nil;
 	}
 	
 	[module insertAt:_location inReaktorProcess:_reaktorProcess];
-	[[self reaktorProcess] resumeEventTap];
+	// [[self reaktorProcess] resumeEventTap];
 }
 
 
 - (void)activateReaktor {
 	[[self reaktorProcess] activate];
-	[[self reaktorProcess] resumeEventTap];
 }
-
-
-
 
 
 - (void)triggerInsertModuleAtPoint:(CGPoint)point {
@@ -161,9 +157,6 @@ FreemanAppDelegate *gDelegate = nil;
 	[[self reaktorProcess] suspendEventTap];
 	[self insertModule:[moduleDatabase constModule]];
 }
-
-
-
 
 
 - (FreemanModuleDatabase *)moduleDatabaseFromBackgroundColor:(NSColor *)backgroundColor {
@@ -230,6 +223,8 @@ OSStatus AppSwitchHandler( EventHandlerCallRef nextHandler, EventRef theEvent, v
 		if( ![gDelegate reaktorProcess] ) {
 			[gDelegate setReaktorProcess:[FreemanRemoteProcess remoteProcessWithSerialNumber:psn]];
 		}
+		
+		[[gDelegate reaktorProcess] resumeEventTap];
 		[[gDelegate statusItem] setImage:[NSImage imageNamed:@"MenuActive.png"]];
 		[[gDelegate overlayManager] setEnabled:YES];
 	} else {

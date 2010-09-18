@@ -1,29 +1,80 @@
-Freeman v0.7 15.09.2010
-by Matt Mower <self@mattmower.com>
+# Freeman v1.0
+* by [Matt Mower](http://mattmower.com/)
+* released: 18.09.2010
 
-Freeman is a tool for users of Native Instruments Reaktor on Mac OSX (10.6.4) that offers a new way to insert modules into structure windows. The default Reaktor approach is to use a right-click context menu and navigate to find the module you want. Using Freeman you get a window with smart type-as-you-go search to find & insert the module you want.
+## Introduction
 
-To use Freeman copy Freeman.app to your /Applications folder. Then double-click to run it.
+Freeman is a tool for users of Native Instruments Reaktor on Mac OSX (10.6.4) that offers a new way to insert modules into both Primary and Core structure windows. The default Reaktor approach is to use a right-click context menu and navigate to find the module you want. Using Freeman you get a window with smart type-as-you-go search to find & insert the module you want.
 
-Freeman will appear in your menubar to show you it is running but does not display an application window of it's own. You will notice the icon is white on blue.
+## Installation
 
-Now switch to Reaktor (Freeman was tested with v5.5 but should also work with v5.1.5) and you will notice the Freeman icon switches to yellow on blue. This lets you know that Freeman is waiting for your input.
+Copy Freeman.app to your /Applications folder. Then double-click the application to run it.
 
-To use Freeman Option-Click on your structure window where you want a new module to appear. The Freeman browser will appear with a search box and a menu of results. Initially both will be empty.
+Freeman will appear in your menubar to show you it is running but does not display an application window of it's own. You will notice the menubar icon is like a dark outline of the Reaktor icon.
 
-Start typing the name of a module you want, bearing in mind Freeman has a smart 'abbreviation' search. Let's say you want the "Audio Voice Combiner" from Built-In's/Auxilliary. You could type `audio voice combiner` but it would be quicker to type `avc`. In fact, it's enough to type `av` since this is a unique enough combination to identify the module.
+Now switch to Reaktor (Freeman was tested with v5.5 but should also work with v5.1.5) and you will notice the Freeman icon lights up red with an F in the centre. This lets you know that Freeman is actively watching Reaktor for you.
 
-Notice that the menu of search results updates while you are typing and, automatically, selects the first (best matching) result. You can see this by the gray background of the first result. To insert this module into your structure simply press the `Return` key.
+## Using Freeman
 
-Let's say you want the "Snap Value" module. Type `sn` and you will see that "Snapshot" is selected with "Snap Value" one further down. Simply press the down arrow to select it. You don't need to switch focus from the search field to do this, just press down and, when you have selected the right module, hit return to insert it.
+Freeman has three ways to insert a module into your structure:
 
-If you find it more convenient you can also browse directly in the menu and hit return to insert a module.
+<table>
+	<thead>
+		<tr>
+			<th>Shortcut</th>
+			<th align="left">Action</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Ctrl+a</td>
+			<td>Add module</td>
+		</tr>
+		<tr>
+			<td>Ctrl+r</td>
+			<td>Re-Add last module</td>
+		</tr>
+		<tr>
+			<td>Ctrl+c</td>
+			<td>Add constant module</td>
+		</tr>
+	</tbody>
+</table>
+		
+Move the mouse cursor into the the Reaktor structure window (if you try and use one of the shortcuts outside of a structure window you will hear a beep to remind you).
 
-Notes
-=====
+Press Ctrl+a and the Freeman module browser will appear. The browser is smart enough to know whether you are in a Primary or Core structure and only displays modules and macros appropriate to that type of structure.
 
-Freeman 0.7 is for Mac OS X 10.6 ("Snow Leopard") only and will not work on previous releases. Additionally it has only been tested on OSX 10.6.4 although it may work on earlier releases of 10.6.
+Begin typing the name of the module you want and Freeman will display a list of matching modules below the search box. It uses a "smart abbreviation" search (a la Quicksilver) to home in on the right module with the fewest number of characters.
 
-Freeman 0.7 supports the primary level built-in modules, core cells, and macros (including user core cells and macros). Invoking it inside a Core structure or in a Panel window will likely have unpredictable, and possibly destructive, results.
+At any time one result (for a new search it will always be the first, best matching, result) will be highlighted with a gray background. At any time you can hit `Enter` or `Return` to insert the highlighted module into your structure. Quite often you can just type a few characters to narrow your search and then hit return.
 
-At this point, please report any bugs and/or feature requests to me: self@mattmower.com
+To find the module you want just keep adding characters until you have narrowed the search right down, or get it close enough and then use the down arrow to highlight one of the other search results.
+
+### How it works
+
+Freeman works by sending events to Reaktor to simulate you, the user, inserting the module. You will see the Reaktor context menu open and select the right module no matter how deeply nested in the menu. This process happens quite quickly however it is important that you **do not press any keys** while Freeman is working.
+
+### Example
+
+Let's say you want the "Snap Value" module. Type `sn` and you will see that "Snapshot" is selected with "Snap Value" one further down. You can either type a `v` to narrow the search further or press the down arrow to select the module directly. You don't need to switch focus from the search field to do this, just press down and, when you have selected the right module, hit return to insert it.
+
+### Re-adding
+
+If you want to insert the same module several times you can use the `Ctrl+r` shortcut to re-add the same module. Freeman will offset the insert position 10 pixels up and to the left each time. **Be careful that you do not insert past the top or left edges of the structure window or the results will be unpredictable**.
+
+### Adding constants
+
+There is a quick shortcut `Ctrl+c` to insert a new constant module at either primary or core level.
+
+## Notes
+
+Freeman 1.0 is for Mac OS X 10.6 ("Snow Leopard") only and will not work on previous releases. Additionally it has only been tested on OSX 10.6.4 although it may work fine with earlier releases of 10.6.
+
+You can get support for Freeman by contacting me via email at the address above or getting in touch with me in #reaktor on Freenode IRC.
+
+## Disclaimer
+
+Freeman is a hack based on manipulating Reaktor using OSX Quartz event services and, as such, is offered with **no warranty of any kind.**
+
+There have been no reported issues so far but please don't test it on the only copy of the ensemble you've been working on for the last 5 years.
