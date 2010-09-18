@@ -54,11 +54,15 @@
                                                          name:@"Built-In Module"
                                                   catalogFile:[[NSBundle mainBundle] pathForResource:@"modules" ofType:@"xml"]]];
 
-		[self addCatalog:[[FreemanDiskCatalog alloc] initWithOwner:self
-                                                          name:@"Core Cell"
-                                                   factoryPath:[[reaktorFactoryContentURL URLByAppendingPathComponent:@"Core Cells"] path]
-                                                      userPath:[[reaktorUserContentURL URLByAppendingPathComponent:@"Core Cells"] path]
-                                                  withFileType:@"rcc"]];
+		FreemanCatalog *catalog = [[FreemanDiskCatalog alloc] initWithOwner:self
+                                                                   name:@"Core Cell"
+                                                            factoryPath:[[reaktorFactoryContentURL URLByAppendingPathComponent:@"Core Cells"] path]
+                                                               userPath:[[reaktorUserContentURL URLByAppendingPathComponent:@"Core Cells"] path]
+                                                           withFileType:@"rcc"];
+		// There are two "built-in" core cells we need to add
+		[catalog addContent:[[FreemanModule alloc] initWithOwner:catalog catalog:catalog name:@"New Audio"]];
+		[catalog addContent:[[FreemanModule alloc] initWithOwner:catalog catalog:catalog name:@"New Event"]];
+		[self addCatalog:catalog];
 
 		[self addCatalog:[[FreemanDiskCatalog alloc] initWithOwner:self
                                                           name:@"Macro"
