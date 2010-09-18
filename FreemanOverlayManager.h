@@ -41,7 +41,7 @@
 
 - (id)initWithDelegate:(id)delegate;
 
-- (void)searchModules:(FreemanModuleDatabase *)moduleDatabase;
+- (void)searchModules:(FreemanModuleDatabase *)moduleDatabase fromPoint:(CGPoint)point;
 - (void)closeAndActivateReaktor;
 // - (void)quickSelect:(NSUInteger)result;
 

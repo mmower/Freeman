@@ -15,6 +15,8 @@
 #import "FreemanSearchField.h"
 #import "FreemanFieldEditor.h"
 
+#import "NSScreen+Freeman.h"
+
 @interface FreemanOverlayManager (PrivateMethods)
 
 - (void)selectPreviousResult;
@@ -73,13 +75,16 @@
 }
 
 
-- (void)searchModules:(FreemanModuleDatabase *)moduleDatabase {
+- (void)searchModules:(FreemanModuleDatabase *)moduleDatabase fromPoint:(CGPoint)point {
 	[self setModuleDatabase:moduleDatabase];
 	
 	[self setSearchString:@""];
 	[self setSearchResults:[NSArray array]];
 	
-	[[self window] center];
+	CGPoint flipped = [[NSScreen mainScreen] flipPoint:point];
+	NSPoint topLeft = NSMakePoint( flipped.x, flipped.y );
+	
+	[[self window] setFrameTopLeftPoint:topLeft];
 	[[self window] setLevel:NSFloatingWindowLevel];
 	[[self window] makeKeyAndOrderFront:self];
 	[[self window] makeFirstResponder:[self searchField]];

@@ -124,7 +124,7 @@ FreemanAppDelegate *gDelegate = nil;
 	}
 	
 	[[self reaktorProcess] suspendEventTap];
-	[_overlayManager searchModules:moduleDatabase];
+	[_overlayManager searchModules:moduleDatabase fromPoint:point];
 }
 
 
