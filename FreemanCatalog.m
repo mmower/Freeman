@@ -37,9 +37,6 @@
 - (void)catalogLoaded {
 	_modules = [NSMutableArray array];
 	
-	// [_contents enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-	// 	[_modules addObjectsFromArray:[obj allModules]];
-	// }];
 	for( FreemanModularObject *obj in _contents ) {
 		[_modules addObjectsFromArray:[obj allModules]];
 	}
@@ -48,9 +45,6 @@
 
 - (void)list {
 	NSLog( @"Catalog: %@", [self name] );
-	// [_modules enumerateObjectsUsingBlock:^(id obj,NSUInteger idx,BOOL *stop) {
-	// 	NSLog( @"Module %@ %@", [obj name], [[obj navigationSequence] formatInGroupsOf:4] );
-	// 	}];
 	for( FreemanModularObject *obj in _modules ) {
 		NSLog( @"Module %@ %@", [obj name], [[obj navigationSequence] formatInGroupsOf:4] );
 	}
@@ -80,6 +74,7 @@
 		[sequence appendString:@"D"];
 	};
 	[sequence appendString:@"R"];
+	
 	return [sequence copy];
 }
 
@@ -91,13 +86,6 @@
 
 - (NSArray *)allModules {
 	NSMutableArray *modules = [NSMutableArray array];
-	// [[self contents] enumerateObjectsUsingBlock:^(id obj,NSUInteger idx,BOOL *stop) {
-	// 	if( [obj isModule] ) {
-	// 		[modules addObject:obj];
-	// 	} else {
-	// 		[modules addObjectsFromArray:[obj allModules]];
-	// 	}
-	// }];
 	for( FreemanModularObject *obj in [self contents] ) {
 		if( [obj isModule] ) {
 			[modules addObject:obj];

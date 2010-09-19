@@ -10,6 +10,7 @@
 
 #import "FreemanModule.h"
 
+#import "NSArray+Freeman.h"
 #import "NSString+FreemanRanking.h"
 
 
@@ -18,9 +19,6 @@
 @synthesize owner    = _owner;
 @synthesize name     = _name;
 @synthesize contents = _contents;
-// @synthesize subMenus           = _subMenus;
-// @synthesize modules            = _modules;
-// @synthesize navigationSequence = _navigationSequence;
 
 
 - (id)initWithOwner:(id<FreemanModularObject>)owner name:(NSString *)name {
@@ -28,9 +26,6 @@
 		_owner    = owner;
 		_name     = name;
 		_contents = [NSMutableArray array];
-		// _subMenus           = [NSMutableArray array];
-		// _modules            = [NSMutableArray array];
-		// _navigationSequence = nil;
 	}
 	
 	return self;
@@ -42,20 +37,6 @@
 }
 
 
-// - (void)addSubMenu:(FreemanMenu *)menu {
-// 	[menu setParent:self];
-// 	[_subMenus addObject:menu];
-// 	[_contents addObject:menu];
-// }
-// 
-// 
-// - (void)addModule:(FreemanModule *)module {
-// 	[module setMenu:self];
-// 	[_modules addObject:module];
-// 	[_contents addObject:module];
-// }
-
-
 - (BOOL)isModule {
 	return NO;
 }
@@ -63,13 +44,6 @@
 
 - (NSArray *)allModules {
 	NSMutableArray *modules = [NSMutableArray array];
-	// [[self contents] enumerateObjectsUsingBlock:^(id obj,NSUInteger idx,BOOL *stop) {
-	// 	if( [obj isModule] ) {
-	// 		[modules addObject:obj];
-	// 	} else {
-	// 		[modules addObjectsFromArray:[obj allModules]];
-	// 	}
-	// }];
 	for( FreemanModularObject *obj in [self contents] ) {
 		if( [obj isModule] ) {
 			[modules addObject:obj];
@@ -77,7 +51,7 @@
 			[modules addObjectsFromArray:[obj allModules]];
 		}
 	}
-	return modules;
+	return [modules copy];
 }
 
 
@@ -99,7 +73,7 @@
 	[sequence appendString:@"R"];
 	
 	#ifdef DEBUG_FREEMAN
-	NSLog( @"Menu %@ navigation sequence: %@", [self name], [sequence formatInGroupsOf:4] );
+	NSLog( @"Menu %@ => %@", [self name], [sequence formatInGroupsOf:4] );
 	#endif
 	
 	return [sequence copy];

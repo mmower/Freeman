@@ -13,6 +13,7 @@
 #import "FreemanRemoteProcess.h"
 
 #import "NSArray+Freeman.h"
+#import "NSString+FreemanRanking.h"
 
 #define AUTO_INSERT	0
 
@@ -45,6 +46,8 @@
 
 
 - (void)insertAt:(CGPoint)point inReaktorProcess:(FreemanRemoteProcess *)reaktorProcess {
+	NSLog( @"Insert %@ via %@", [self name], [[self navigationSequence] formatInGroupsOf:3] );
+	
 	// Open the context menu
 	[reaktorProcess sendRightMouseClick:point];
 	
@@ -103,7 +106,9 @@
 
 - (NSString *)navigationSequence {
 	NSMutableString *sequence = [NSMutableString string];
+	NSLog( @"Owner %@ navigation sequence %@", [[self owner] name], [[self owner] navigationSequence] );
 	[sequence appendString:[[self owner] navigationSequence]];
+	
 	for( int i = 0; i < [[self owner] indexOfContent:self]; i++ ) {
 		[sequence appendString:@"D"];
 	}
