@@ -10,10 +10,14 @@
 //	(See copyright notice at <http://cocoa.karelia.com>)
 //
 
+#import "CGSPrivate.h"
+
 #import "NSColor+Freeman.h"
 
 #import "NSScreen+Freeman.h"
 #import "NSArray+Freeman.h"
+
+OSStatus CGSFindWindowByGeometry(int cid, int zero, int one, int zero_again, CGPoint *screen_point, CGPoint *window_coords_out, int *wid_out, int *cid_out );
 
 @implementation NSColor (Freeman)
 
@@ -96,25 +100,18 @@
 
 + (NSColor *)colorAtLocation:(CGPoint)screenPoint {
 	// NSPoint windowPoint = NSMakePoint( screenPoint.x, screenPoint.y );
-
-	AXUIElementRef focusedApp, focusedWindow;
 	
-	AXUIElementCopyAttributeValue( AXUIElementCreateSystemWide(), (CFStringRef)kAXFocusedApplicationAttribute, (CFTypeRef *)&focusedApp );
-	AXUIElementCopyAttributeValue( focusedApp, (CFStringRef)NSAccessibilityFocusedWindowAttribute, (CFTypeRef *)&focusedWindow );
-	NSLog( @"window = %@", focusedWindow );
+	CGPoint localWhere;
+	int windowNumber, cid;
+	CGSFindWindowByGeometry( _CGSDefaultConnection(), 0, 1, 0, &screenPoint, &localWhere, &windowNumber, &cid);
 	
-	NSArray *names;
-	AXUIElementCopyAttributeNames( focusedWindow, (CFArrayRef *)&names );
-	NSLog( @"attrs = (%@)", [names pretty] );
 	
 	
 	// NSInteger windowNumber = [NSWindow windowNumberAtPoint:windowPoint belowWindowWithWindowNumber:0];
-	// NSColor *color = [self colorOfWindow:windowNumber atPoint:[[NSScreen mainScreen] flipPoint:screenPoint]];
-	// NSLog( @"Window %d @ %.0f,%.0f => (%@)", windowNumber, screenPoint.x, screenPoint.y, [color asHexString] );
-	// NSLog( @"--------------------------------" );
-	// return color;
-	
-	return [NSColor blackColor];
+	NSColor *color = [self colorOfWindow:windowNumber atPoint:[[NSScreen mainScreen] flipPoint:screenPoint]];
+	NSLog( @"Window %d @ %.0f,%.0f => (%@)", windowNumber, screenPoint.x, screenPoint.y, [color asHexString] );
+	NSLog( @"--------------------------------" );
+	return color;
 }
 
 
