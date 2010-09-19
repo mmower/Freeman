@@ -13,7 +13,7 @@
 
 @class FreemanMenu;
 
-@interface FreemanXMLCatalog : FreemanCatalog <NSXMLParserDelegate> {
+@interface FreemanXMLCatalog : FreemanCatalog {
 	NSMutableArray						*_menuStack;
 	id<FreemanModularObject>	_currentContainer;
 }

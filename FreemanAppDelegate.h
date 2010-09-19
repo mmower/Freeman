@@ -13,7 +13,7 @@
 @class FreemanModuleDatabase;
 @class FreemanModule;
 
-@interface FreemanAppDelegate : NSObject <NSApplicationDelegate> {
+@interface FreemanAppDelegate : NSObject {
   NSWindow								*_window;
 	NSMenu									*_statusMenu;
 	NSStatusItem						*_statusItem;	

@@ -24,13 +24,20 @@
 - (NSString *)pretty {
 	NSMutableString *pretty = [NSMutableString stringWithCapacity:128];
 	
+	// [self enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+	// 	if( idx > 0 ) {
+	// 		[pretty appendString:@","];
+	// 	}
+	// 	[pretty appendString:[obj description]];
+	// }];
+	
 	[pretty appendString:@"("];
-	[self enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+	for( int idx = 0; idx < [self count]; idx++ ) {
 		if( idx > 0 ) {
 			[pretty appendString:@","];
 		}
-		[pretty appendString:[obj description]];
-	}];
+		[pretty appendString:[[self objectAtIndex:idx] description]];
+	}
 	[pretty appendString:@")"];
 	
 	return pretty;

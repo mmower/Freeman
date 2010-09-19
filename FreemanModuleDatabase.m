@@ -13,6 +13,7 @@
 #import "FreemanModule.h"
 
 #import "NSString+FreemanRanking.h"
+#import "NSURL+Freeman.h"
 
 
 @interface FreemanModuleDatabase (PrivateMethods)
@@ -125,14 +126,16 @@
 - (FreemanModule *)constModule {
 	NSArray *result;
 	if( _primary ) {
-		result = [_modules filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^(id obj,NSDictionary *bindings) {
-			return (BOOL)([[obj path] isEqualToString:@"Built-In Module : Math : Constant"]);
-		}]];
+		// result = [_modules filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^(id obj,NSDictionary *bindings) {
+		// 	return (BOOL)([[obj path] isEqualToString:@"Built-In Module : Math : Constant"]);
+		// }]];
+		result = [_modules filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"path = 'Built-In Module : Math : Constant'"]];
 		NSAssert( [result count] == 1, @"Could not find primary constant module!" );
 	} else {
-		result = [_modules filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^(id obj,NSDictionary *bindings) {
-			return (BOOL)([[obj path] isEqualToString:@"Built-In Module : Const"]);
-		}]];
+		// result = [_modules filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^(id obj,NSDictionary *bindings) {
+		// 	return (BOOL)([[obj path] isEqualToString:@"Built-In Module : Const"]);
+		// }]];
+		result = [_modules filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"path = 'Built-In Module : Const'"]];
 		NSAssert( [result count] == 1, @"Could not find core constant module!" );
 	}
 	
@@ -141,24 +144,28 @@
 
 
 - (NSArray *)searchFor:(NSString *)query {
-	[_modules enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-		[obj setScoreForLastAbbreviation:[[obj name] scoreForAbbreviation:query]];
-		}];
+	// [_modules enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+	// 	[obj setScoreForLastAbbreviation:[[obj name] scoreForAbbreviation:query]];
+	// 	}];
+	for( FreemanModule *module in _modules ) {
+		[module setScoreForLastAbbreviation:[[module name] scoreForAbbreviation:query]];
+	}
 	
-	NSArray *possibleMatches = [_modules filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^(id obj, NSDictionary *bindings) {
-		return (BOOL)([obj scoreForLastAbbreviation] > 0.0);
-	}]];
+	// NSArray *possibleMatches = [_modules filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^(id obj, NSDictionary *bindings) {
+	// 	return (BOOL)([obj scoreForLastAbbreviation] > 0.0);
+	// }]];
+	NSArray *possibleMatches = [_modules filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"scoreForLastAbbreviation > 0.0"]];
 	
-	
-	return [possibleMatches sortedArrayUsingComparator:^(id a, id b) {
-		if( [a scoreForLastAbbreviation] > [b scoreForLastAbbreviation] ) {
-			return (NSComparisonResult)NSOrderedAscending;
-		} else if( [a scoreForLastAbbreviation] < [b scoreForLastAbbreviation] ) {
-			return (NSComparisonResult)NSOrderedDescending;
-		} else {
-			return (NSComparisonResult)NSOrderedSame;
-		}
-	}];
+	// return [possibleMatches sortedArrayUsingComparator:^(id a, id b) {
+	// 	if( [a scoreForLastAbbreviation] > [b scoreForLastAbbreviation] ) {
+	// 		return (NSComparisonResult)NSOrderedAscending;
+	// 	} else if( [a scoreForLastAbbreviation] < [b scoreForLastAbbreviation] ) {
+	// 		return (NSComparisonResult)NSOrderedDescending;
+	// 	} else {
+	// 		return (NSComparisonResult)NSOrderedSame;
+	// 	}
+	// }];
+	return [possibleMatches sortedArrayUsingSelector:@selector(scoreRelativeTo:)];
 }
 
 
@@ -263,9 +270,14 @@
 
 - (NSArray *)allModules {
 	NSMutableArray *modules = [NSMutableArray array];
-	[[self contents] enumerateObjectsUsingBlock:^(id obj,NSUInteger idx,BOOL *stop) {
+	
+	// [[self contents] enumerateObjectsUsingBlock:^(id obj,NSUInteger idx,BOOL *stop) {
+	// 	[modules addObjectsFromArray:[obj allModules]];
+	// }];
+	for( FreemanModularObject *obj in [self contents] ) {
 		[modules addObjectsFromArray:[obj allModules]];
-	}];
+	}
+	
 	return [modules copy];
 }
 

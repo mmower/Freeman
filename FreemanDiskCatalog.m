@@ -39,9 +39,21 @@
 
 
 - (void)loadModulesFrom:(NSString *)path withFileType:(NSString *)fileType into:(id<FreemanModularObject>)container {
-	[[self foldersInPath:path] enumerateObjectsUsingBlock:^(id file,NSUInteger idx, BOOL *stop) {
-		FreemanMenu *subMenu = [[FreemanMenu alloc] initWithOwner:container name:file];
-		[self loadModulesFrom:[path stringByAppendingPathComponent:file] withFileType:fileType into:subMenu];
+	// [[self foldersInPath:path] enumerateObjectsUsingBlock:^(id file,NSUInteger idx, BOOL *stop) {
+	// 	FreemanMenu *subMenu = [[FreemanMenu alloc] initWithOwner:container name:file];
+	// 	[self loadModulesFrom:[path stringByAppendingPathComponent:file] withFileType:fileType into:subMenu];
+	// 	if( [[subMenu allModules] count] > 0 ) {
+	// 		[container addContent:subMenu];
+	// 	} else {
+	// 		#ifdef DEBUG_FREEMAN
+	// 		NSLog( @"** Discarding empty submenu: %@", [subMenu name] );
+	// 		#endif
+	// 	}
+	// 	
+	// }];
+	for( NSString *folder in [self foldersInPath:path] ) {
+		FreemanMenu *subMenu = [[FreemanMenu alloc] initWithOwner:container name:folder];
+		[self loadModulesFrom:[path stringByAppendingPathComponent:folder] withFileType:fileType into:subMenu];
 		if( [[subMenu allModules] count] > 0 ) {
 			[container addContent:subMenu];
 		} else {
@@ -49,37 +61,64 @@
 			NSLog( @"** Discarding empty submenu: %@", [subMenu name] );
 			#endif
 		}
-		
-	}];
+	}
 	
-	[[self filesInPath:path withFileType:fileType] enumerateObjectsUsingBlock:^(id file, NSUInteger idx, BOOL *stop) {
+	// [[self filesInPath:path withFileType:fileType] enumerateObjectsUsingBlock:^(id file, NSUInteger idx, BOOL *stop) {
+	// 	FreemanModule *module = [[FreemanModule alloc] initWithOwner:container catalog:self name:[file stringByDeletingPathExtension]];
+	// 	[container addContent:module];
+	// }];
+	for( NSString *file in [self filesInPath:path withFileType:fileType] ) {
 		FreemanModule *module = [[FreemanModule alloc] initWithOwner:container catalog:self name:[file stringByDeletingPathExtension]];
 		[container addContent:module];
-	}];
+	}
 }
 
 
 - (NSArray *)foldersInPath:(NSString *)path {
-	NSPredicate *predicate = [NSPredicate predicateWithBlock:^(id file, NSDictionary *bindings) {
-		BOOL exists, isDirectory;
-		exists = [[NSFileManager defaultManager] fileExistsAtPath:[path stringByAppendingPathComponent:file] isDirectory:&isDirectory];
-		return (BOOL)(exists && isDirectory);
-	}];
+	// NSPredicate *predicate = [NSPredicate predicateWithBlock:^(id file, NSDictionary *bindings) {
+	// 	BOOL exists, isDirectory;
+	// 	exists = [[NSFileManager defaultManager] fileExistsAtPath:[path stringByAppendingPathComponent:file] isDirectory:&isDirectory];
+	// 	return (BOOL)(exists && isDirectory);
+	// }];
+	// 
+	// return [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:NULL] filteredArrayUsingPredicate:predicate];
 	
-	return [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:NULL] filteredArrayUsingPredicate:predicate];
+	NSMutableArray *folders = [NSMutableArray array];
+	
+	for( NSString *entry in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:NULL] ) {
+		BOOL exists, isDirectory;
+		exists = [[NSFileManager defaultManager] fileExistsAtPath:[path stringByAppendingPathComponent:entry] isDirectory:&isDirectory];
+		if( exists && isDirectory ) {
+			[folders addObject:entry];
+		}
+	}
+	
+	return folders;
 }
 
 
 - (NSArray *)filesInPath:(NSString *)path withFileType:(NSString *)fileType {
-	NSPredicate *predicate = [NSPredicate predicateWithBlock:^(id file, NSDictionary *bindings) {
-		BOOL exists, isDirectory;
-		exists = [[NSFileManager defaultManager] fileExistsAtPath:[path stringByAppendingPathComponent:file] isDirectory:&isDirectory];
-		return (BOOL)([[file pathExtension] isEqualToString:fileType] && exists && !isDirectory);
-	}];
+	// NSPredicate *predicate = [NSPredicate predicateWithBlock:^(id file, NSDictionary *bindings) {
+	// 	BOOL exists, isDirectory;
+	// 	exists = [[NSFileManager defaultManager] fileExistsAtPath:[path stringByAppendingPathComponent:file] isDirectory:&isDirectory];
+	// 	return (BOOL)([[file pathExtension] isEqualToString:fileType] && exists && !isDirectory);
+	// }];
+	// 
+	// return [[[[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:NULL] filteredArrayUsingPredicate:predicate] sortedArrayUsingComparator:^(id a,id b) {
+	// 	return (NSComparisonResult)[a compare:b];
+	// }];
 	
-	return [[[[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:NULL] filteredArrayUsingPredicate:predicate] sortedArrayUsingComparator:^(id a,id b) {
-		return (NSComparisonResult)[a compare:b];
-	}];
+	NSMutableArray *files = [NSMutableArray array];
+	
+	for( NSString *entry in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:NULL] ) {
+		BOOL exists, isDirectory;
+		exists = [[NSFileManager defaultManager] fileExistsAtPath:[path stringByAppendingPathComponent:entry] isDirectory:&isDirectory];
+		if( exists && !isDirectory ) {
+			[files addObject:entry];
+		}
+	}
+	
+	return [files sortedArrayUsingSelector:@selector(compare:)];
 }
 
 

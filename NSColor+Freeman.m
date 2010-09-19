@@ -13,6 +13,7 @@
 #import "NSColor+Freeman.h"
 
 #import "NSScreen+Freeman.h"
+#import "NSArray+Freeman.h"
 
 @implementation NSColor (Freeman)
 
@@ -94,12 +95,26 @@
 
 
 + (NSColor *)colorAtLocation:(CGPoint)screenPoint {
-	NSPoint windowPoint = NSMakePoint( screenPoint.x, screenPoint.y );
-	NSInteger windowNumber = [NSWindow windowNumberAtPoint:windowPoint belowWindowWithWindowNumber:0];
-	NSColor *color = [self colorOfWindow:windowNumber atPoint:[[NSScreen mainScreen] flipPoint:screenPoint]];
-	NSLog( @"Window %d @ %.0f,%.0f => (%@)", windowNumber, screenPoint.x, screenPoint.y, [color asHexString] );
-	NSLog( @"--------------------------------" );
-	return color;
+	// NSPoint windowPoint = NSMakePoint( screenPoint.x, screenPoint.y );
+
+	AXUIElementRef focusedApp, focusedWindow;
+	
+	AXUIElementCopyAttributeValue( AXUIElementCreateSystemWide(), (CFStringRef)kAXFocusedApplicationAttribute, (CFTypeRef *)&focusedApp );
+	AXUIElementCopyAttributeValue( focusedApp, (CFStringRef)NSAccessibilityFocusedWindowAttribute, (CFTypeRef *)&focusedWindow );
+	NSLog( @"window = %@", focusedWindow );
+	
+	NSArray *names;
+	AXUIElementCopyAttributeNames( focusedWindow, (CFArrayRef *)&names );
+	NSLog( @"attrs = (%@)", [names pretty] );
+	
+	
+	// NSInteger windowNumber = [NSWindow windowNumberAtPoint:windowPoint belowWindowWithWindowNumber:0];
+	// NSColor *color = [self colorOfWindow:windowNumber atPoint:[[NSScreen mainScreen] flipPoint:screenPoint]];
+	// NSLog( @"Window %d @ %.0f,%.0f => (%@)", windowNumber, screenPoint.x, screenPoint.y, [color asHexString] );
+	// NSLog( @"--------------------------------" );
+	// return color;
+	
+	return [NSColor blackColor];
 }
 
 

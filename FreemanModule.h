@@ -32,4 +32,6 @@
 
 - (NSString *)menuPath;
 
+- (NSComparisonResult)scoreRelativeTo:(FreemanModule *)module;
+
 @end

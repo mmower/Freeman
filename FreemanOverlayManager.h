@@ -13,7 +13,7 @@
 @class FreemanSearchField;
 @class FreemanFieldEditor;
 
-@interface FreemanOverlayManager : NSWindowController <NSTextFieldDelegate> {
+@interface FreemanOverlayManager : NSWindowController {
 	id										_delegate;
 	BOOL									_enabled;
 	

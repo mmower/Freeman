@@ -53,6 +53,17 @@
 }
 
 
+- (NSComparisonResult)scoreRelativeTo:(FreemanModule *)module {
+	if( [self scoreForLastAbbreviation] > [module scoreForLastAbbreviation] ) {
+		return NSOrderedAscending;
+	} else if( [self scoreForLastAbbreviation] < [module scoreForLastAbbreviation] ) {
+		return NSOrderedDescending;
+	} else {
+		return NSOrderedSame;
+	}
+}
+
+
 - (NSString *)description {
 	return [NSString stringWithFormat:@"Freeman Module<%@> (%f)", [self name], [self scoreForLastAbbreviation]];
 }

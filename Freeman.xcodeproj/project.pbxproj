@@ -32,6 +32,7 @@
 		C975FB36123B83D900C2AC4E /* FreemanXMLCatalog.m in Sources */ = {isa = PBXBuildFile; fileRef = C975FB34123B83D900C2AC4E /* FreemanXMLCatalog.m */; };
 		C975FB39123B849800C2AC4E /* FreemanCatalog.m in Sources */ = {isa = PBXBuildFile; fileRef = C975FB38123B849800C2AC4E /* FreemanCatalog.m */; };
 		C975FDB3123C4D3C00C2AC4E /* FreemanMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = C975FDB2123C4D3C00C2AC4E /* FreemanMenu.m */; };
+		C98257CB12461411007799BD /* NSURL+Freeman.m in Sources */ = {isa = PBXBuildFile; fileRef = C98257CA12461411007799BD /* NSURL+Freeman.m */; };
 		C993DDFB1238D6C000FCB461 /* FreemanRemoteProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = C993DDFA1238D6C000FCB461 /* FreemanRemoteProcess.m */; };
 		C993DF8212391D3A00FCB461 /* FreemanModuleDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = C993DF8112391D3A00FCB461 /* FreemanModuleDatabase.m */; };
 		C993DF8512391D5A00FCB461 /* FreemanModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C993DF8412391D5A00FCB461 /* FreemanModule.m */; };
@@ -99,6 +100,8 @@
 		C975FB38123B849800C2AC4E /* FreemanCatalog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreemanCatalog.m; sourceTree = "<group>"; };
 		C975FDB1123C4D3C00C2AC4E /* FreemanMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreemanMenu.h; sourceTree = "<group>"; };
 		C975FDB2123C4D3C00C2AC4E /* FreemanMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreemanMenu.m; sourceTree = "<group>"; };
+		C98257C912461411007799BD /* NSURL+Freeman.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+Freeman.h"; sourceTree = "<group>"; };
+		C98257CA12461411007799BD /* NSURL+Freeman.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+Freeman.m"; sourceTree = "<group>"; };
 		C993DDF91238D6C000FCB461 /* FreemanRemoteProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreemanRemoteProcess.h; sourceTree = "<group>"; };
 		C993DDFA1238D6C000FCB461 /* FreemanRemoteProcess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreemanRemoteProcess.m; sourceTree = "<group>"; };
 		C993DF7F123912C200FCB461 /* modules.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = modules.xml; sourceTree = "<group>"; };
@@ -163,6 +166,8 @@
 				C91B7E8A12417BCB00A3390C /* NSColor+Freeman.m */,
 				C91BE94B12450FB50087CB81 /* NSScreen+Freeman.h */,
 				C91BE94C12450FB50087CB81 /* NSScreen+Freeman.m */,
+				C98257C912461411007799BD /* NSURL+Freeman.h */,
+				C98257CA12461411007799BD /* NSURL+Freeman.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -344,6 +349,7 @@
 				C910CA0D123EB9BC00585490 /* NSArray+Freeman.m in Sources */,
 				C91B7E8B12417BCB00A3390C /* NSColor+Freeman.m in Sources */,
 				C91BE94D12450FB50087CB81 /* NSScreen+Freeman.m in Sources */,
+				C98257CB12461411007799BD /* NSURL+Freeman.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -420,7 +426,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx10.5;
 				WARNING_CFLAGS = "-Wall";
 			};
 			name = Debug;
@@ -435,7 +441,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx10.5;
 				WARNING_CFLAGS = "-Wall";
 			};
 			name = Release;

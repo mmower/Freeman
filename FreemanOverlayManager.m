@@ -98,11 +98,20 @@
 }
 
 
+- (void)updateSearchResults:(id)results {
+	[self setSearchResults:results];
+	if( [results count] > 0 ) {
+		[[self resultsTable] selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
+	}
+}
+
+
 - (void)search:(id)object {
 	if( ![self searchString] || [[self searchString] isEqualToString:@""] ) {
-		dispatch_async( dispatch_get_main_queue(), ^{
-			[self setSearchResults:[NSArray array]];
-		});
+		[self performSelectorOnMainThread:@selector(updateSearchResults:) withObject:[NSArray array] waitUntilDone:NO];
+		// dispatch_async( dispatch_get_main_queue(), ^{
+		// 	[self setSearchResults:[NSArray array]];
+		// });
 		return;
 	} else {
 		#ifdef DEBUG_FREEMAN
@@ -111,10 +120,11 @@
 		
 		NSArray *results = [_moduleDatabase searchFor:[self searchString]];
 		if( [results count] > 0 && ![[NSThread currentThread] isCancelled] ) {
-			dispatch_async( dispatch_get_main_queue(), ^{
-				[self setSearchResults:results];
-				[[self resultsTable] selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
-			});
+			[self performSelectorOnMainThread:@selector(updateSearchResults:) withObject:results waitUntilDone:NO];
+			// dispatch_async( dispatch_get_main_queue(), ^{
+			// 	[self setSearchResults:results];
+			// 	[[self resultsTable] selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
+			// });
 		}
 	}
 }

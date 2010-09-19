@@ -63,14 +63,21 @@
 
 - (NSArray *)allModules {
 	NSMutableArray *modules = [NSMutableArray array];
-	[[self contents] enumerateObjectsUsingBlock:^(id obj,NSUInteger idx,BOOL *stop) {
+	// [[self contents] enumerateObjectsUsingBlock:^(id obj,NSUInteger idx,BOOL *stop) {
+	// 	if( [obj isModule] ) {
+	// 		[modules addObject:obj];
+	// 	} else {
+	// 		[modules addObjectsFromArray:[obj allModules]];
+	// 	}
+	// }];
+	for( FreemanModularObject *obj in [self contents] ) {
 		if( [obj isModule] ) {
 			[modules addObject:obj];
 		} else {
 			[modules addObjectsFromArray:[obj allModules]];
 		}
-	}];
-	return [modules copy];
+	}
+	return modules;
 }
 
 

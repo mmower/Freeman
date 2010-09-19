@@ -16,14 +16,18 @@
 #define CGKEYCODE_DOWN (125)
 #define CGKEYCODE_UP (126)
 
+#define KEY_ACTION_INSERT @"insert"
+#define KEY_ACTION_INSERT_AGAIN @"insert_again"
+#define KEY_ACTION_INSERT_CONST @"insert_const"
 
-typedef CGEventRef (^EventRefGeneratingBlock)();
+
+// typedef CGEventRef (^EventRefGeneratingBlock)();
 
 
 @interface FreemanRemoteProcess (PrivateMethods)
 
 - (void)installEventTap;
-- (void)postEvent:(EventRefGeneratingBlock)block;
+// - (void)postEvent:(EventRefGeneratingBlock)block;
 - (CGEventRef)createKeyboardEvent:(CGKeyCode)keyCode keyDown:(BOOL)keyDown;
 - (CGKeyCode)mapSpecifierToKeyCode:(NSString *)specifier;
 
@@ -35,7 +39,7 @@ typedef CGEventRef (^EventRefGeneratingBlock)();
 @end
 
 
-static CGPoint currentPoint;
+static CGPoint gCurrentPoint;
 
 CGEventRef EventTapCallback( CGEventTapProxy proxy, CGEventType type, CGEventRef ref, void *refCon ) {
 	UniChar key;
@@ -43,32 +47,35 @@ CGEventRef EventTapCallback( CGEventTapProxy proxy, CGEventType type, CGEventRef
 	
 	switch( type ) {
 		case kCGEventMouseMoved:
-			currentPoint = CGEventGetLocation( ref );
+			gCurrentPoint = CGEventGetLocation( ref );
 			break;
 		case kCGEventKeyDown:
 			if( CGEventGetFlags( ref ) & kCGEventFlagMaskControl ) {
 				CGEventKeyboardGetUnicodeString( ref, 1, &keyLength, &key );
 				switch( key ) {
 					case 0x01:
-						dispatch_async( dispatch_get_main_queue(), ^{
-							[((FreemanRemoteProcess *)refCon) pressedInsertAt:currentPoint];
-						});
-						currentPoint.x -= 10;
-						currentPoint.y -= 10;
+						[((FreemanRemoteProcess *)refCon) performSelectorOnMainThread:@selector(doKeyAction:) withObject:KEY_ACTION_INSERT waitUntilDone:NO];
+						// dispatch_async( dispatch_get_main_queue(), ^{
+						// 	[((FreemanRemoteProcess *)refCon) pressedInsertAt:gCurrentPoint];
+						// });
+						// currentPoint.x -= 10;
+						// currentPoint.y -= 10;
 						return NULL;
 					case 0x12:
-						dispatch_async( dispatch_get_main_queue(), ^{
-							[((FreemanRemoteProcess *)refCon) pressedReInsertAt:currentPoint];
-						});
-						currentPoint.x -= 10;
-						currentPoint.y -= 10;
+						[((FreemanRemoteProcess *)refCon) performSelectorOnMainThread:@selector(doKeyAction:) withObject:KEY_ACTION_INSERT_AGAIN waitUntilDone:NO];
+						// dispatch_async( dispatch_get_main_queue(), ^{
+						// 	[((FreemanRemoteProcess *)refCon) pressedReInsertAt:gCurrentPoint];
+						// });
+						// currentPoint.x -= 10;
+						// currentPoint.y -= 10;
 						return NULL;
 					case 0x03:
-						dispatch_async( dispatch_get_main_queue(), ^{
-							[((FreemanRemoteProcess *)refCon) pressedInsertConstAt:currentPoint];
-						});
-						currentPoint.x -= 10;
-						currentPoint.y -= 10;
+						[((FreemanRemoteProcess *)refCon) performSelectorOnMainThread:@selector(doKeyAction:) withObject:KEY_ACTION_INSERT_CONST waitUntilDone:NO];
+						// dispatch_async( dispatch_get_main_queue(), ^{
+						// 	[((FreemanRemoteProcess *)refCon) pressedInsertConstAt:gCurrentPoint];
+						// });
+						// currentPoint.x -= 10;
+						// currentPoint.y -= 10;
 						return NULL;
 				}
 			}
@@ -101,17 +108,28 @@ CGEventRef EventTapCallback( CGEventTapProxy proxy, CGEventType type, CGEventRef
 }
 
 
-- (void)postEvent:(EventRefGeneratingBlock)block {
-	CGEventRef eventRef = block();
-	NSAssert( eventRef, @"Failed to create event" );
-	CGEventPostToPSN( &_psn, eventRef );
-	CFRelease( eventRef );
-}
+// - (void)postEvent:(EventRefGeneratingBlock)block {
+// 	CGEventRef eventRef = block();
+// 	NSAssert( eventRef, @"Failed to create event" );
+// 	CGEventPostToPSN( &_psn, eventRef );
+// 	CFRelease( eventRef );
+// }
 
 
 - (void)sendRightMouseClick:(CGPoint)clickPoint {
-	[self postEvent:^() { return CGEventCreateMouseEvent( _eventSourceRef, kCGEventRightMouseDown, clickPoint, kCGMouseButtonRight ); }];
-	[self postEvent:^() { return CGEventCreateMouseEvent( _eventSourceRef, kCGEventRightMouseUp, clickPoint, kCGMouseButtonRight ); }];
+	
+	CGEventRef eventRef;
+	
+	eventRef = CGEventCreateMouseEvent( _eventSourceRef, kCGEventRightMouseDown, clickPoint, kCGMouseButtonRight );
+	CGEventPostToPSN( &_psn, eventRef );
+	CFRelease( eventRef );
+
+	eventRef = CGEventCreateMouseEvent( _eventSourceRef, kCGEventRightMouseUp, clickPoint, kCGMouseButtonRight );
+	CGEventPostToPSN( &_psn, eventRef );
+	CFRelease( eventRef );
+	
+	// [self postEvent:^() { return CGEventCreateMouseEvent( _eventSourceRef, kCGEventRightMouseDown, clickPoint, kCGMouseButtonRight ); }];
+	// [self postEvent:^() { return CGEventCreateMouseEvent( _eventSourceRef, kCGEventRightMouseUp, clickPoint, kCGMouseButtonRight ); }];
 }
 
 
@@ -127,8 +145,19 @@ CGEventRef EventTapCallback( CGEventTapProxy proxy, CGEventType type, CGEventRef
 
 
 - (void)sendKeyStroke:(CGKeyCode)keyCode {
-	[self postEvent:^() { return [self createKeyboardEvent:keyCode keyDown:YES]; }];
-	[self postEvent:^() { return [self createKeyboardEvent:keyCode keyDown:NO]; }];
+	
+	CGEventRef eventRef;
+	
+	eventRef = [self createKeyboardEvent:keyCode keyDown:YES];
+	CGEventPostToPSN( &_psn, eventRef );
+	CFRelease( eventRef );
+
+	eventRef = [self createKeyboardEvent:keyCode keyDown:NO];
+	CGEventPostToPSN( &_psn, eventRef );
+	CFRelease( eventRef );
+	
+	// [self postEvent:^() { return [self createKeyboardEvent:keyCode keyDown:YES]; }];
+	// [self postEvent:^() { return [self createKeyboardEvent:keyCode keyDown:NO]; }];
 }
 
 
@@ -275,6 +304,20 @@ CGEventRef EventTapCallback( CGEventTapProxy proxy, CGEventType type, CGEventRef
 	NSLog( @"Event tap resumed" );
 	CGEventTapEnable( _tapMachPort, true );
 	NSAssert( CGEventTapIsEnabled( _tapMachPort ), @"Failed to resume event tap!" );
+}
+
+
+- (void)doKeyAction:(id)action {
+	if( [action isEqualToString:KEY_ACTION_INSERT] ) {
+		[[self delegate] triggerInsertModuleAtPoint:gCurrentPoint];
+		gCurrentPoint = CGPointMake( gCurrentPoint.x - 8, gCurrentPoint.y - 8 );
+	} else if( [action isEqualToString:KEY_ACTION_INSERT_AGAIN] ) {
+		[[self delegate] triggerReInsertModuleAtPoint:gCurrentPoint];
+		gCurrentPoint = CGPointMake( gCurrentPoint.x - 8, gCurrentPoint.y - 8 );
+	} else if( [action isEqualToString:KEY_ACTION_INSERT_CONST ] ) {
+		[[self delegate] triggerInsertConstModuleAtPoint:gCurrentPoint];
+		gCurrentPoint = CGPointMake( gCurrentPoint.x - 8, gCurrentPoint.y - 8 );
+	}
 }
 
 
