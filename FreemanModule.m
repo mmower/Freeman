@@ -106,9 +106,7 @@
 
 - (NSString *)navigationSequence {
 	NSMutableString *sequence = [NSMutableString string];
-	NSLog( @"Owner %@ navigation sequence %@", [[self owner] name], [[self owner] navigationSequence] );
 	[sequence appendString:[[self owner] navigationSequence]];
-	
 	for( int i = 0; i < [[self owner] indexOfContent:self]; i++ ) {
 		[sequence appendString:@"D"];
 	}
