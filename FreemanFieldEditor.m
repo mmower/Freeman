@@ -9,11 +9,13 @@
 #import "FreemanFieldEditor.h"
 
 #import "FreemanOverlayManager.h"
+#import "FreemanKeyMapper.h"
+
+// #define DEBUG_FREEMAN 1
 
 @interface FreemanFieldEditor (PrivateMethods)
 
-// - (NSUInteger)quickSelect:(NSEvent *)event;
-// - (BOOL)optDown:(NSEvent *)event;
+- (BOOL)favouriteModifiers:(NSEvent *)event;
 
 @end
 
@@ -22,41 +24,32 @@
 @synthesize overlayManager = _overlayManager;
 
 - (void)keyDown:(NSEvent *)event {
-	#ifdef DEBUG_FREEMAN
-	NSLog( @"keyCode = %03d OPT=%@", [event keyCode], ([event modifierFlags] & NSAlternateKeyMask) ? @"Y" : @"N" );
-	#endif
-	[super keyDown:event];
 	
-	// if( [self optDown:event] && ([self quickSelect:event] > 0) ) {
-	// 	// Swallow opt+quickselect key
-	// } else {
-	// 	[super keyDown:event];
-	// }
+	#ifdef DEBUG_FREEMAN
+	NSLog( @"keyCode = %03d FAV=%@", [event keyCode], ([event modifierFlags] & NSShiftKeyMask && [event modifierFlags] & NSControlKeyMask) ? @"Y" : @"N" );
+	#endif
+
+	int favourite = mapKeyCodeToFavouriteNumber( [event keyCode] );
+	
+	if( ( [self favouriteModifiers:event] ) && ( favourite > 0 ) ) {
+		[[self overlayManager] setFavourite:favourite];
+	} else {
+		[super keyDown:event];
+	}
 }
 
 
 // Swallow key-up events for the key-down events we are special processing
 - (void)keyUp:(NSEvent *)event {
-	[super keyUp:event];
-	// if( ( [self optDown:event] && ([self quickSelect:event] > 0) )) {
-	// 	NSLog( @"Dispatching quick-select" );
-	// 	dispatch_async( dispatch_get_main_queue(), ^{
-	// 		[[self overlayManager] quickSelect:[self quickSelect:event]];
-	// 		});
-	// } else {
-	// 	[super keyUp:event];
-	// }
+	if( !( ( [self favouriteModifiers:event] ) && ( mapKeyCodeToFavouriteNumber( [event keyCode] ) > 0 ) ) ) {
+		[super keyUp:event];
+	}
 }
 
 
-// - (NSUInteger)quickSelect:(NSEvent *)event {
-// 	return [[event charactersIgnoringModifiers] integerValue];
-// }
-// 
-// 
-// - (BOOL)optDown:(NSEvent *)event {
-// 	return ([event modifierFlags] & NSAlternateKeyMask) == NSAlternateKeyMask;
-// }
+- (BOOL)favouriteModifiers:(NSEvent *)event {
+	return [event modifierFlags] & NSControlKeyMask && [event modifierFlags] & NSShiftKeyMask;
+}
 
 
 @end

@@ -16,6 +16,9 @@
 	NSUInteger							_quickSelection;
 }
 
+
+
+
 @property (assign) FreemanOverlayManager *overlayManager;
 
 @end
