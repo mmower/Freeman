@@ -58,6 +58,11 @@
 }
 
 
+- (void)windowWillClose:(NSNotification *)notification {
+	[[self delegate] activateReaktor];
+}
+
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if( [keyPath isEqualToString:@"searchString"] ) {
 		if( _searchThread ) {
@@ -95,7 +100,7 @@
 
 - (void)closeAndActivateReaktor {
 	[self close];
-	[[self delegate] activateReaktor];
+	// [[self delegate] activateReaktor];
 }
 
 
