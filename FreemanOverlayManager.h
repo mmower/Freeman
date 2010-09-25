@@ -43,7 +43,7 @@
 
 - (void)searchModules:(FreemanModuleDatabase *)moduleDatabase fromPoint:(CGPoint)point;
 - (void)closeAndActivateReaktor;
-// - (void)quickSelect:(NSUInteger)result;
+- (void)setFavourite:(NSUInteger)favourite;
 
 - (IBAction)insertModule:(id)sender;
 

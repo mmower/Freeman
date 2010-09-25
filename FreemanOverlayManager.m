@@ -22,6 +22,7 @@
 - (void)selectPreviousResult;
 - (void)selectNextResult;
 - (void)closeAndInsertModule:(FreemanModule *)module;
+- (FreemanModule *)selectedModule;
 
 @end
 
@@ -109,9 +110,6 @@
 - (void)search:(id)object {
 	if( ![self searchString] || [[self searchString] isEqualToString:@""] ) {
 		[self performSelectorOnMainThread:@selector(updateSearchResults:) withObject:[NSArray array] waitUntilDone:NO];
-		// dispatch_async( dispatch_get_main_queue(), ^{
-		// 	[self setSearchResults:[NSArray array]];
-		// });
 		return;
 	} else {
 		#ifdef DEBUG_FREEMAN
@@ -121,10 +119,6 @@
 		NSArray *results = [_moduleDatabase searchFor:[self searchString]];
 		if( [results count] > 0 && ![[NSThread currentThread] isCancelled] ) {
 			[self performSelectorOnMainThread:@selector(updateSearchResults:) withObject:results waitUntilDone:NO];
-			// dispatch_async( dispatch_get_main_queue(), ^{
-			// 	[self setSearchResults:results];
-			// 	[[self resultsTable] selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
-			// });
 		}
 	}
 }
@@ -147,24 +141,25 @@
 	}
 }
 
-// - (void)quickSelect:(NSUInteger)result {
-// 	NSLog( @"quickSelect: %d", result );
-// 	if( result > 0 && result <= [[self searchResults] count] ) {
-// 		FreemanModule *selectedModule = [[self searchResults] objectAtIndex:(result-1)];
-// 		dispatch_async( dispatch_get_main_queue(), ^{
-// 			[self closeAndInsertModule:selectedModule];
-// 		});
-// 		
-// 		#ifdef DEBUG_FREEMAN
-// 		NSLog( @"quickSelect:%@", [selectedModule name] );
-// 		#endif
-// 	}
-// }
+
+- (void)setFavourite:(NSUInteger)favourite {
+	int currentRow = [[self resultsTable] selectedRow];
+	if( currentRow > -1 ) {
+		[self close];
+		[_delegate setFavourite:[self selectedModule] inSlot:favourite];
+		[self closeAndInsertModule:[self selectedModule]];
+	}
+}
+
+
+- (FreemanModule *)selectedModule {
+	return [[self searchResults] objectAtIndex:[[self resultsTable] selectedRow]];
+}
 
 
 - (IBAction)insertModule:(id)sender {
 	if( [[self resultsTable] selectedRow] != -1 ) {
-		[self closeAndInsertModule:[[self searchResults] objectAtIndex:[[self resultsTable] selectedRow]]];
+		[self closeAndInsertModule:[self selectedModule]];
 	}
 }
 
