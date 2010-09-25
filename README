@@ -1,14 +1,18 @@
-# Freeman v1.0
+# Freeman v1.1
 * by [Matt Mower](http://mattmower.com/)
-* released: 18.09.2010
+* released: 25.09.2010
 
 ## Introduction
 
-Freeman is a tool for users of Native Instruments Reaktor on Mac OSX (10.6.4) that offers a new way to insert modules into both Primary and Core structure windows. The default Reaktor approach is to use a right-click context menu and navigate to find the module you want. Using Freeman you get a window with smart type-as-you-go search to find & insert the module you want.
+Freeman is a tool for users of Native Instruments Reaktor on Mac OS X 10.5 and 10.6 that offers a new way to insert modules into both Primary and Core structure windows. The default Reaktor approach is to use a right-click context menu and navigate to find the module you want. Using Freeman you get a window with smart type-as-you-go search to find & insert the module you want.
 
 ## Installation
 
-Copy Freeman.app to your /Applications folder. Then double-click the application to run it.
+Copy Freeman.app to your /Applications folder.
+
+Open System Preferences and select the `Universal Access` pane. Ensure that `Enable access for assistive devices` is checked. If this setting is not checked Freeman will not run.
+
+Double-click the Freeman.app to run it.
 
 Freeman will appear in your menubar to show you it is running but does not display an application window of it's own. You will notice the menubar icon is like a dark outline of the Reaktor icon.
 
@@ -16,7 +20,7 @@ Now switch to Reaktor (Freeman was tested with v5.5 but should also work with v5
 
 ## Using Freeman
 
-Freeman has three ways to insert a module into your structure:
+Freeman has four ways to insert a module into your structure. The first three of which are described here. The fourth, favourites, is described in the section below.
 
 <table>
 	<thead>
@@ -51,6 +55,12 @@ At any time one result (for a new search it will always be the first, best match
 
 To find the module you want just keep adding characters until you have narrowed the search right down, or get it close enough and then use the down arrow to highlight one of the other search results.
 
+### Favourites
+
+You can assign your 10 most frequently used modules to shortcut keys that Freeman will use to insert them. To create a favourite open the search dialog with ctrl+a as normal. Select the module that you want to make into a favourite. Now, instead of pressing return, press Ctrl+Shift+<n> where n is a number key from '1' to '0' on your keyboard. Freeman will insert your selected module and remember the association. In future, from the structure window, you can press Ctrl+Shift+<n> again to re-insert the module.
+
+Freeman remembers your favourites between sessions and you can have 10 favourites in both Primary and Core structures.
+
 ### How it works
 
 Freeman works by sending events to Reaktor to simulate you, the user, inserting the module. You will see the Reaktor context menu open and select the right module no matter how deeply nested in the menu. This process happens quite quickly however it is important that you **do not press any keys** while Freeman is working.
@@ -69,12 +79,12 @@ There is a quick shortcut `Ctrl+c` to insert a new constant module at either pri
 
 ## Notes
 
-Freeman 1.0 is for Mac OS X 10.6 ("Snow Leopard") only and will not work on previous releases. Additionally it has only been tested on OSX 10.6.4 although it may work fine with earlier releases of 10.6.
+Freeman 1.1 is for Mac OS X 10.5 ("Leopard") and 10.6 ("Snow Leopard").
 
 You can get support for Freeman by contacting me via email at the address above or getting in touch with me in #reaktor on Freenode IRC.
 
 ## Disclaimer
 
-Freeman is a hack based on manipulating Reaktor using OSX Quartz event services and, as such, is offered with **no warranty of any kind.**
+Freeman is a hack based on manipulating the Reaktor process using OSX Quartz event services and, as such, is offered with **no warranty of any kind.**
 
 There have been no reported issues so far but please don't test it on the only copy of the ensemble you've been working on for the last 5 years.
