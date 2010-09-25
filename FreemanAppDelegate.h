@@ -43,6 +43,9 @@
 
 - (void)insertModule:(FreemanModule *)module;
 
+- (void)setFavourite:(FreemanModule *)module inSlot:(NSInteger)slot;
+- (void)triggerInsertFavourite:(NSInteger)favouriteNumber atPoint:(CGPoint)point;
+
 - (void)activateReaktor;
 
 - (IBAction)showAboutBox:(id)sender;

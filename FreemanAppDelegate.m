@@ -16,6 +16,7 @@
 #import "FreemanRemoteProcess.h"
 #import "FreemanModuleDatabase.h"
 #import "FreemanModule.h"
+#import "FreemanPreferences.h"
 
 #import "NSColor+Freeman.h"
 #import "NSScreen+Freeman.h"
@@ -81,7 +82,15 @@ FreemanAppDelegate *gDelegate = nil;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	if( !AXAPIEnabled() ) {
-		NSLog( @"Universal access must be enabled or GrapplingIron can't work!" );
+		NSLog( @"Access for Assistive Devices is not enabled!" );
+		NSAlert *alert = [NSAlert alertWithMessageText:@"Freeman cannot start"
+                                     defaultButton:@"Exit"
+                                   alternateButton:nil
+                                       otherButton:nil
+                         informativeTextWithFormat:@"Freeman requires access for assistive devices to be enabled in the universal access system preferences pane. Please enable this setting before starting Freeman again."];
+
+		[alert runModal];
+		[NSApp terminate:self];
 	} else {
 		gDelegate = self;
 		_overlayManager = [[FreemanOverlayManager alloc] initWithDelegate:self];
@@ -105,13 +114,15 @@ FreemanAppDelegate *gDelegate = nil;
 		_lastInsertedCoreModule = module;
 	}
 	
+	[[self reaktorProcess] suspendEventTap];
 	[module insertAt:_location inReaktorProcess:_reaktorProcess];
-	// [[self reaktorProcess] resumeEventTap];
+	[[self reaktorProcess] resumeEventTap];
 }
 
 
 - (void)activateReaktor {
 	[[self reaktorProcess] activate];
+	[[self reaktorProcess] resumeEventTap];
 }
 
 
@@ -137,10 +148,8 @@ FreemanAppDelegate *gDelegate = nil;
 	}
 	
 	if( [moduleDatabase primary] && _lastInsertedPrimaryModule ) {
-		[[self reaktorProcess] suspendEventTap];
 		[self insertModule:_lastInsertedPrimaryModule];
 	} else if( _lastInsertedCoreModule ) {
-		[[self reaktorProcess] suspendEventTap];
 		[self insertModule:_lastInsertedCoreModule];
 	}
 }
@@ -154,7 +163,6 @@ FreemanAppDelegate *gDelegate = nil;
 		return;
 	}
 	
-	[[self reaktorProcess] suspendEventTap];
 	[self insertModule:[moduleDatabase constModule]];
 }
 
@@ -167,6 +175,46 @@ FreemanAppDelegate *gDelegate = nil;
 	} else {
 		return nil;
 	}
+}
+
+
+- (void)setFavourite:(FreemanModule *)module inSlot:(NSInteger)slot {
+	if( [module primary] ) {
+		[FreemanPreferences setPrimaryFavourite:[module path] inSlot:slot];
+	} else {
+		[FreemanPreferences setCoreFavourite:[module path] inSlot:slot];
+	}
+}
+
+
+- (void)triggerInsertFavourite:(NSInteger)favouriteNumber atPoint:(CGPoint)point {
+	NSLog( @"Insert favourite at (%.0f,%.0f)", point.x, point.y );
+	_location = point;
+	FreemanModuleDatabase *moduleDatabase = [self moduleDatabaseFromBackgroundColor:[NSColor colorAtLocation:[[NSScreen mainScreen] flipPoint:_location]]];
+	if( !moduleDatabase ) {
+		NSBeep();
+		return;
+	}
+	
+	NSString *modulePath = nil;
+	if( [moduleDatabase primary] ) {
+		modulePath = [FreemanPreferences primaryFavouriteInSlot:favouriteNumber];
+	} else {
+		modulePath = [FreemanPreferences coreFavouriteInSlot:favouriteNumber];
+	}
+	
+	if( !modulePath ) {
+		NSBeep();
+		return;
+	}
+	
+	FreemanModule *module = [moduleDatabase moduleWithPath:modulePath];
+	if( !module ) {
+		NSBeep();
+		return;
+	}
+	
+	[self insertModule:module];
 }
 
 
@@ -224,6 +272,7 @@ OSStatus AppSwitchHandler( EventHandlerCallRef nextHandler, EventRef theEvent, v
 			[gDelegate setReaktorProcess:[FreemanRemoteProcess remoteProcessWithSerialNumber:psn]];
 		}
 		
+		NSLog( @"Activating reatkor" );
 		[[gDelegate reaktorProcess] resumeEventTap];
 		[[gDelegate statusItem] setImage:[NSImage imageNamed:@"MenuActive.png"]];
 		[[gDelegate overlayManager] setEnabled:YES];

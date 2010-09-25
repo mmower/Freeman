@@ -39,6 +39,8 @@
 		C993DFAD12392D6600FCB461 /* modules.xml in Resources */ = {isa = PBXBuildFile; fileRef = C993DF7F123912C200FCB461 /* modules.xml */; };
 		C993E0001239324000FCB461 /* Overlay.xib in Resources */ = {isa = PBXBuildFile; fileRef = C993DFFF1239324000FCB461 /* Overlay.xib */; };
 		C993E13E123952E900FCB461 /* NSString+FreemanRanking.m in Sources */ = {isa = PBXBuildFile; fileRef = C993E13D123952E900FCB461 /* NSString+FreemanRanking.m */; };
+		C9FC781112474EA400646E0A /* FreemanPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FC781012474EA400646E0A /* FreemanPreferences.m */; };
+		C9FC783712476E3300646E0A /* FreemanKeyMapper.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FC783612476E3300646E0A /* FreemanKeyMapper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -112,6 +114,10 @@
 		C993DFFF1239324000FCB461 /* Overlay.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Overlay.xib; sourceTree = "<group>"; };
 		C993E13C123952E900FCB461 /* NSString+FreemanRanking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+FreemanRanking.h"; sourceTree = "<group>"; };
 		C993E13D123952E900FCB461 /* NSString+FreemanRanking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+FreemanRanking.m"; sourceTree = "<group>"; };
+		C9FC780F12474EA400646E0A /* FreemanPreferences.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreemanPreferences.h; sourceTree = "<group>"; };
+		C9FC781012474EA400646E0A /* FreemanPreferences.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreemanPreferences.m; sourceTree = "<group>"; };
+		C9FC783512476E3300646E0A /* FreemanKeyMapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreemanKeyMapper.h; sourceTree = "<group>"; };
+		C9FC783612476E3300646E0A /* FreemanKeyMapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreemanKeyMapper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,6 +174,10 @@
 				C91BE94C12450FB50087CB81 /* NSScreen+Freeman.m */,
 				C98257C912461411007799BD /* NSURL+Freeman.h */,
 				C98257CA12461411007799BD /* NSURL+Freeman.m */,
+				C9FC780F12474EA400646E0A /* FreemanPreferences.h */,
+				C9FC781012474EA400646E0A /* FreemanPreferences.m */,
+				C9FC783512476E3300646E0A /* FreemanKeyMapper.h */,
+				C9FC783612476E3300646E0A /* FreemanKeyMapper.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -350,6 +360,8 @@
 				C91B7E8B12417BCB00A3390C /* NSColor+Freeman.m in Sources */,
 				C91BE94D12450FB50087CB81 /* NSScreen+Freeman.m in Sources */,
 				C98257CB12461411007799BD /* NSURL+Freeman.m in Sources */,
+				C9FC781112474EA400646E0A /* FreemanPreferences.m in Sources */,
+				C9FC783712476E3300646E0A /* FreemanKeyMapper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
