@@ -105,12 +105,9 @@ OSStatus CGSFindWindowByGeometry(int cid, int zero, int one, int zero_again, CGP
 	int windowNumber, cid;
 	CGSFindWindowByGeometry( _CGSDefaultConnection(), 0, 1, 0, &screenPoint, &localWhere, &windowNumber, &cid);
 	
-	
-	
 	// NSInteger windowNumber = [NSWindow windowNumberAtPoint:windowPoint belowWindowWithWindowNumber:0];
 	NSColor *color = [self colorOfWindow:windowNumber atPoint:[[NSScreen mainScreen] flipPoint:screenPoint]];
 	NSLog( @"Window %d @ %.0f,%.0f => (%@)", windowNumber, screenPoint.x, screenPoint.y, [color asHexString] );
-	NSLog( @"--------------------------------" );
 	return color;
 }
 
