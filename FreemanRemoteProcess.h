@@ -9,14 +9,13 @@
 #import <Foundation/Foundation.h>
 
 @interface FreemanRemoteProcess : NSObject {
-	id _delegate;
+	id										_delegate;
 	CGEventSourceRef			_eventSourceRef;
 	ProcessSerialNumber		_psn;
 	CFMachPortRef					_tapMachPort;
 }
 
 @property (assign) id delegate;
-
 @property (readonly) ProcessSerialNumber psn;
 
 + (id)remoteProcessWithSerialNumber:(ProcessSerialNumber)psn;
@@ -27,8 +26,8 @@
 - (void)resumeEventTap;
 
 - (void)activate;
+- (void)sendLeftMouseClick:(CGPoint)clickPoint;
 - (void)sendRightMouseClick:(CGPoint)clickPoint;
-- (void)sendKeyStroke:(CGKeyCode)keyCode;
 - (void)sendKeySequence:(NSString *)keys;
 
 @end

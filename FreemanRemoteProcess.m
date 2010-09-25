@@ -9,6 +9,7 @@
 #import "FreemanRemoteProcess.h"
 
 #import "FreemanAppDelegate.h"
+#import "FreemanKeyMapper.h"
 
 #define CGKEYCODE_RETURN (36)
 #define CGKEYCODE_LEFT (123)
@@ -21,15 +22,13 @@
 #define KEY_ACTION_INSERT_CONST @"insert_const"
 
 
-// typedef CGEventRef (^EventRefGeneratingBlock)();
-
-
 @interface FreemanRemoteProcess (PrivateMethods)
 
 - (void)installEventTap;
-// - (void)postEvent:(EventRefGeneratingBlock)block;
 - (CGEventRef)createKeyboardEvent:(CGKeyCode)keyCode keyDown:(BOOL)keyDown;
 - (CGKeyCode)mapSpecifierToKeyCode:(NSString *)specifier;
+
+- (void)sendMouseEvent:(CGEventType)mouseType forButton:(CGMouseButton)button atPoint:(CGPoint)clickPoint;
 
 - (void)pressedInsertAt:(CGPoint)point;
 - (void)pressedReInsertAt:(CGPoint)point;
@@ -51,32 +50,26 @@ CGEventRef EventTapCallback( CGEventTapProxy proxy, CGEventType type, CGEventRef
 			break;
 		case kCGEventKeyDown:
 			if( CGEventGetFlags( ref ) & kCGEventFlagMaskControl ) {
-				CGEventKeyboardGetUnicodeString( ref, 1, &keyLength, &key );
-				switch( key ) {
-					case 0x01:
-						[((FreemanRemoteProcess *)refCon) performSelectorOnMainThread:@selector(doKeyAction:) withObject:KEY_ACTION_INSERT waitUntilDone:NO];
-						// dispatch_async( dispatch_get_main_queue(), ^{
-						// 	[((FreemanRemoteProcess *)refCon) pressedInsertAt:gCurrentPoint];
-						// });
-						// currentPoint.x -= 10;
-						// currentPoint.y -= 10;
+				
+				if( CGEventGetFlags( ref ) & kCGEventFlagMaskShift ) {
+					int favourite = mapKeyCodeToFavouriteNumber( CGEventGetIntegerValueField( ref, kCGKeyboardEventKeycode ) );
+					if( favourite > 0 ) {
+						[((FreemanRemoteProcess *)refCon) performSelectorOnMainThread:@selector(doFavouriteAction:) withObject:[NSNumber numberWithInteger:favourite] waitUntilDone:NO];
 						return NULL;
-					case 0x12:
-						[((FreemanRemoteProcess *)refCon) performSelectorOnMainThread:@selector(doKeyAction:) withObject:KEY_ACTION_INSERT_AGAIN waitUntilDone:NO];
-						// dispatch_async( dispatch_get_main_queue(), ^{
-						// 	[((FreemanRemoteProcess *)refCon) pressedReInsertAt:gCurrentPoint];
-						// });
-						// currentPoint.x -= 10;
-						// currentPoint.y -= 10;
-						return NULL;
-					case 0x03:
-						[((FreemanRemoteProcess *)refCon) performSelectorOnMainThread:@selector(doKeyAction:) withObject:KEY_ACTION_INSERT_CONST waitUntilDone:NO];
-						// dispatch_async( dispatch_get_main_queue(), ^{
-						// 	[((FreemanRemoteProcess *)refCon) pressedInsertConstAt:gCurrentPoint];
-						// });
-						// currentPoint.x -= 10;
-						// currentPoint.y -= 10;
-						return NULL;
+					}
+				} else {
+					CGEventKeyboardGetUnicodeString( ref, 1, &keyLength, &key );
+					switch( key ) {
+						case 0x01:
+							[((FreemanRemoteProcess *)refCon) performSelectorOnMainThread:@selector(doKeyAction:) withObject:KEY_ACTION_INSERT waitUntilDone:NO];
+							return NULL;
+						case 0x12:
+							[((FreemanRemoteProcess *)refCon) performSelectorOnMainThread:@selector(doKeyAction:) withObject:KEY_ACTION_INSERT_AGAIN waitUntilDone:NO];
+							return NULL;
+						case 0x03:
+							[((FreemanRemoteProcess *)refCon) performSelectorOnMainThread:@selector(doKeyAction:) withObject:KEY_ACTION_INSERT_CONST waitUntilDone:NO];
+							return NULL;
+					}
 				}
 			}
 			break;
@@ -108,28 +101,31 @@ CGEventRef EventTapCallback( CGEventTapProxy proxy, CGEventType type, CGEventRef
 }
 
 
-// - (void)postEvent:(EventRefGeneratingBlock)block {
-// 	CGEventRef eventRef = block();
-// 	NSAssert( eventRef, @"Failed to create event" );
-// 	CGEventPostToPSN( &_psn, eventRef );
-// 	CFRelease( eventRef );
-// }
+- (void)sendMouseEvent:(CGEventType)mouseType forButton:(CGMouseButton)button atPoint:(CGPoint)clickPoint {
+	CGEventRef eventRef;
+	
+	eventRef = CGEventCreateMouseEvent( _eventSourceRef, mouseType, clickPoint, button );
+	// Mask off any (keyboard) modifiers
+	CGEventSetFlags( eventRef, 0 );
+	CGEventPostToPSN( &_psn, eventRef );
+	CFRelease( eventRef );
+
+	eventRef = CGEventCreateMouseEvent( _eventSourceRef, mouseType, clickPoint, button );
+	CGEventSetFlags( eventRef, 0 );
+	CGEventPostToPSN( &_psn, eventRef );
+	CFRelease( eventRef );
+}
+
+
+- (void)sendLeftMouseClick:(CGPoint)clickPoint {
+	[self sendMouseEvent:kCGEventLeftMouseDown forButton:kCGMouseButtonLeft atPoint:clickPoint];
+	[self sendMouseEvent:kCGEventLeftMouseUp forButton:kCGMouseButtonLeft atPoint:clickPoint];
+}
 
 
 - (void)sendRightMouseClick:(CGPoint)clickPoint {
-	
-	CGEventRef eventRef;
-	
-	eventRef = CGEventCreateMouseEvent( _eventSourceRef, kCGEventRightMouseDown, clickPoint, kCGMouseButtonRight );
-	CGEventPostToPSN( &_psn, eventRef );
-	CFRelease( eventRef );
-
-	eventRef = CGEventCreateMouseEvent( _eventSourceRef, kCGEventRightMouseUp, clickPoint, kCGMouseButtonRight );
-	CGEventPostToPSN( &_psn, eventRef );
-	CFRelease( eventRef );
-	
-	// [self postEvent:^() { return CGEventCreateMouseEvent( _eventSourceRef, kCGEventRightMouseDown, clickPoint, kCGMouseButtonRight ); }];
-	// [self postEvent:^() { return CGEventCreateMouseEvent( _eventSourceRef, kCGEventRightMouseUp, clickPoint, kCGMouseButtonRight ); }];
+	[self sendMouseEvent:kCGEventRightMouseDown forButton:kCGMouseButtonRight atPoint:clickPoint];
+	[self sendMouseEvent:kCGEventRightMouseUp forButton:kCGMouseButtonRight atPoint:clickPoint];
 }
 
 
@@ -145,7 +141,6 @@ CGEventRef EventTapCallback( CGEventTapProxy proxy, CGEventType type, CGEventRef
 
 
 - (void)sendKeyStroke:(CGKeyCode)keyCode {
-	
 	CGEventRef eventRef;
 	
 	eventRef = [self createKeyboardEvent:keyCode keyDown:YES];
@@ -155,9 +150,6 @@ CGEventRef EventTapCallback( CGEventTapProxy proxy, CGEventType type, CGEventRef
 	eventRef = [self createKeyboardEvent:keyCode keyDown:NO];
 	CGEventPostToPSN( &_psn, eventRef );
 	CFRelease( eventRef );
-	
-	// [self postEvent:^() { return [self createKeyboardEvent:keyCode keyDown:YES]; }];
-	// [self postEvent:^() { return [self createKeyboardEvent:keyCode keyDown:NO]; }];
 }
 
 
@@ -286,24 +278,64 @@ CGEventRef EventTapCallback( CGEventTapProxy proxy, CGEventType type, CGEventRef
 #pragma mark Event tap management & responders
 
 - (void)installEventTap {
+	// We may be called in response to a failed resume call
+	if( _tapMachPort ) {
+		CFRelease( _tapMachPort );
+	}
+	
 	_tapMachPort = CGEventTapCreateForPSN( &_psn, kCGHeadInsertEventTap, kCGEventTapOptionDefault, CGEventMaskBit(kCGEventMouseMoved) | CGEventMaskBit(kCGEventKeyDown), EventTapCallback, (void*)self );
-	NSAssert( _tapMachPort, @"Unable to create Mach Port for event tap!" );
+	if( !_tapMachPort ) {
+		[[NSAlert alertWithMessageText:@"Freeman Event Tap Failure"
+	                                   defaultButton:@"Exit"
+	                                 alternateButton:nil
+	                                     otherButton:nil
+	                       informativeTextWithFormat:@"Freeman cannot establish the Quartz event tap and cannot run. Please report this error!"] runModal];
+		[NSApp terminate:self];
+	}
 	CFRunLoopSourceRef runLoopSourceRef = CFMachPortCreateRunLoopSource( kCFAllocatorDefault, _tapMachPort, 0 );
 	CFRunLoopAddSource( CFRunLoopGetCurrent(), runLoopSourceRef, kCFRunLoopDefaultMode );
 }
 
 
 - (void)suspendEventTap {
-	NSLog( @"Event tap suspended" );
+	if( !CGEventTapIsEnabled( _tapMachPort) ) {
+		return;
+	}
+	
 	CGEventTapEnable( _tapMachPort, false );
-	NSAssert( !CGEventTapIsEnabled( _tapMachPort ), @"Failed to suspend event tap!" );
+	if( CGEventTapIsEnabled( _tapMachPort ) ) {
+		NSLog( @"** Error **: Freeman could not suspend event tap!" );
+		[[NSAlert alertWithMessageText:@"Event Tap Failure"
+                                     defaultButton:@"Exit"
+                                   alternateButton:nil
+                                       otherButton:nil
+                         informativeTextWithFormat:@"Freeman cannot suspend the Quartz event tap. Please report this error!"] runModal];
+		[NSApp terminate:self];
+	}
+	NSLog( @"Event tap suspended" );
 }
 
 
 - (void)resumeEventTap {
-	NSLog( @"Event tap resumed" );
+	if( CGEventTapIsEnabled( _tapMachPort) ) {
+		return;
+	}
+	
 	CGEventTapEnable( _tapMachPort, true );
-	NSAssert( CGEventTapIsEnabled( _tapMachPort ), @"Failed to resume event tap!" );
+	if( !CGEventTapIsEnabled( _tapMachPort ) ) {
+		NSLog( @"X-Experimental: Event tap could not be resumed, start new event tap" );
+		[self installEventTap];
+		
+		
+		
+		[[NSAlert alertWithMessageText:@"Event Tap Failure"
+                                     defaultButton:@"Exit"
+                                   alternateButton:nil
+                                       otherButton:nil
+                         informativeTextWithFormat:@"Freeman cannot re-enable the Quartz event tap. Please report this error."] runModal];
+		[NSApp terminate:self];
+	}
+	NSLog( @"Event tap resumed" );
 }
 
 
@@ -318,6 +350,14 @@ CGEventRef EventTapCallback( CGEventTapProxy proxy, CGEventType type, CGEventRef
 		[[self delegate] triggerInsertConstModuleAtPoint:gCurrentPoint];
 		gCurrentPoint = CGPointMake( gCurrentPoint.x - 8, gCurrentPoint.y - 8 );
 	}
+}
+
+
+- (void)doFavouriteAction:(id)favourite {
+	NSLog( @"Insert favourite %d", [favourite integerValue] );
+	
+	[[self delegate] triggerInsertFavourite:[favourite integerValue] atPoint:gCurrentPoint];
+	gCurrentPoint = CGPointMake( gCurrentPoint.x - 8, gCurrentPoint.y - 8 );
 }
 
 
