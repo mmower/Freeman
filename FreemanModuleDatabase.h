@@ -33,4 +33,6 @@
 - (NSArray *)searchFor:(NSString *)query;
 - (FreemanModule *)constModule;
 
+- (FreemanModule *)moduleWithPath:(NSString *)path;
+
 @end

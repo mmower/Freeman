@@ -137,6 +137,17 @@
 }
 
 
+- (FreemanModule *)moduleWithPath:(NSString *)path {
+	NSArray *result = [_modules filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"path = %@",path]];
+	if( [result count] != 1 ) {
+		NSLog( @"Could not obtain unique result for %@ path: %@", _primary ? @"primary" : @"core", path );
+		return nil;
+	}
+	
+	return [result objectAtIndex:0];
+}
+
+
 - (NSArray *)searchFor:(NSString *)query {
 	for( FreemanModule *module in _modules ) {
 		[module setScoreForLastAbbreviation:[[module name] scoreForAbbreviation:query]];
