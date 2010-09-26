@@ -38,40 +38,41 @@
 @end
 
 
-static CGPoint gCurrentPoint;
-
-CGEventRef EventTapCallback( CGEventTapProxy proxy, CGEventType type, CGEventRef ref, void *refCon ) {
+CGEventRef EventTapCallback( CGEventTapProxy proxy, CGEventType type, CGEventRef ref, void *refcon ) {
 	UniChar key;
 	UniCharCount keyLength;
+	FreemanRemoteProcess *remoteProcess = (FreemanRemoteProcess *)refcon;
 	
 	switch( type ) {
 		case kCGEventMouseMoved:
-			gCurrentPoint = CGEventGetLocation( ref );
+			[remoteProcess setMousePosition:CGEventGetLocation( ref )];
 			break;
+			
 		case kCGEventKeyDown:
-			if( CGEventGetFlags( ref ) & kCGEventFlagMaskControl ) {
-				
-				if( CGEventGetFlags( ref ) & kCGEventFlagMaskShift ) {
-					int favourite = mapKeyCodeToFavouriteNumber( CGEventGetIntegerValueField( ref, kCGKeyboardEventKeycode ) );
-					if( favourite > 0 ) {
-						[((FreemanRemoteProcess *)refCon) performSelectorOnMainThread:@selector(doFavouriteAction:) withObject:[NSNumber numberWithInteger:favourite] waitUntilDone:NO];
+			if( [remoteProcess inFavouriteChordSequence] ) {
+				[remoteProcess setInFavouriteChordSequence:NO];
+				int favourite = mapKeyCodeToFavouriteNumber( CGEventGetIntegerValueField( ref, kCGKeyboardEventKeycode ) );
+				if( favourite > 0 ) {
+					[remoteProcess performSelectorOnMainThread:@selector(doFavouriteAction:) withObject:[NSNumber numberWithInteger:favourite] waitUntilDone:NO];
+				}
+			} else if( CGEventGetFlags( ref ) & kCGEventFlagMaskControl ) {
+				CGEventKeyboardGetUnicodeString( ref, 1, &keyLength, &key );
+				switch( key ) {
+					case 0x01:
+						[remoteProcess performSelectorOnMainThread:@selector(doKeyAction:) withObject:KEY_ACTION_INSERT waitUntilDone:NO];
 						return NULL;
-					}
-				} else {
-					CGEventKeyboardGetUnicodeString( ref, 1, &keyLength, &key );
-					switch( key ) {
-						case 0x01:
-							[((FreemanRemoteProcess *)refCon) performSelectorOnMainThread:@selector(doKeyAction:) withObject:KEY_ACTION_INSERT waitUntilDone:NO];
-							return NULL;
-						case 0x12:
-							[((FreemanRemoteProcess *)refCon) performSelectorOnMainThread:@selector(doKeyAction:) withObject:KEY_ACTION_INSERT_AGAIN waitUntilDone:NO];
-							return NULL;
-						case 0x03:
-							[((FreemanRemoteProcess *)refCon) performSelectorOnMainThread:@selector(doKeyAction:) withObject:KEY_ACTION_INSERT_CONST waitUntilDone:NO];
-							return NULL;
-					}
+					case 0x12:
+						[remoteProcess performSelectorOnMainThread:@selector(doKeyAction:) withObject:KEY_ACTION_INSERT_AGAIN waitUntilDone:NO];
+						return NULL;
+					case 0x03:
+						[remoteProcess performSelectorOnMainThread:@selector(doKeyAction:) withObject:KEY_ACTION_INSERT_CONST waitUntilDone:NO];
+						return NULL;
+					case 0x06:
+						[remoteProcess setInFavouriteChordSequence:YES];
+						return NULL;
 				}
 			}
+		
 			break;
 	}
 	
@@ -81,8 +82,10 @@ CGEventRef EventTapCallback( CGEventTapProxy proxy, CGEventType type, CGEventRef
 
 @implementation FreemanRemoteProcess
 
-@synthesize delegate = _delegate;
-@synthesize psn      = _psn;
+@synthesize delegate                 = _delegate;
+@synthesize psn                      = _psn;
+@synthesize mousePosition            = _mousePosition;
+@synthesize inFavouriteChordSequence = _inFavouriteChordSequence;
 
 
 + (id)remoteProcessWithSerialNumber:(ProcessSerialNumber)psn {
@@ -340,24 +343,27 @@ CGEventRef EventTapCallback( CGEventTapProxy proxy, CGEventType type, CGEventRef
 
 
 - (void)doKeyAction:(id)action {
-	if( [action isEqualToString:KEY_ACTION_INSERT] ) {
-		[[self delegate] triggerInsertModuleAtPoint:gCurrentPoint];
-		gCurrentPoint = CGPointMake( gCurrentPoint.x - 8, gCurrentPoint.y - 8 );
-	} else if( [action isEqualToString:KEY_ACTION_INSERT_AGAIN] ) {
-		[[self delegate] triggerReInsertModuleAtPoint:gCurrentPoint];
-		gCurrentPoint = CGPointMake( gCurrentPoint.x - 8, gCurrentPoint.y - 8 );
-	} else if( [action isEqualToString:KEY_ACTION_INSERT_CONST ] ) {
-		[[self delegate] triggerInsertConstModuleAtPoint:gCurrentPoint];
-		gCurrentPoint = CGPointMake( gCurrentPoint.x - 8, gCurrentPoint.y - 8 );
+	if( [action isEqualToString:KEY_ACTION_INSERT] || [action isEqualToString:KEY_ACTION_INSERT_AGAIN] || [action isEqualToString:KEY_ACTION_INSERT_CONST ] ) {
+		if( [action isEqualToString:KEY_ACTION_INSERT] ) {
+			[[self delegate] triggerInsertModuleAtPoint:[self mousePosition]];
+		} else if( [action isEqualToString:KEY_ACTION_INSERT_AGAIN] ) {
+			[[self delegate] triggerReInsertModuleAtPoint:[self mousePosition]];
+		} else if( [action isEqualToString:KEY_ACTION_INSERT_CONST ] ) {
+			[[self delegate] triggerInsertConstModuleAtPoint:[self mousePosition]];
+		}
+		[self offsetMousePositionByDX:-8 DY:-8];
 	}
 }
 
 
+- (void)offsetMousePositionByDX:(CGFloat)dx DY:(CGFloat)dy {
+	[self setMousePosition:CGPointMake( [self mousePosition].x + dx, [self mousePosition].y + dy )];
+}
+
+
 - (void)doFavouriteAction:(id)favourite {
-	NSLog( @"Insert favourite %d", [favourite integerValue] );
-	
-	[[self delegate] triggerInsertFavourite:[favourite integerValue] atPoint:gCurrentPoint];
-	gCurrentPoint = CGPointMake( gCurrentPoint.x - 8, gCurrentPoint.y - 8 );
+	[[self delegate] triggerInsertFavourite:[favourite integerValue] atPoint:[self mousePosition]];
+	[self offsetMousePositionByDX:-8 DY:-8];
 }
 
 
@@ -379,7 +385,6 @@ CGEventRef EventTapCallback( CGEventTapProxy proxy, CGEventType type, CGEventRef
 - (void)activate {
 	SetFrontProcess( &_psn );
 }
-
 
 
 @end

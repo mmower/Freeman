@@ -13,10 +13,16 @@
 	CGEventSourceRef			_eventSourceRef;
 	ProcessSerialNumber		_psn;
 	CFMachPortRef					_tapMachPort;
+	
+	
+	CGPoint								_mousePosition;
+	BOOL									_inFavouriteChordSequence;
 }
 
 @property (assign) id delegate;
 @property (readonly) ProcessSerialNumber psn;
+@property (assign) CGPoint mousePosition;
+@property (assign) BOOL inFavouriteChordSequence;
 
 + (id)remoteProcessWithSerialNumber:(ProcessSerialNumber)psn;
 
@@ -29,5 +35,7 @@
 - (void)sendLeftMouseClick:(CGPoint)clickPoint;
 - (void)sendRightMouseClick:(CGPoint)clickPoint;
 - (void)sendKeySequence:(NSString *)keys;
+
+- (void)offsetMousePositionByDX:(CGFloat)dx DY:(CGFloat)dy;
 
 @end
