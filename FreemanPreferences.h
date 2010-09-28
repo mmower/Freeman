@@ -8,30 +8,29 @@
 
 #import <Cocoa/Cocoa.h>
 
+#define PRIMARY_STRUCTURE_BACKGROUND @"#454E58"
+#define CORE_STRUCTURE_BACKGROUND @"#242A30"
+
+extern NSString * const PrimaryStructureColourPrefKey;
+extern NSString * const CoreStructureColourPrefKey;
 
 extern NSString * const PrimaryFavouritesPrefKey;
 extern NSString * const CoreFavouritesPrefKey;
 
 
-@class FreemanModule;
-
-
 @interface FreemanPreferences : NSObject {
-
 }
 
 
-// + (NSDictionary *)primaryFavourites;
-// + (void)setPrimaryFavourites:(NSDictionary *)favourites;
++ (NSColor *)primaryStructureColor;
+- (void)setPrimaryStructureColor:(NSColor *)color;
+
++ (NSColor *)coreStructureColor;
+- (void)setCoreStructureColor:(NSColor *)color;
 
 
 + (NSString *)primaryFavouriteInSlot:(NSInteger)slot;
 + (void)setPrimaryFavourite:(NSString *)modulePath inSlot:(NSInteger)slot;
-
-
-// + (NSDictionary *)coreFavourites;
-// + (void)setCoreFavourites:(NSDictionary *)favourites;
-
 
 + (NSString *)coreFavouriteInSlot:(NSInteger)slot;
 + (void)setCoreFavourite:(NSString *)modulePath inSlot:(NSInteger)slot;

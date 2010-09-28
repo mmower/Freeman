@@ -10,9 +10,13 @@
 
 #import "FreemanModule.h"
 
+#import "NSColor+Freeman.h"
 
-NSString * const PrimaryFavouritesPrefKey = @"com.lucidmac.freeman.favourites.primary.%d";
-NSString * const CoreFavouritesPrefKey    = @"com.lucidmac.freeman.favourites.core.%d";
+NSString * const PrimaryStructureColorPrefKey = @"com.lucidmac.freeman.primary.structure.color";
+NSString * const CoreStructureColorPrefKey    = @"com.lucidmac.freeman.core.structure.color";
+
+NSString * const PrimaryFavouritesPrefKey     = @"com.lucidmac.freeman.favourites.primary.%d";
+NSString * const CoreFavouritesPrefKey        = @"com.lucidmac.freeman.favourites.core.%d";
 
 
 @implementation FreemanPreferences
@@ -20,20 +24,30 @@ NSString * const CoreFavouritesPrefKey    = @"com.lucidmac.freeman.favourites.co
 
 + (void)initialize {
   NSMutableDictionary *defaultPreferenceValues = [NSMutableDictionary dictionary];
-  // [defaultPreferenceValues setObject:[NSDictionary dictionary] forKey:PrimaryFavouritesPrefKey];
-  // [defaultPreferenceValues setObject:[NSDictionary dictionary] forKey:CoreFavouritesPrefKey];
+	[defaultPreferenceValues setObject:PRIMARY_STRUCTURE_BACKGROUND forKey:PrimaryStructureColorPrefKey];
+	[defaultPreferenceValues setObject:CORE_STRUCTURE_BACKGROUND forKey:CoreStructureColorPrefKey];
   [[NSUserDefaults standardUserDefaults] registerDefaults:defaultPreferenceValues];
 }
 
 
-// + (NSDictionary *)primaryFavourites {
-// 	return [[NSUserDefaults standardUserDefaults] objectForKey:PrimaryFavouritesPrefKey];
-// }
++ (NSColor *)primaryStructureColor {
+	return [NSColor colorFromHexRGB:[[NSUserDefaults standardUserDefaults] objectForKey:PrimaryStructureColorPrefKey]];
+}
 
 
-// + (void)setPrimaryFavourites:(NSDictionary *)favourites {
-// 	[[NSUserDefaults standardUserDefaults] setObject:favourites forKey:PrimaryFavouritesPrefKey];
-// }
+- (void)setPrimaryStructureColor:(NSColor *)color {
+	[[NSUserDefaults standardUserDefaults] setObject:[color asHexString] forKey:PrimaryStructureColorPrefKey];
+}
+
+
++ (NSColor *)coreStructureColor {
+	return [NSColor colorFromHexRGB:[[NSUserDefaults standardUserDefaults] objectForKey:CoreStructureColorPrefKey]];
+}
+
+
+- (void)setCoreStructureColor:(NSColor *)color {
+	[[NSUserDefaults standardUserDefaults] setObject:[color asHexString] forKey:CoreStructureColorPrefKey];
+}
 
 
 + (NSString *)primaryFavouriteInSlot:(NSInteger)slot {
@@ -43,22 +57,7 @@ NSString * const CoreFavouritesPrefKey    = @"com.lucidmac.freeman.favourites.co
 
 + (void)setPrimaryFavourite:(NSString *)modulePath inSlot:(NSInteger)slot {
 	[[NSUserDefaults standardUserDefaults] setObject:modulePath forKey:[NSString stringWithFormat:PrimaryFavouritesPrefKey,slot]];
-	// 
-	// 
-	// NSMutableDictionary *tempFavourites = [NSMutableDictionary dictionaryWithDictionary:[self primaryFavourites]];
-	// [tempFavourites setObject:[module path] forKey:[NSNumber numberWithInteger:slot]];
-	// [self setPrimaryFavourites:tempFavourites];
 }
-
-
-// + (NSDictionary *)coreFavourites {
-// 	return [[NSUserDefaults standardUserDefaults] objectForKey:CoreFavouritesPrefKey];
-// }
-// 
-// 
-// + (void)setCoreFavourites:(NSDictionary *)favourites {
-// 	[[NSUserDefaults standardUserDefaults] setObject:favourites forKey:CoreFavouritesPrefKey];
-// }
 
 
 + (NSString *)coreFavouriteInSlot:(NSInteger)slot {
@@ -68,9 +67,6 @@ NSString * const CoreFavouritesPrefKey    = @"com.lucidmac.freeman.favourites.co
 
 + (void)setCoreFavourite:(NSString *)modulePath inSlot:(NSInteger)slot {
 	[[NSUserDefaults standardUserDefaults] setObject:modulePath forKey:[NSString stringWithFormat:CoreFavouritesPrefKey,slot]];
-	// NSMutableDictionary *tempFavourites = [NSMutableDictionary dictionaryWithDictionary:[self coreFavourites]];
-	// [tempFavourites setObject:[module path] forKey:[NSNumber numberWithInteger:slot]];
-	// [self setCoreFavourites:tempFavourites];
 }
 
 

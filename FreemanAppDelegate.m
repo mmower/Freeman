@@ -22,13 +22,6 @@
 #import "NSColor+Freeman.h"
 #import "NSScreen+Freeman.h"
 
-#define PRIMARY_STRUCTURE_BACKGROUND @"#454E58"
-#define CORE_STRUCTURE_BACKGROUND @"#242A30"
-
-
-NSColor *primaryStructureColor;
-NSColor *coreStructureColor;
-
 
 OSStatus AppSwitchHandler( EventHandlerCallRef nextHandler, EventRef theEvent, void *userData );
 
@@ -46,14 +39,6 @@ FreemanAppDelegate *gDelegate = nil;
 
 
 @implementation FreemanAppDelegate
-
-+ (void)initialize {
-	if( !primaryStructureColor ) {
-		primaryStructureColor = [NSColor colorFromHexRGB:PRIMARY_STRUCTURE_BACKGROUND];
-		coreStructureColor = [NSColor colorFromHexRGB:CORE_STRUCTURE_BACKGROUND];
-	}
-}
-
 
 @synthesize window = _window;
 @synthesize statusMenu = _statusMenu;
@@ -177,9 +162,9 @@ FreemanAppDelegate *gDelegate = nil;
 
 
 - (FreemanModuleDatabase *)moduleDatabaseFromBackgroundColor:(NSColor *)backgroundColor {
-	if( [backgroundColor isSameColorInRGB:primaryStructureColor] ) {
+	if( [backgroundColor isSameColorInRGB:[FreemanPreferences primaryStructureColor]] ) {
 		return _primaryModuleDatabase;
-	} else if( [backgroundColor isSameColorInRGB:coreStructureColor] ) {
+	} else if( [backgroundColor isSameColorInRGB:[FreemanPreferences coreStructureColor]] ) {
 		return _coreModuleDatabase;
 	} else {
 		return nil;
