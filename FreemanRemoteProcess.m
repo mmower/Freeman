@@ -46,6 +46,7 @@ CGEventRef EventTapCallback( CGEventTapProxy proxy, CGEventType type, CGEventRef
 	switch( type ) {
 		case kCGEventMouseMoved:
 			[remoteProcess setMousePosition:CGEventGetLocation( ref )];
+			[remoteProcess setInFavouriteChordSequence:NO];
 			break;
 			
 		case kCGEventKeyDown:
@@ -101,6 +102,17 @@ CGEventRef EventTapCallback( CGEventTapProxy proxy, CGEventType type, CGEventRef
 	}
 	
 	return self;
+}
+
+
+- (void)setInFavouriteChordSequence:(BOOL)inFavouriteChordSequence {
+	_inFavouriteChordSequence = inFavouriteChordSequence;
+	
+	if( inFavouriteChordSequence ) {
+		[_delegate showFavouritesAtPoint:[self mousePosition]];
+	} else {
+		[_delegate hideFavourites];
+	}
 }
 
 

@@ -13,6 +13,7 @@
 #import <ApplicationServices/ApplicationServices.h>
 
 #import "FreemanOverlayManager.h"
+#import "FreemanFavouritesManager.h"
 #import "FreemanRemoteProcess.h"
 #import "FreemanModuleDatabase.h"
 #import "FreemanModule.h"
@@ -38,6 +39,7 @@ FreemanAppDelegate *gDelegate = nil;
 @interface FreemanAppDelegate (PrivateMethods)
 
 - (void)registerAppSwitch;
+- (FreemanModuleDatabase *)moduleDatabaseAtPoint:(CGPoint)point;
 - (FreemanModuleDatabase *)moduleDatabaseFromBackgroundColor:(NSColor *)backgroundColor;
 
 @end
@@ -59,6 +61,7 @@ FreemanAppDelegate *gDelegate = nil;
 @synthesize image = _image;
 
 @synthesize overlayManager = _overlayManager;
+@synthesize favouritesManager = _favouritesManager;
 @synthesize primaryModuleDatabase = _primaryModuleDatabase;
 @synthesize coreModuleDatabase = _coreModuleDatabase;
 @synthesize reaktorProcess = _reaktorProcess;
@@ -68,6 +71,7 @@ FreemanAppDelegate *gDelegate = nil;
 	if( ( self = [super init] ) ) {
 		_primaryModuleDatabase = [[FreemanModuleDatabase alloc] initPrimaryModuleDatabase];
 		_coreModuleDatabase = [[FreemanModuleDatabase alloc] initCoreModuleDatabase];
+		_favouritesManager = [[FreemanFavouritesManager alloc] init];
 	}
 	
 	return self;
@@ -128,7 +132,7 @@ FreemanAppDelegate *gDelegate = nil;
 
 - (void)triggerInsertModuleAtPoint:(CGPoint)point {
 	_location = point;
-	FreemanModuleDatabase *moduleDatabase = [self moduleDatabaseFromBackgroundColor:[NSColor colorAtLocation:[[NSScreen mainScreen] flipPoint:_location]]];
+	FreemanModuleDatabase *moduleDatabase = [self moduleDatabaseAtPoint:_location];
 	if( !moduleDatabase ) {
 		NSBeep();
 		return;
@@ -141,7 +145,7 @@ FreemanAppDelegate *gDelegate = nil;
 
 - (void)triggerReInsertModuleAtPoint:(CGPoint)point {
 	_location = point;
-	FreemanModuleDatabase *moduleDatabase = [self moduleDatabaseFromBackgroundColor:[NSColor colorAtLocation:[[NSScreen mainScreen] flipPoint:_location]]];
+	FreemanModuleDatabase *moduleDatabase = [self moduleDatabaseAtPoint:_location];
 	if( !moduleDatabase ) {
 		NSBeep();
 		return;
@@ -157,13 +161,18 @@ FreemanAppDelegate *gDelegate = nil;
 
 - (void)triggerInsertConstModuleAtPoint:(CGPoint)point {
 	_location = point;
-	FreemanModuleDatabase *moduleDatabase = [self moduleDatabaseFromBackgroundColor:[NSColor colorAtLocation:[[NSScreen mainScreen] flipPoint:_location]]];
+	FreemanModuleDatabase *moduleDatabase = [self moduleDatabaseAtPoint:_location];
 	if( !moduleDatabase ) {
 		NSBeep();
 		return;
 	}
 	
 	[self insertModule:[moduleDatabase constModule]];
+}
+
+
+- (FreemanModuleDatabase *)moduleDatabaseAtPoint:(CGPoint)point {
+	return [self moduleDatabaseFromBackgroundColor:[NSColor colorAtLocation:[[NSScreen mainScreen] flipPoint:point]]];
 }
 
 
@@ -175,6 +184,21 @@ FreemanAppDelegate *gDelegate = nil;
 	} else {
 		return nil;
 	}
+}
+
+
+- (void)showFavouritesAtPoint:(CGPoint)point {
+	FreemanModuleDatabase *database = [self moduleDatabaseAtPoint:point];
+	if( database ) {
+		[_favouritesManager showForModuleDatabase:database atPoint:point];
+	} else {
+		[_favouritesManager hide];
+	}
+}
+
+
+- (void)hideFavourites {
+	[_favouritesManager hide];
 }
 
 
@@ -279,6 +303,7 @@ OSStatus AppSwitchHandler( EventHandlerCallRef nextHandler, EventRef theEvent, v
 	} else {
 		[[gDelegate statusItem] setImage:[NSImage imageNamed:@"MenuNormal.png"]];
 		[[gDelegate overlayManager] setEnabled:NO];
+		[[gDelegate reaktorProcess] setInFavouriteChordSequence:NO];
 	}
 	
 	return noErr;

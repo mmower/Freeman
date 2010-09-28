@@ -11,6 +11,7 @@
 #import "FreemanXMLCatalog.h"
 #import "FreemanDiskCatalog.h"
 #import "FreemanModule.h"
+#import "FreemanPreferences.h"
 
 #import "NSString+FreemanRanking.h"
 #import "NSURL+Freeman.h"

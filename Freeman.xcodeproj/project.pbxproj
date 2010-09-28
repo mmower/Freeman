@@ -13,6 +13,10 @@
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		C910CA0D123EB9BC00585490 /* NSArray+Freeman.m in Sources */ = {isa = PBXBuildFile; fileRef = C910CA0C123EB9BC00585490 /* NSArray+Freeman.m */; };
+		C911113F124F50F30074EB8A /* FreemanFavouritesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C911113E124F50F30074EB8A /* FreemanFavouritesManager.m */; };
+		C9111141124F511C0074EB8A /* Favourites.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9111140124F511C0074EB8A /* Favourites.xib */; };
+		C9111164124F5FBC0074EB8A /* BWToolkitFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9111163124F5FBC0074EB8A /* BWToolkitFramework.framework */; };
+		C911116E124F5FC50074EB8A /* BWToolkitFramework.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = C9111163124F5FBC0074EB8A /* BWToolkitFramework.framework */; };
 		C91B7E8B12417BCB00A3390C /* NSColor+Freeman.m in Sources */ = {isa = PBXBuildFile; fileRef = C91B7E8A12417BCB00A3390C /* NSColor+Freeman.m */; };
 		C91B7EB41241819000A3390C /* coremodules.xml in Resources */ = {isa = PBXBuildFile; fileRef = C91B7EB31241819000A3390C /* coremodules.xml */; };
 		C91BE94D12450FB50087CB81 /* NSScreen+Freeman.m in Sources */ = {isa = PBXBuildFile; fileRef = C91BE94C12450FB50087CB81 /* NSScreen+Freeman.m */; };
@@ -50,6 +54,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				C911116E124F5FC50074EB8A /* BWToolkitFramework.framework in Copy Frameworks */,
 				C9219C84123A8FC1009E5829 /* Sparkle.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
@@ -72,6 +77,10 @@
 		8D1107320486CEB800E47090 /* Freeman.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Freeman.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C910CA0B123EB9BC00585490 /* NSArray+Freeman.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Freeman.h"; sourceTree = "<group>"; };
 		C910CA0C123EB9BC00585490 /* NSArray+Freeman.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Freeman.m"; sourceTree = "<group>"; };
+		C911113D124F50F30074EB8A /* FreemanFavouritesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreemanFavouritesManager.h; sourceTree = "<group>"; };
+		C911113E124F50F30074EB8A /* FreemanFavouritesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreemanFavouritesManager.m; sourceTree = "<group>"; };
+		C9111140124F511C0074EB8A /* Favourites.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Favourites.xib; sourceTree = "<group>"; };
+		C9111163124F5FBC0074EB8A /* BWToolkitFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BWToolkitFramework.framework; path = /Volumes/Corrino/matt/Projects/LucidMac/Grayson/BWToolkitFramework.framework; sourceTree = "<absolute>"; };
 		C91B7E8912417BCB00A3390C /* NSColor+Freeman.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSColor+Freeman.h"; sourceTree = "<group>"; };
 		C91B7E8A12417BCB00A3390C /* NSColor+Freeman.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSColor+Freeman.m"; sourceTree = "<group>"; };
 		C91B7EB31241819000A3390C /* coremodules.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = coremodules.xml; sourceTree = "<group>"; };
@@ -129,6 +138,7 @@
 				C9266C1C12383B79002619C7 /* Carbon.framework in Frameworks */,
 				C9266C7212384B46002619C7 /* Quartz.framework in Frameworks */,
 				C9219C76123A8F85009E5829 /* Sparkle.framework in Frameworks */,
+				C9111164124F5FBC0074EB8A /* BWToolkitFramework.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -178,6 +188,8 @@
 				C9FC781012474EA400646E0A /* FreemanPreferences.m */,
 				C9FC783512476E3300646E0A /* FreemanKeyMapper.h */,
 				C9FC783612476E3300646E0A /* FreemanKeyMapper.m */,
+				C911113D124F50F30074EB8A /* FreemanFavouritesManager.h */,
+				C911113E124F50F30074EB8A /* FreemanFavouritesManager.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -188,6 +200,7 @@
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
 				C9266C1B12383B79002619C7 /* Carbon.framework */,
 				C9219C75123A8F85009E5829 /* Sparkle.framework */,
+				C9111163124F5FBC0074EB8A /* BWToolkitFramework.framework */,
 			);
 			name = "Linked Frameworks";
 			sourceTree = "<group>";
@@ -245,6 +258,7 @@
 				C993DF7F123912C200FCB461 /* modules.xml */,
 				C993DFFF1239324000FCB461 /* Overlay.xib */,
 				C9219C9B123A95A4009E5829 /* Credits.rtf */,
+				C9111140124F511C0074EB8A /* Favourites.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -315,6 +329,7 @@
 				C9219C60123A8C26009E5829 /* MenuNormal.png in Resources */,
 				C9219C9C123A95A4009E5829 /* Credits.rtf in Resources */,
 				C91B7EB41241819000A3390C /* coremodules.xml in Resources */,
+				C9111141124F511C0074EB8A /* Favourites.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -362,6 +377,7 @@
 				C98257CB12461411007799BD /* NSURL+Freeman.m in Sources */,
 				C9FC781112474EA400646E0A /* FreemanPreferences.m in Sources */,
 				C9FC783712476E3300646E0A /* FreemanKeyMapper.m in Sources */,
+				C911113F124F50F30074EB8A /* FreemanFavouritesManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -395,6 +411,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/../Grayson\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -416,6 +433,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/../Grayson\"",
 				);
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
