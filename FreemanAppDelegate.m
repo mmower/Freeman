@@ -227,6 +227,20 @@ FreemanAppDelegate *gDelegate = nil;
 }
 
 
+- (void)triggerSetPrimaryStructureColourFromPoint:(CGPoint)point {
+	[FreemanPreferences setPrimaryStructureColor:[NSColor colorAtLocation:[[NSScreen mainScreen] flipPoint:point]]];
+	NSBeep();
+	NSBeep();
+}
+
+
+- (void)triggerSetCoreStructureColourFromPoint:(CGPoint)point {
+	[FreemanPreferences setCoreStructureColor:[NSColor colorAtLocation:[[NSScreen mainScreen] flipPoint:point]]];
+	NSBeep();
+	NSBeep();
+}
+
+
 // - (NSDictionary *)windowInfo:(CGWindowID)windowID {
 // 	CGWindowID *windowIDs = calloc( 1, sizeof(CGWindowID) );
 // 	windowIDs[0] = windowID;

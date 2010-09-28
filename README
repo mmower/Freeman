@@ -57,7 +57,11 @@ To find the module you want just keep adding characters until you have narrowed 
 
 ### Favourites
 
-You can assign your 10 most frequently used modules to shortcut keys that Freeman will use to insert them. To create a favourite open the search dialog with ctrl+a as normal. Select the module that you want to make into a favourite. Now, instead of pressing return, press Ctrl+Shift+&lt;n&gt; where n is a number key from '1' to '0' on your keyboard. Freeman will insert your selected module and remember the association. In future, from the structure window, you can press Ctrl+Shift+&lt;n&gt; again to re-insert the module.
+You can assign your 10 most frequently used modules to shortcut keys that Freeman will use to insert them.
+
+To create a favourite open the search dialog with ctrl+a as normal. Select the module that you want to make into a favourite. Now, instead of pressing return, press Ctrl+Shift+&lt;n&gt; where n is a number key from '1' to '0' on your keyboard. Freeman will insert your selected module and remember the association.
+
+When you want to insert a favourite module in future press Ctrl+F and then, without holding Ctrl+F, press the number key corresponding to the favourite module you want to insert. Freeman will popup a hint window showing your favourites to help you learn them.
 
 Freeman remembers your favourites between sessions and you can have 10 favourites in both Primary and Core structures.
 
@@ -77,9 +81,17 @@ If you want to insert the same module several times you can use the `Ctrl+r` sho
 
 There is a quick shortcut `Ctrl+c` to insert a new constant module at either primary or core level.
 
+## Problems
+
+### Freeman detects Reaktor but Ctrl+a does not work
+
+For reasons that are not yet clear Freeman isn't working for some users. This appears to be because their structure windows have a non-standard colour and so Freeman does not "see" them. If you think you are being affected by this problem please try sampling the structure window colours.
+
+To do this move the mouse over an empty part of the structure window and press Ctrl+[ for primary, or Ctrl+] for core. Freeman will sample the colour of the window where the mouse is pointing and store that association.
+
 ## Notes
 
-Freeman 1.1 is for Mac OS X 10.5 ("Leopard") and 10.6 ("Snow Leopard").
+Freeman 1.2 is for Mac OS X 10.5 ("Leopard") and 10.6 ("Snow Leopard").
 
 You can get support for Freeman by contacting me via email at the address above or getting in touch with me in #reaktor on Freenode IRC.
 

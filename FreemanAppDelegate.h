@@ -44,6 +44,9 @@
 - (void)triggerReInsertModuleAtPoint:(CGPoint)point;
 - (void)triggerInsertConstModuleAtPoint:(CGPoint)point;
 
+- (void)triggerSetPrimaryStructureColourFromPoint:(CGPoint)point;
+- (void)triggerSetCoreStructureColourFromPoint:(CGPoint)point;
+
 - (void)insertModule:(FreemanModule *)module;
 
 - (void)setFavourite:(FreemanModule *)module inSlot:(NSInteger)slot;

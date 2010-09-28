@@ -35,7 +35,7 @@ NSString * const CoreFavouritesPrefKey        = @"com.lucidmac.freeman.favourite
 }
 
 
-- (void)setPrimaryStructureColor:(NSColor *)color {
++ (void)setPrimaryStructureColor:(NSColor *)color {
 	[[NSUserDefaults standardUserDefaults] setObject:[color asHexString] forKey:PrimaryStructureColorPrefKey];
 }
 
@@ -45,7 +45,7 @@ NSString * const CoreFavouritesPrefKey        = @"com.lucidmac.freeman.favourite
 }
 
 
-- (void)setCoreStructureColor:(NSColor *)color {
++ (void)setCoreStructureColor:(NSColor *)color {
 	[[NSUserDefaults standardUserDefaults] setObject:[color asHexString] forKey:CoreStructureColorPrefKey];
 }
 

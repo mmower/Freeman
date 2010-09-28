@@ -20,6 +20,8 @@
 #define KEY_ACTION_INSERT @"insert"
 #define KEY_ACTION_INSERT_AGAIN @"insert_again"
 #define KEY_ACTION_INSERT_CONST @"insert_const"
+#define KEY_ACTION_SAMPLE_PRIMARY @"sample_primary"
+#define KEY_ACTION_SAMPLE_CORE @"sample_core"
 
 
 @interface FreemanRemoteProcess (PrivateMethods)
@@ -70,6 +72,12 @@ CGEventRef EventTapCallback( CGEventTapProxy proxy, CGEventType type, CGEventRef
 						return NULL;
 					case 0x06:
 						[remoteProcess setInFavouriteChordSequence:YES];
+						return NULL;
+					case 0x1B:
+						[remoteProcess performSelectorOnMainThread:@selector(doKeyAction:) withObject:KEY_ACTION_SAMPLE_PRIMARY waitUntilDone:NO];
+						return NULL;
+					case 0x1D:
+						[remoteProcess performSelectorOnMainThread:@selector(doKeyAction:) withObject:KEY_ACTION_SAMPLE_CORE waitUntilDone:NO];
 						return NULL;
 				}
 			}
@@ -360,10 +368,14 @@ CGEventRef EventTapCallback( CGEventTapProxy proxy, CGEventType type, CGEventRef
 			[[self delegate] triggerInsertModuleAtPoint:[self mousePosition]];
 		} else if( [action isEqualToString:KEY_ACTION_INSERT_AGAIN] ) {
 			[[self delegate] triggerReInsertModuleAtPoint:[self mousePosition]];
-		} else if( [action isEqualToString:KEY_ACTION_INSERT_CONST ] ) {
+		} else if( [action isEqualToString:KEY_ACTION_INSERT_CONST] ) {
 			[[self delegate] triggerInsertConstModuleAtPoint:[self mousePosition]];
 		}
 		[self offsetMousePositionByDX:-8 DY:-8];
+	} else if( [action isEqualToString:KEY_ACTION_SAMPLE_PRIMARY] ) {
+		[[self delegate] triggerSetPrimaryStructureColourFromPoint:[self mousePosition]];
+	} else if( [action isEqualToString:KEY_ACTION_SAMPLE_CORE] ) {
+		[[self delegate] triggerSetCoreStructureColourFromPoint:[self mousePosition]];
 	}
 }
 

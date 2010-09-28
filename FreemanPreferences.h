@@ -23,10 +23,10 @@ extern NSString * const CoreFavouritesPrefKey;
 
 
 + (NSColor *)primaryStructureColor;
-- (void)setPrimaryStructureColor:(NSColor *)color;
++ (void)setPrimaryStructureColor:(NSColor *)color;
 
 + (NSColor *)coreStructureColor;
-- (void)setCoreStructureColor:(NSColor *)color;
++ (void)setCoreStructureColor:(NSColor *)color;
 
 
 + (NSString *)primaryFavouriteInSlot:(NSInteger)slot;
