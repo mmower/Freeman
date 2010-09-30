@@ -57,13 +57,13 @@ To find the module you want just keep adding characters until you have narrowed 
 
 ### Favourites
 
-You can assign your 10 most frequently used modules to shortcut keys that Freeman will use to insert them.
+You can assign your 9 most frequently used modules to shortcut keys that Freeman will use to insert them.
 
-To create a favourite open the search dialog with ctrl+a as normal. Select the module that you want to make into a favourite. Now, instead of pressing return, press Ctrl+Shift+&lt;n&gt; where n is a number key from '1' to '0' on your keyboard. Freeman will insert your selected module and remember the association.
+To create a favourite open the search dialog with ctrl+a as normal. Select the module that you want to make into a favourite. Now, instead of pressing return, press ctrl+f, then (without holding ctrl+f) press one of the following keys: 'q', 'w', 'e', 'a', 's', 'd', 'z', 'x', or 'c'.
 
-When you want to insert a favourite module in future press Ctrl+F and then, without holding Ctrl+F, press the number key corresponding to the favourite module you want to insert. Freeman will popup a hint window showing your favourites to help you learn them.
+Freeman will insert the selected module and remember the association of the module with that key. When you want to insert a favourite module in future press the same key sequence, i.e. ctrl+f followed by the selected key. When you press ctrl+f Freeman will popup a hint window showing your assigned favourites to help you learn them.
 
-Freeman remembers your favourites between sessions and you can have 10 favourites in both Primary and Core structures.
+Freeman remembers your favourites between sessions and you can have 9 favourites in both Primary and Core structures.
 
 ### How it works
 

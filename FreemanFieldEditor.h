@@ -13,11 +13,7 @@
 @interface FreemanFieldEditor : NSTextView {
 	FreemanOverlayManager		*_overlayManager;
 	BOOL										_inQuickSelect;
-	NSUInteger							_quickSelection;
 }
-
-
-
 
 @property (assign) FreemanOverlayManager *overlayManager;
 

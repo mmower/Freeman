@@ -48,15 +48,43 @@
 
 
 - (void)updateFavouritesForModuleDatabase:(FreemanModuleDatabase *)moduleDatabase {
-	NSMutableArray *favourites = [NSMutableArray arrayWithCapacity:10];
+	NSMutableArray *favourites = [NSMutableArray arrayWithCapacity:9];
 	
-	NSNumber *slot;
+	NSString *slot;
 	NSString *path;
 	FreemanModule *module;
 	NSString *value;
 	
-	for( int n = 1; n <= 10; n++ ) {
-		slot = [NSNumber numberWithInteger:(n % 10)];
+	for( int n = 1; n <= 9; n++ ) {
+		switch( n ) {
+			case 1:
+				slot = @"q";
+				break;
+			case 2:
+				slot = @"w";
+				break;
+			case 3:
+				slot = @"e";
+				break;
+			case 4:
+				slot = @"a";
+				break;
+			case 5:
+				slot = @"s";
+				break;
+			case 6:
+				slot = @"d";
+				break;
+			case 7:
+				slot = @"z";
+				break;
+			case 8:
+				slot = @"x";
+				break;
+			case 9:
+				slot = @"c";
+				break;
+		}
 		
 		if( [moduleDatabase primary] ) {
 			path = [FreemanPreferences primaryFavouriteInSlot:n];
@@ -76,7 +104,6 @@
 		}
 		
 		NSDictionary *favourite = [NSDictionary dictionaryWithObjectsAndKeys:slot,@"slot",value,@"value",nil];
-		NSLog( @"Favourites = %@", favourite );
 		[favourites addObject:favourite];
 	}
 	[self setFavourites:favourites];

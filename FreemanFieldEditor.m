@@ -25,31 +25,29 @@
 
 - (void)keyDown:(NSEvent *)event {
 	
-	#ifdef DEBUG_FREEMAN
-	NSLog( @"keyCode = %03d FAV=%@", [event keyCode], ([event modifierFlags] & NSShiftKeyMask && [event modifierFlags] & NSControlKeyMask) ? @"Y" : @"N" );
-	#endif
-
-	int favourite = mapKeyCodeToFavouriteNumber( [event keyCode] );
-	
-	if( ( [self favouriteModifiers:event] ) && ( favourite > 0 ) ) {
-		[[self overlayManager] setFavourite:favourite];
+	if( _inQuickSelect ) {
+		_inQuickSelect = NO;
+		int favourite = mapKeyCodeToFavouriteNumber( [event keyCode] );
+		if( favourite > 0 ) {
+			[[self overlayManager] setFavourite:favourite];
+		}
+	} else if( [event modifierFlags] & NSControlKeyMask && [event keyCode] == 0x03 ) {
+		_inQuickSelect = YES;
 	} else {
+		_inQuickSelect = NO;
 		[super keyDown:event];
 	}
 }
 
 
 // Swallow key-up events for the key-down events we are special processing
-- (void)keyUp:(NSEvent *)event {
-	if( !( ( [self favouriteModifiers:event] ) && ( mapKeyCodeToFavouriteNumber( [event keyCode] ) > 0 ) ) ) {
-		[super keyUp:event];
-	}
-}
+// - (void)keyUp:(NSEvent *)event {
+// 	[super keyUp:event];
+// }
 
 
-- (BOOL)favouriteModifiers:(NSEvent *)event {
-	return [event modifierFlags] & NSControlKeyMask && [event modifierFlags] & NSShiftKeyMask;
-}
-
+// - (BOOL)favouriteModifiers:(NSEvent *)event {
+// 	return [event modifierFlags] & NSControlKeyMask && [event modifierFlags] & NSShiftKeyMask;
+// }
 
 @end
