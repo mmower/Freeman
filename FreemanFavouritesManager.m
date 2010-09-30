@@ -84,6 +84,8 @@
 			case 9:
 				slot = @"c";
 				break;
+			default:
+				slot = @"-";
 		}
 		
 		if( [moduleDatabase primary] ) {
