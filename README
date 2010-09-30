@@ -31,20 +31,21 @@ Freeman has four ways to insert a module into your structure.
 	</thead>
 	<tbody>
 		<tr>
-			<td>`ctrl+a`</td>
+			<td><code>ctrl+a</code></td>
 			<td>Add module</td>
 		</tr>
 		<tr>
-			<td>`ctrl+r`</td>
+			<td><code>ctrl+r</code></td>
 			<td>Re-Add last module</td>
 		</tr>
 		<tr>
-			<td>`ctrl+c`</td>
+			<td><code>ctrl+c</code></td>
 			<td>Add constant module</td>
 		</tr>
 		<tr>
-			<td>`ctrl+f`</td>
+			<td><code>ctrl+f</code></td>
 			<td>Add favourite module</td>
+		</tr>
 	</tbody>
 </table>
 		
