@@ -1,3 +1,4 @@
+.DS_Store
 Freeman.xcodeproj/*.pbxuser
 Freeman.xcodeproj/*.perspective*
 Freeman.xcodeproj/*.mode*
