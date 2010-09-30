@@ -1,6 +1,6 @@
-# Freeman v1.1
+# Freeman v1.2.1
 * by [Matt Mower](http://mattmower.com/)
-* released: 25.09.2010
+* released: 30.09.2010
 
 ## Introduction
 
@@ -20,7 +20,7 @@ Now switch to Reaktor (Freeman was tested with v5.5 but should also work with v5
 
 ## Using Freeman
 
-Freeman has four ways to insert a module into your structure. The first three of which are described here. The fourth, favourites, is described in the section below.
+Freeman has four ways to insert a module into your structure.
 
 <table>
 	<thead>
@@ -31,23 +31,26 @@ Freeman has four ways to insert a module into your structure. The first three of
 	</thead>
 	<tbody>
 		<tr>
-			<td>Ctrl+a</td>
+			<td>`ctrl+a`</td>
 			<td>Add module</td>
 		</tr>
 		<tr>
-			<td>Ctrl+r</td>
+			<td>`ctrl+r`</td>
 			<td>Re-Add last module</td>
 		</tr>
 		<tr>
-			<td>Ctrl+c</td>
+			<td>`ctrl+c`</td>
 			<td>Add constant module</td>
 		</tr>
+		<tr>
+			<td>`ctrl+f`</td>
+			<td>Add favourite module</td>
 	</tbody>
 </table>
 		
 Move the mouse cursor into the the Reaktor structure window (if you try and use one of the shortcuts outside of a structure window you will hear a beep to remind you).
 
-Press Ctrl+a and the Freeman module browser will appear. The browser is smart enough to know whether you are in a Primary or Core structure and only displays modules and macros appropriate to that type of structure.
+Press `ctrl+a` and the Freeman module browser will appear. The browser is smart enough to know whether you are in a Primary or Core structure and only displays modules and macros appropriate to that type of structure.
 
 Begin typing the name of the module you want and Freeman will display a list of matching modules below the search box. It uses a "smart abbreviation" search (a la Quicksilver) to home in on the right module with the fewest number of characters.
 
@@ -59,9 +62,9 @@ To find the module you want just keep adding characters until you have narrowed 
 
 You can assign your 9 most frequently used modules to shortcut keys that Freeman will use to insert them.
 
-To create a favourite open the search dialog with ctrl+a as normal. Select the module that you want to make into a favourite. Now, instead of pressing return, press ctrl+f, then (without holding ctrl+f) press one of the following keys: 'q', 'w', 'e', 'a', 's', 'd', 'z', 'x', or 'c'.
+To create a favourite open the search dialog with ctrl+a as normal. Select the module that you want to make into a favourite. Now, instead of pressing return, press `ctrl+f`, then (without holding `ctrl+f`) press one of the following keys: `q`, `w`, `e`, `a`, `s`, `d`, `z`, `x`, or `c`.
 
-Freeman will insert the selected module and remember the association of the module with that key. When you want to insert a favourite module in future press the same key sequence, i.e. ctrl+f followed by the selected key. When you press ctrl+f Freeman will popup a hint window showing your assigned favourites to help you learn them.
+Freeman will insert the selected module and remember the association of the module with that key. When you want to insert a favourite module in future press the same key sequence, i.e. `ctrl+f` followed by the selected key. When you press `ctrl+f` Freeman will popup a hint window showing your assigned favourites to help you learn them.
 
 Freeman remembers your favourites between sessions and you can have 9 favourites in both Primary and Core structures.
 
@@ -75,28 +78,28 @@ Let's say you want the "Snap Value" module. Type `sn` and you will see that "Sna
 
 ### Re-adding
 
-If you want to insert the same module several times you can use the `Ctrl+r` shortcut to re-add the same module. Freeman will offset the insert position 10 pixels up and to the left each time. **Be careful that you do not insert past the top or left edges of the structure window or the results will be unpredictable**.
+If you want to insert the same module several times you can use the `ctrl+r` shortcut to re-add the same module. Freeman will automatically offset the insert position 8 pixels up and to the left each time but it isn't very smart about what might be there. **Be careful that you do not insert past the top or left edges of the structure window, or over the top of an existing module. The results will be unpredictable**.
 
 ### Adding constants
 
-There is a quick shortcut `Ctrl+c` to insert a new constant module at either primary or core level.
+There is a quick shortcut `ctrl+c` to insert a new constant module at either primary or core level.
 
 ## Problems
 
-### Freeman detects Reaktor but Ctrl+a does not work
+### Freeman detects Reaktor but `ctrl+a` does not work
 
 For reasons that are not yet clear Freeman isn't working for some users. This appears to be because their structure windows have a non-standard colour and so Freeman does not "see" them. If you think you are being affected by this problem please try sampling the structure window colours.
 
-To do this move the mouse over an empty part of the structure window and press Ctrl+[ for primary, or Ctrl+] for core. Freeman will sample the colour of the window where the mouse is pointing and store that association.
+To do this move the mouse over an empty part of the structure window and press `ctrl+[` for primary, or `ctrl+]` for core. Freeman will sample the colour of the window where the mouse is pointing and store that association.
 
 ## Notes
 
-Freeman 1.2 is for Mac OS X 10.5 ("Leopard") and 10.6 ("Snow Leopard").
+Freeman 1.2.1 is for Mac OS X 10.5 ("Leopard") and 10.6 ("Snow Leopard").
 
 You can get support for Freeman by contacting me via email at the address above or getting in touch with me in #reaktor on Freenode IRC.
 
 ## Disclaimer
 
-Freeman is a hack based on manipulating the Reaktor process using OSX Quartz event services and, as such, is offered with **no warranty of any kind.**
+Freeman is a hack based on manipulating the Reaktor process using OSX Quartz event services and private CoreGraphics calls. As such, is offered with **no warranty of any kind.**
 
 There have been no reported issues so far but please don't test it on the only copy of the ensemble you've been working on for the last 5 years.
