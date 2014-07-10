@@ -2,6 +2,10 @@
 * by [Matt Mower](http://mattmower.com/)
 * released: 30.09.2010
 
+## Public release under MIT license
+
+I'm releasing the code written by me under the MIT license while other code remains under its own license.
+
 ## Introduction
 
 Freeman is a tool for users of Native Instruments Reaktor on Mac OS X 10.5 and 10.6 that offers a new way to insert modules into both Primary and Core structure windows. The default Reaktor approach is to use a right-click context menu and navigate to find the module you want. Using Freeman you get a window with smart type-as-you-go search to find & insert the module you want.
